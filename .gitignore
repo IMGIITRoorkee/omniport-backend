@@ -1,0 +1,18 @@
+# IntelliJ configuration
+.idea/
+
+# Compiled .pyc files
+*/__pycache__/
+
+# Ignore migrations ...
+*migrations/*
+# ... but commit the __init__.py file so that the folder gets created
+!*migrations/__init__.py
+
+# Ignore apps ...
+apps/*
+# ... but commit the README.md file so that the folder gets created
+!apps/README.md
+
+# Static files
+static/
