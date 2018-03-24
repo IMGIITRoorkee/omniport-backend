@@ -24,8 +24,17 @@ OMNIPORT_DIR = os.path.dirname(SETTINGS_DIR)
 # The base directory, inside which the project rests
 BASE_DIR = os.path.dirname(OMNIPORT_DIR)
 
-# Application definition
+# The ``apps`` directory where all Django apps will be loaded from
+APPS_DIR = os.path.join(BASE_DIR, 'apps')
 
+# The individual app directories
+APP_DIRS = [
+    folder
+    for folder in os.listdir(path=APPS_DIR)
+    if os.path.isdir(os.path.join(APPS_DIR, folder))
+]
+
+# Application declarations
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,9 +43,24 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Django REST framework
+    # PyPI packages
     'rest_framework',
+    'channels',
+    'django_countries',
+    'easy_select2',
+    'nested_admin',
 ]
+
+# Create a path to the apps' AppConfig by parsing the app directories
+APP_CONFIGS = [
+    f'{folder}.apps.{folder[0].upper()}{folder[1:]}Config'
+    for folder in APP_DIRS
+]
+
+INSTALLED_APPS += APP_CONFIGS
+
+# App-base URL mapping maintained for future purposes
+APP_BASE_URL_MAP = dict()
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,11 +90,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'omniport.wsgi.application'
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation'
@@ -110,3 +131,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = '/media/'
+
+# WSGI application served by Gunicorn
+WSGI_APPLICATION = 'omniport.wsgi.application'
+
+# ASGI application served by Daphne
+ASGI_APPLICATION = 'omniport.routing.application'
