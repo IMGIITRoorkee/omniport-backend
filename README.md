@@ -25,11 +25,11 @@ To say simply, _it's cool and good_.
 - ASGI server: `Daphne`
 - Database: `PostgreSQL` + `Psycopg2`
 
-A Dockerised setup is the preferred mode of setup.
+A Dockerised setup is the preferred mode of installation.
 
 ## Contribution guidelines
 
-- Fork the repository to your GitHub account.
+- Fork the repository to your account.
 - Branch out to `a_meaningful_branch_name`.
 - Send in a `WIP: Pull request`.
 - Commit your changes.
