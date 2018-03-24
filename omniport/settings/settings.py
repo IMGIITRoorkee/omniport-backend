@@ -2,7 +2,6 @@ from omniport.settings.base import *
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -15,6 +14,7 @@ DATABASES = {
 }
 
 # Internationalisation and localisation
+
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', 'en-gb')
 
 TIME_ZONE = os.getenv('TIME_ZONE', 'Asia/Kolkata')
@@ -27,10 +27,19 @@ SECRET_KEY = os.getenv(
 )
 
 # This variable should be True in testing environments and False otherwise
-DEBUG = True
+DEBUG = bool(os.getenv('DEBUG', False))
 
 if DEBUG is True:
+    # The list of hosts to which this application will respond
     ALLOWED_HOSTS = ['*']
+    # The list of apps whose URLs will be loaded in this app
+    ALLOWED_APPS = '__all__'
 else:
-    hostnames = os.getenv('HOSTNAMES', '')
+    hostnames = os.getenv('HOSTNAMES', '*')
     ALLOWED_HOSTS = hostnames.split(',')
+
+    allowed_apps = os.getenv('ALLOWED_APPS', None)
+    if allowed_apps is None:
+        ALLOWED_HOSTS = '__all__'
+    else:
+        ALLOWED_APPS = allowed_apps.split(',')
