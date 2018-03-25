@@ -13,10 +13,10 @@ def get_site_urlpatterns():
 
     site_urlpatterns = list()
 
-    for app in settings.DJANGO_APP_FOLDERS:
+    for app in settings.APP_DIRS:
         if settings.ALLOWED_APPS == '__all__' or app in settings.ALLOWED_APPS:
             config_file = os.path.join(
-                settings.DJANGO_APPS_DIR,
+                settings.APPS_DIR,
                 app,
                 'config.json'
             )
