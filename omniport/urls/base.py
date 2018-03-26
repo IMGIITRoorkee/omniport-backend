@@ -5,7 +5,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from omniport.views.hello_world import HelloWorld
 
@@ -15,4 +15,7 @@ urlpatterns = [
 
     # Django admin URL dispatcher
     path('omnipotence/', admin.site.urls),
+
+    # Django REST Framework URL dispatcher
+    path('rest/', include('rest_framework.urls')),
 ]
