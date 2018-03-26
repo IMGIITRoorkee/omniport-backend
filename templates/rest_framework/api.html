@@ -1,0 +1,12 @@
+{% extends 'rest_framework/base.html' %}
+{% load i18n %}
+
+{% block title %}
+    {% if name %}{{ name }} – {% endif %}{% trans SITE_VERBOSE_NAME %}
+{% endblock %}
+
+{% block branding %}
+    <a href="#" class="navbar-brand">
+        {% trans SITE_VERBOSE_NAME %}
+    </a>
+{% endblock %}
