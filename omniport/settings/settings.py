@@ -7,7 +7,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.getenv('DATABASE_NAME', 'omniport_database'),
         'USER': os.getenv('DATABASE_USER', 'omniport_user'),
-        'HOST': os.getenv('DATABASE_HOST', 'postgresql'),
+        'HOST': os.getenv('DATABASE_HOST', 'database'),
         'PORT': int(os.getenv('DATABASE_PORT', '5432')),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'omniport_password'),
     },
