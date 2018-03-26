@@ -1,5 +1,13 @@
 from omniport.settings.base import *
 
+# Site
+
+SITE_ID = int(os.getenv('SITE_ID', 0))
+
+SITE_NAME = os.getenv('SITE_NAME', f'site_{SITE_ID}')
+
+SITE_VERBOSE_NAME = os.getenv('SITE_VERBOSE_NAME', f'Omniport Site {SITE_ID}')
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 DATABASES = {
