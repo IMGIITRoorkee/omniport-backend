@@ -49,6 +49,9 @@ INSTALLED_APPS = [
     'django_countries',
     'easy_select2',
     'nested_admin',
+
+    # Kernel
+    'kernel',
 ]
 
 # Create a path to the apps' AppConfig by parsing the app directories
@@ -61,6 +64,8 @@ INSTALLED_APPS += APP_CONFIGS
 
 # App-base URL mapping maintained for future purposes
 APP_BASE_URL_MAP = dict()
+
+APP_BASE_URL_MAP['kernel'] = 'kernel/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
