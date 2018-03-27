@@ -1,3 +1,4 @@
+import swapper
 from django.contrib.auth import models as auth_models
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -13,7 +14,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     """
 
     person = models.OneToOneField(
-        to='Person',
+        to=swapper.get_model_name('kernel', 'Person'),
         blank=True,
         null=True,
         on_delete=models.CASCADE,
