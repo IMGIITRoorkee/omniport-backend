@@ -51,7 +51,10 @@ INSTALLED_APPS = [
     'nested_admin',
 
     # Kernel
-    'kernel',
+    'kernel.apps.KernelConfig',
+
+    # Shell
+    'shell.apps.ShellConfig',
 ]
 
 # Create a path to the apps' AppConfig by parsing the app directories
