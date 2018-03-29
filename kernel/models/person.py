@@ -29,8 +29,8 @@ class AbstractPerson(Model):
         blank=True,
     )
     spouses = models.ManyToManyField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        related_name='spouses',
+        to='self',
+        symmetrical=True,
         blank=True,
     )
 
