@@ -35,7 +35,6 @@ class AbstractFinancialInformation(Model):
         """
 
         abstract = True
-        verbose_name_plural = 'financial information'
 
     def __str__(self):
         """
@@ -59,4 +58,5 @@ class FinancialInformation(AbstractFinancialInformation):
         Meta class for FinancialInformation
         """
 
+        verbose_name_plural = 'financial information'
         swappable = swapper.swappable_setting('kernel', 'FinancialInformation')

@@ -39,7 +39,6 @@ class AbstractPoliticalInformation(Model):
         """
 
         abstract = True
-        verbose_name_plural = 'political information'
 
     def __str__(self):
         """
@@ -62,4 +61,5 @@ class PoliticalInformation(AbstractPoliticalInformation):
         Meta class for PoliticalInformation
         """
 
+        verbose_name_plural = 'political information'
         swappable = swapper.swappable_setting('kernel', 'PoliticalInformation')

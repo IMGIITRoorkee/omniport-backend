@@ -48,7 +48,6 @@ class AbstractBiologicalInformation(Model):
         """
 
         abstract = True
-        verbose_name_plural = 'biological information'
 
     @property
     def age_in_years(self):
@@ -96,4 +95,5 @@ class BiologicalInformation(AbstractBiologicalInformation):
         Meta class for BiologicalInformation
         """
 
+        verbose_name_plural = 'biological information'
         swappable = swapper.swappable_setting('kernel', 'BiologicalInformation')
