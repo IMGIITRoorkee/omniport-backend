@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # The location of this file
+from omniport.utils import populate_base_url_map
+
 FILE_PATH = os.path.abspath(__file__)
 
 # The ``settings`` package inside the ``omniport`` package
@@ -24,14 +26,24 @@ OMNIPORT_DIR = os.path.dirname(SETTINGS_DIR)
 # The base directory, inside which the project rests
 BASE_DIR = os.path.dirname(OMNIPORT_DIR)
 
-# The ``apps`` directory where all Django apps will be loaded from
+# The ``apps`` directory where all Omniport drop-in apps will be loaded from
 APPS_DIR = os.path.join(BASE_DIR, 'apps')
+
+# The ``services`` directory where all Omniport service apps will be loaded from
+SERVICES_DIR = os.path.join(BASE_DIR, 'services')
 
 # The individual app directories
 APP_DIRS = [
     folder
     for folder in os.listdir(path=APPS_DIR)
     if os.path.isdir(os.path.join(APPS_DIR, folder))
+]
+
+# The individual service directories
+SERVICE_DIRS = [
+    folder
+    for folder in os.listdir(path=SERVICES_DIR)
+    if os.path.isdir(os.path.join(SERVICES_DIR, folder))
 ]
 
 # Application declarations
@@ -65,10 +77,23 @@ APP_CONFIGS = [
 
 INSTALLED_APPS += APP_CONFIGS
 
+# Create a path to the services' AppConfig by parsing the service directories
+SERVICE_CONFIGS = [
+    f'{folder}.apps.{folder[0].upper()}{folder[1:]}Config'
+    for folder in SERVICE_DIRS
+]
+
+INSTALLED_APPS += SERVICE_CONFIGS
+
 # App-base URL mapping maintained for future purposes
 APP_BASE_URL_MAP = dict()
 
-APP_BASE_URL_MAP['kernel'] = 'kernel/'
+populate_base_url_map(APPS_DIR, APP_DIRS, APP_BASE_URL_MAP)
+
+# Service-base URL mapping maintained for future purposes
+SERVICE_BASE_URL_MAP = dict()
+
+populate_base_url_map(SERVICES_DIR, SERVICE_DIRS, SERVICE_BASE_URL_MAP)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
