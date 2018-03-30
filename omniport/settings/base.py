@@ -128,6 +128,10 @@ TEMPLATES = [
 
 AUTH_USER_MODEL = 'kernel.User'
 
+AUTHENTICATION_BACKENDS = [
+    'kernel.auth_backends.generalised.GeneralisedAuthBackend',
+]
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
