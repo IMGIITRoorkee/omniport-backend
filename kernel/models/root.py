@@ -5,6 +5,7 @@ from django_permanent import models as permanent_models
 class Model(permanent_models.PermanentModel):
     """
     This abstract root model should be inherited by all model classes
+    Provides additional features like soft delete and datetime information
     Do not inherit from django.db.models.Model!
     """
 
