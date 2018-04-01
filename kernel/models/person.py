@@ -40,7 +40,6 @@ class AbstractPerson(Model):
         """
 
         abstract = True
-        verbose_name_plural = 'people'
 
     def get_short_name(self):
         """
@@ -80,4 +79,5 @@ class Person(AbstractPerson):
         Meta class for Person
         """
 
+        verbose_name_plural = 'people'
         swappable = swapper.swappable_setting('kernel', 'Person')
