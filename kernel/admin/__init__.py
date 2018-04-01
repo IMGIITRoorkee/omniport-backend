@@ -1,4 +1,5 @@
 import swapper
+from django.contrib.auth.models import Group
 
 from kernel.admin.site import omnipotence
 from kernel.models import (
@@ -16,6 +17,7 @@ PoliticalInformation = swapper.load_model('kernel', 'PoliticalInformation')
 # Register all models
 # If any are being overridden, they will show up separately in the Django admin
 omnipotence.register(User)
+omnipotence.register(Group)
 
 omnipotence.register(Person)
 omnipotence.register(BiologicalInformation)
