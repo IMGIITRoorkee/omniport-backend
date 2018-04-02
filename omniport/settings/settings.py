@@ -51,7 +51,3 @@ else:
         ALLOWED_HOSTS = '__all__'
     else:
         ALLOWED_APPS = allowed_apps.split(',')
-
-# Swapper models
-
-KERNEL_POLITICALINFORMATION_MODEL = 'shell.PoliticalInformation'

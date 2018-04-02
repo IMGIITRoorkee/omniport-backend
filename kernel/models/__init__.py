@@ -3,6 +3,17 @@ from kernel.models.generics import (
     ContactInformation,
     LocationInformation,
 )
+from kernel.models.institute import (
+    # Abstract models for customised implementations
+    AbstractDepartment,
+    AbstractCentre,
+    AbstractBranch,
+
+    # Concrete models for default implementation
+    Department,
+    Centre,
+    Branch
+)
 from kernel.models.person import (
     # Abstract models for customised implementations
     AbstractPerson,
