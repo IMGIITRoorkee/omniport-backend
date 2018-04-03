@@ -32,3 +32,10 @@ from kernel.models.personal_information import (
     FinancialInformation,
     PoliticalInformation,
 )
+from kernel.models.roles import (
+    # Abstract models for customised implementations
+    AbstractStudent,
+
+    # Concrete models for default implementation
+    Student,
+)

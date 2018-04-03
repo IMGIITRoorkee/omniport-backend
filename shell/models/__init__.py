@@ -6,3 +6,6 @@ from shell.models.institute import (
 from shell.models.personal_information import (
     PoliticalInformation,
 )
+from shell.models.roles import (
+    Student,
+)
