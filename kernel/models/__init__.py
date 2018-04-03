@@ -35,7 +35,9 @@ from kernel.models.personal_information import (
 from kernel.models.roles import (
     # Abstract models for customised implementations
     AbstractStudent,
+    AbstractFacultyMember,
 
     # Concrete models for default implementation
     Student,
+    FacultyMember,
 )

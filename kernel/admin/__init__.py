@@ -21,6 +21,7 @@ Centre = swapper.load_model('kernel', 'Centre')
 Branch = swapper.load_model('kernel', 'Branch')
 
 Student = swapper.load_model('kernel', 'Student')
+FacultyMember = swapper.load_model('kernel', 'FacultyMember')
 
 # Register all models
 # If any are being overridden, they will show up separately in the Django admin
@@ -42,3 +43,4 @@ omnipotence.register(Centre)
 omnipotence.register(Branch)
 
 omnipotence.register(Student)
+omnipotence.register(FacultyMember)

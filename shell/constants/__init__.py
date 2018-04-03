@@ -11,5 +11,12 @@ from shell.constants.degrees import (
     DOCTORATE_DEGREES,
     DEGREES,
 )
-from shell.constants.departments import DEPARTMENTS
-from shell.constants.graduations import GRADUATIONS
+from shell.constants.departments import (
+    DEPARTMENTS,
+)
+from shell.constants.faculty_designations import (
+    FACULTY_DESIGNATIONS,
+)
+from shell.constants.graduations import (
+    GRADUATIONS,
+)

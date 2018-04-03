@@ -8,4 +8,5 @@ from shell.models.personal_information import (
 )
 from shell.models.roles import (
     Student,
+    FacultyMember,
 )
