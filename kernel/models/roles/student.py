@@ -38,6 +38,7 @@ class AbstractStudent(PeriodMixin, Model):
         ],
         blank=True,
         null=True,
+        verbose_name='current CGPA',
     )
 
     class Meta:
