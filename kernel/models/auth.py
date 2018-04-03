@@ -1,4 +1,8 @@
+import mimetypes
+import os
+
 import swapper
+from django.conf import settings
 from django.contrib.auth import models as auth_models
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -6,6 +10,38 @@ from django.db import models
 
 from kernel.managers import auth
 from kernel.utils.rights import has_omnipotence_rights
+
+
+def upload_to(user, filename):
+    """
+    Compute the location of where to store the display picture, removing any
+    existing file with the same name
+    :param user: the user whose display picture is being uploaded
+    :param filename: the original filename of the image, not used
+    :return: the path to the uploaded image
+    """
+
+    extension = filename.split('.')[-1]
+    extension = f'.{extension}'
+    if extension not in mimetypes.types_map.keys():
+        extension = ''
+
+    destination = os.path.join(
+        'kernel',
+        'display_pictures',
+        f'{user.id}{extension}',
+    )
+
+    try:
+        path = os.path.join(
+            settings.MEDIA_ROOT,
+            destination,
+        )
+        os.remove(path)
+    except FileNotFoundError:
+        pass
+
+    return destination
 
 
 class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
@@ -46,6 +82,13 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
             MinValueValidator(0),
         ],
         default=0,
+    )
+
+    display_picture = models.ImageField(
+        upload_to=upload_to,
+        max_length=255,
+        blank=True,
+        null=True,
     )
 
     objects = auth.UserManager()
