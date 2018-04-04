@@ -15,7 +15,7 @@ urlpatterns = [
     path('', HelloWorld.as_view(), name='hello_world'),
 
     # Ensures a CSRF cookie on the client
-    path('ensure_csrf', EnsureCsrf.as_view(), name='ensure_csrf'),
+    path('ensure_csrf/', EnsureCsrf.as_view(), name='ensure_csrf'),
 
     # Django admin URL dispatcher
     path('omnipotence/', omnipotence.urls),
