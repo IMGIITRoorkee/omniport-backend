@@ -43,8 +43,8 @@ class ContactInformation(Model):
     )
     entity_object_id = models.PositiveIntegerField()
     entity = contenttypes_fields.GenericForeignKey(
-        'entity_content_type',
-        'entity_object_id'
+        ct_field='entity_content_type',
+        fk_field='entity_object_id',
     )
 
     class Meta:
