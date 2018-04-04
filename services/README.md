@@ -7,3 +7,5 @@ services into their own folder is the right way to organise code.
 
 Note that the services in the `services` folder are not drop-in like the apps 
 in the `apps` folder.
+
+`appGroup: services`
