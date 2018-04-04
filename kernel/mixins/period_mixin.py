@@ -1,9 +1,10 @@
 import datetime
 
 from django.db import models
+from django.db.models import Q, Model
 
 
-class PeriodMixin:
+class PeriodMixin(Model):
     """
     This mixin adds information about the start and end of any entity's
     active period
@@ -16,6 +17,58 @@ class PeriodMixin:
         null=True,
     )
 
+    class Meta:
+        """
+        Meta class for PeriodMixin
+        """
+
+        abstract = True
+
+    @classmethod
+    def all_filter_will_be_active(cls):
+        """
+        Return a query set of objects filtering only the to-be-active ones
+        :return: a query set of to-be-active objects
+        """
+
+        if hasattr(cls, 'objects'):
+            today = datetime.date.today()
+            return cls.objects.all().filter(start_date__gt=today)
+        else:
+            raise AttributeError('Class does not have attribute \'objects\'')
+
+    @classmethod
+    def all_filter_active(cls):
+        """
+        Return a query set of objects filtering only the currently active ones
+        :return: a query set of currently active objects
+        """
+
+        if hasattr(cls, 'objects'):
+            today = datetime.date.today()
+            q_end_missing = Q(end_date=None)
+            q_end_not_passed = Q(end_date__gte=today)
+            q = Q(
+                q_end_missing
+                | q_end_not_passed
+            )
+            return cls.objects.all().filter(start_date__lte=today).filter(q)
+        else:
+            raise AttributeError('Class does not have attribute \'objects\'')
+
+    @classmethod
+    def all_filter_has_been_active(cls):
+        """
+        Return a query set of objects filtering only the has-been-active ones
+        :return: a query set of has-been-active objects
+        """
+
+        if hasattr(cls, 'objects'):
+            today = datetime.date.today()
+            return cls.objects.all().filter(end_date_lt=today)
+        else:
+            raise AttributeError('Class does not have attribute \'objects\'')
+
     @property
     def is_active(self):
         """
@@ -25,9 +78,9 @@ class PeriodMixin:
 
         today = datetime.date.today()
         if self.end_date is not None:
-            return self.start_date < today < self.end_date
+            return self.start_date <= today <= self.end_date
         else:
-            return self.start_date < today
+            return self.start_date <= today
 
     @property
     def is_yet_to_begin(self):
