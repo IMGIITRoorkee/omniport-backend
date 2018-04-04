@@ -32,20 +32,6 @@ APPS_DIR = os.path.join(BASE_DIR, 'apps')
 # The ``services`` directory where all Omniport service apps will be loaded from
 SERVICES_DIR = os.path.join(BASE_DIR, 'services')
 
-# The individual app directories
-APP_DIRS = [
-    folder
-    for folder in os.listdir(path=APPS_DIR)
-    if os.path.isdir(os.path.join(APPS_DIR, folder))
-]
-
-# The individual service directories
-SERVICE_DIRS = [
-    folder
-    for folder in os.listdir(path=SERVICES_DIR)
-    if os.path.isdir(os.path.join(SERVICES_DIR, folder))
-]
-
 # Application declarations
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,6 +55,13 @@ INSTALLED_APPS = [
     'shell.apps.ShellConfig',
 ]
 
+# The individual app directories
+APP_DIRS = [
+    folder
+    for folder in os.listdir(path=APPS_DIR)
+    if os.path.isdir(os.path.join(APPS_DIR, folder))
+]
+
 # Create a path to the apps' AppConfig by parsing the app directories
 APP_CONFIGS = [
     f'{folder}.apps.{folder[0].upper()}{folder[1:]}Config'
@@ -76,6 +69,13 @@ APP_CONFIGS = [
 ]
 
 INSTALLED_APPS += APP_CONFIGS
+
+# The individual service directories
+SERVICE_DIRS = [
+    folder
+    for folder in os.listdir(path=SERVICES_DIR)
+    if os.path.isdir(os.path.join(SERVICES_DIR, folder))
+]
 
 # Create a path to the services' AppConfig by parsing the service directories
 SERVICE_CONFIGS = [
