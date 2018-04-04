@@ -1,6 +1,8 @@
 import swapper
+from django.contrib.contenttypes import fields as contenttypes_fields
 from django.db import models
 
+from kernel.models import LocationInformation
 from kernel.models.root import Model
 
 
@@ -16,6 +18,13 @@ class AbstractDepartment(Model):
     )
     name = models.CharField(
         max_length=127,
+    )
+
+    location_information = contenttypes_fields.GenericRelation(
+        to=LocationInformation,
+        related_query_name='department',
+        content_type_field='entity_content_type',
+        object_id_field='entity_object_id',
     )
 
     class Meta:

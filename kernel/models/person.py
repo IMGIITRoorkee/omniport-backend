@@ -1,4 +1,5 @@
 import swapper
+from django.contrib.contenttypes import fields as contenttypes_fields
 from django.db import models
 
 from kernel.models.root import Model
@@ -32,6 +33,19 @@ class AbstractPerson(Model):
         to='self',
         symmetrical=True,
         blank=True,
+    )
+
+    contact_information = contenttypes_fields.GenericRelation(
+        to='ContactInformation',
+        related_query_name='person',
+        content_type_field='entity_content_type',
+        object_id_field='entity_object_id',
+    )
+    location_information = contenttypes_fields.GenericRelation(
+        to='LocationInformation',
+        related_query_name='person',
+        content_type_field='entity_content_type',
+        object_id_field='entity_object_id',
     )
 
     class Meta:
