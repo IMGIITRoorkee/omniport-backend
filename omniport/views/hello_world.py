@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 class HelloWorld(APIView):
     """
-    This view greets visitors with a friendly "Hello World!"
+    This view greets visitors with a friendly 'Hello World!'
     """
 
     @staticmethod
