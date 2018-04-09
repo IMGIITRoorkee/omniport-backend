@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ping-Pong: {{ SITE_VERBOSE_NAME }}</title>
+
+    <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css' %}">
+    <link rel="stylesheet" href="{% static 'omniport/css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'omniport/css/styling.css' %}">
+
+    <script src="{% static 'jquery/jquery.min.js' %}" defer></script>
+    <script src="{% static 'semantic-ui/semantic.min.js' %}" defer></script>
+</head>
+<body>
+<div class="ui centered container grid">
+    <div class="ui center aligned segment">
+        <h1>Ping-Pong</h1>
+        <div class="ui divider"></div>
+        <button id="send-ping" class="ui basic button">Ping</button>
+        <button id="send-pong" class="ui basic button">Pong</button>
+        <p></p>
+        <p id="message">Waiting for WebSocket initialisation</p>
+    </div>
+</div>
+</body>
+<script src="{% static 'omniport/js/ping_pong.js' %}"></script>
+</html>
