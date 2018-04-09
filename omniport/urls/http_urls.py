@@ -1,18 +1,16 @@
-"""omniport URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-"""
-
 from django.urls import path, include
 
 from kernel.admin.site import omnipotence
 from omniport.views.csrf import EnsureCsrf
 from omniport.views.hello_world import HelloWorld
+from omniport.views.ping_pong import PingPong
 
-urlpatterns = [
+http_urlpatterns = [
     # Hello World!
     path('', HelloWorld.as_view(), name='hello_world'),
+
+    # WebSocket Ping Pong!
+    path('ping_pong/', PingPong.as_view(), name='ping_pong'),
 
     # Ensures a CSRF cookie on the client
     path('ensure_csrf/', EnsureCsrf.as_view(), name='ensure_csrf'),

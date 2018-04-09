@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # The location of this file
-from omniport.utils import populate_base_url_map
+from omniport.utils import populate_base_urls_map
 
 FILE_PATH = os.path.abspath(__file__)
 
@@ -86,14 +86,14 @@ SERVICE_CONFIGS = [
 INSTALLED_APPS += SERVICE_CONFIGS
 
 # App-base URL mapping maintained for future purposes
-APP_BASE_URL_MAP = dict()
+APP_BASE_URLS_MAP = dict()
 
-populate_base_url_map(APPS_DIR, APP_DIRS, APP_BASE_URL_MAP)
+populate_base_urls_map(APPS_DIR, APP_DIRS, APP_BASE_URLS_MAP)
 
 # Service-base URL mapping maintained for future purposes
-SERVICE_BASE_URL_MAP = dict()
+SERVICE_BASE_URLS_MAP = dict()
 
-populate_base_url_map(SERVICES_DIR, SERVICE_DIRS, SERVICE_BASE_URL_MAP)
+populate_base_urls_map(SERVICES_DIR, SERVICE_DIRS, SERVICE_BASE_URLS_MAP)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -110,7 +110,10 @@ ROOT_URLCONF = 'omniport.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'omniport', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -163,6 +166,10 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'omniport', 'static'),
+]
 
 STATIC_URL = '/static/'
 
