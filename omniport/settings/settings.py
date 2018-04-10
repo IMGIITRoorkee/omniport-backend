@@ -1,5 +1,11 @@
 from omniport.settings.base import *
 
+# Institute
+
+INSTITUTE = os.getenv('INSTITUTE', 'Institute')
+
+MAINTAINERS = os.getenv('MAINTAINERS', 'Dhruv Bhanushali')
+
 # Site
 
 SITE_ID = int(os.getenv('SITE_ID', 0))
