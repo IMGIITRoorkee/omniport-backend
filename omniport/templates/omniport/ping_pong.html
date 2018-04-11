@@ -15,16 +15,48 @@
     <script src="{% static 'semantic-ui/semantic.min.js' %}" defer></script>
 </head>
 <body>
-<div class="ui centered container grid">
-    <div class="ui center aligned segment">
-        <h1>Ping-Pong</h1>
-        <div class="ui divider"></div>
-        <button id="send-ping" class="ui basic button">Ping</button>
-        <button id="send-pong" class="ui basic button">Pong</button>
-        <p></p>
-        <p id="message">Waiting for WebSocket initialisation</p>
+<header class="ui top attached segment">
+    <div class="ui container" id="title-bar">
+        <div id="portal-logo">
+            <img src="{% static PORTAL_LOGO %}" class="title-bar-logo">
+        </div>
+        <div id="site-name">
+            {% block site_name %}{% endblock %}
+        </div>
+        <div class="growing space"></div>
+        <div id="institute">
+            {% block institute %}{% endblock %}
+        </div>
+        <div id="institute-logo">
+            <img src="{% static INSTITUTE_LOGO %}" class="title-bar-logo">
+        </div>
     </div>
-</div>
+</header>
+
+<main>
+    <div class="ui centered container grid">
+        <div class="ui center aligned segment">
+            <h1>Ping-Pong</h1>
+            <div class="ui divider"></div>
+            <button id="send-ping" class="ui basic button">Ping</button>
+            <button id="send-pong" class="ui basic button">Pong</button>
+            <p></p>
+            <p id="message">Waiting for WebSocket initialisation</p>
+        </div>
+    </div>
+</main>
+
+<footer class="ui bottom attached segment">
+    <div class="ui container" id="end-bar">
+        <div>
+            &copy; {% now 'Y' %};
+        </div>
+        <img src="{% static MAINTAINERS_LOGO %}" id="maintainers-logo">
+        <div>
+            {{ MAINTAINERS }}
+        </div>
+    </div>
+</footer>
 </body>
 <script src="{% static 'omniport/ping_pong/js/ping_pong.js' %}"></script>
 </html>
