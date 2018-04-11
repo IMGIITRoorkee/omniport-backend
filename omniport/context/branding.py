@@ -67,3 +67,4 @@ def branding_text(_):
     data = dict()
     data['INSTITUTE'] = settings.INSTITUTE
     data['MAINTAINERS'] = settings.MAINTAINERS
+    return data
