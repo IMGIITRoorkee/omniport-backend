@@ -122,6 +122,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'omniport.context.branding.logos',
+                'omniport.context.branding.branding_text',
                 'omniport.context.site.site_information',
             ],
         },
