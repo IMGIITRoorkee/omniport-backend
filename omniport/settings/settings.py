@@ -54,6 +54,6 @@ else:
 
     allowed_apps = os.getenv('ALLOWED_APPS', None)
     if allowed_apps is None:
-        ALLOWED_HOSTS = '__all__'
+        ALLOWED_APPS = '__all__'
     else:
         ALLOWED_APPS = allowed_apps.split(',')
