@@ -36,10 +36,11 @@ def get_service_urlpatterns(protocol):
 
     for service, base_urls in settings.SERVICE_BASE_URLS_MAP.items():
         # Add the path mapping to the URL patterns
-        base_url = base_urls[protocol]
-        service_urlpatterns.append(
-            path(f'{base_url}', include(f'{service}.{protocol}_urls'))
-        )
+        base_url = base_urls.get(protocol, None)
+        if base_url is not None:
+            service_urlpatterns.append(
+                path(f'{base_url}', include(f'{service}.{protocol}_urls'))
+            )
 
     return service_urlpatterns
 
@@ -56,9 +57,10 @@ def get_app_urlpatterns(protocol):
     for app, base_urls in settings.APP_BASE_URLS_MAP.items():
         if settings.ALLOWED_APPS == '__all__' or app in settings.ALLOWED_APPS:
             # Add the path mapping to the URL patterns
-            base_url = base_urls[protocol]
-            app_urlpatterns.append(
-                path(f'{base_url}', include(f'{app}.{protocol}_urls'))
-            )
+            base_url = base_urls.get(protocol, None)
+            if base_url is not None:
+                app_urlpatterns.append(
+                    path(f'{base_url}', include(f'{app}.{protocol}_urls'))
+                )
 
     return app_urlpatterns
