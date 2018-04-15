@@ -1,7 +1,7 @@
 from django.conf import settings
 
 
-def site_information(_):
+def site_information(_=None):
     """
     Add the site information from settings to the context
     :param _: the request being served

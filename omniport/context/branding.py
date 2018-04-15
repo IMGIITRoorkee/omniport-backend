@@ -43,7 +43,7 @@ def indexed_logo(name, extension, preferred_index):
         return unique_logo(name, extension)
 
 
-def logos(_):
+def logos(_=None):
     """
     Add the logos of the institute, maintainer and project to the context
     :param _: the request being served
@@ -57,7 +57,7 @@ def logos(_):
     return data
 
 
-def branding_text(_):
+def branding_text(_=None):
     """
     Add the brand text of the institute, maintainer and project to the context
     :param _: the request being served
