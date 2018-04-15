@@ -41,7 +41,7 @@ SECRET_KEY = os.getenv(
 )
 
 # This variable should be True in testing environments and False otherwise
-DEBUG = bool(os.getenv('DEBUG', False))
+DEBUG = True if os.getenv('DEBUG', 'False') == 'True' else False
 
 if DEBUG is True:
     # The list of hosts to which this application will respond
