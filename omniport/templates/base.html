@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}{% endblock %}: {{ SITE_VERBOSE_NAME }}</title>
+
+    <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css' %}">
+    <link rel="stylesheet" href="{% static 'omniport/ping_pong/css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'omniport/ping_pong/css/styling.css' %}">
+
+    <script src="{% static 'jquery/jquery.min.js' %}" defer></script>
+    <script src="{% static 'semantic-ui/semantic.min.js' %}" defer></script>
+</head>
+<body>
+<header class="ui top attached segment">
+    <div class="ui container" id="title-bar">
+        <div id="portal-logo">
+            <img src="{% static PORTAL_LOGO %}" class="title-bar-logo">
+        </div>
+        <div id="site-name">
+            {% block site_name %}{% endblock %}
+        </div>
+        <div class="growing space"></div>
+        <div id="institute">
+            {% block institute %}{% endblock %}
+        </div>
+        <div id="institute-logo">
+            <img src="{% static INSTITUTE_LOGO %}" class="title-bar-logo">
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="ui centered container grid">
+        <div class="ui center aligned segment">
+            {% block box_content %}{% endblock %}
+        </div>
+    </div>
+</main>
+
+<footer class="ui bottom attached segment">
+    <div class="ui container" id="end-bar">
+        <div>
+            &copy; {% now 'Y' %};
+        </div>
+        <img src="{% static MAINTAINERS_LOGO %}" id="maintainers-logo">
+        <div>
+            {{ MAINTAINERS }}
+        </div>
+    </div>
+</footer>
+</body>
+</html>
