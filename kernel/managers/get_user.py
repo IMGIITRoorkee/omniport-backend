@@ -19,6 +19,9 @@ def get_user(username):
 
     User
     - username
+    
+    Student
+    - enrolment_number
 
     ContactInformation
     - primary_phone_number
@@ -28,11 +31,22 @@ def get_user(username):
     """
 
     Person = swapper.load_model('kernel', 'Person')
+    Student = swapper.load_model('kernel', 'Student')
 
     try:
         user = User.objects.get(username=username)
         return user
     except User.DoesNotExist:
+        pass
+
+    try:
+        student = Student.objects.get(enrolment_number=username)
+        person = student.person
+        if person is not None:
+            user = person.user
+            if user is not None:
+                return user
+    except Student.DoesNotExist:
         pass
 
     try:
