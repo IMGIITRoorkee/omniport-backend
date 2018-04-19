@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        {% block title %}{% endblock %}: {{ SITE_VERBOSE_NAME }}</title>
+        {% block title %}{% endblock %}: {{ SITE_VERBOSE_NAME }}
+    </title>
 
     <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css' %}">
     <link rel="stylesheet" href="{% static 'omniport/ping_pong/css/layout.css' %}">
@@ -14,12 +15,16 @@
 
     <script src="{% static 'jquery/jquery.min.js' %}" defer></script>
     <script src="{% static 'semantic-ui/semantic.min.js' %}" defer></script>
+
+    <link rel="icon" href="{% static SITE_FAVICON %}">
 </head>
 <body>
 <header class="ui top attached segment">
     <div class="ui container" id="title-bar">
         <div id="portal-logo">
-            <img src="{% static PORTAL_LOGO %}" class="title-bar-logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static SITE_LOGO %}" class="title-bar-logo">
+            </a>
         </div>
         <div id="site-name">
             {% block site_name %}{% endblock %}
@@ -29,7 +34,9 @@
             {% block institute %}{% endblock %}
         </div>
         <div id="institute-logo">
-            <img src="{% static INSTITUTE_LOGO %}" class="title-bar-logo">
+            <a href="{{ INSTITUTE_HOME_PAGE }}">
+                <img src="{% static INSTITUTE_LOGO %}" class="title-bar-logo">
+            </a>
         </div>
     </div>
 </header>
@@ -47,7 +54,9 @@
         <div>
             &copy; {% now 'Y' %};
         </div>
-        <img src="{% static MAINTAINERS_LOGO %}" id="maintainers-logo">
+        <a href="{{ MAINTAINERS_HOME_PAGE }}">
+            <img src="{% static MAINTAINERS_LOGO %}" id="maintainers-logo">
+        </a>
         <div>
             {{ MAINTAINERS }}
         </div>
