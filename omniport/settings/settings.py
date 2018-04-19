@@ -3,8 +3,16 @@ from omniport.settings.base import *
 # Institute
 
 INSTITUTE = os.getenv('INSTITUTE', 'Institute')
+INSTITUTE_HOME_PAGE = os.getenv(
+    'INSTITUTE_HOME_PAGE',
+    'https://dhruvkb.github.io/'
+)
 
 MAINTAINERS = os.getenv('MAINTAINERS', 'Dhruv Bhanushali')
+MAINTAINERS_HOME_PAGE = os.getenv(
+    'MAINTAINERS_HOME_PAGE',
+    'https://dhruvkb.github.io/'
+)
 
 # Site
 
