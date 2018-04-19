@@ -6,8 +6,13 @@ from omniport.views.hello_world import HelloWorld
 from omniport.views.ping_pong import PingPong
 
 http_urlpatterns = [
+    # TODO
+    # Home
+    # The root path should serve the React app and assets from NGINX itself
+    path('', HelloWorld.as_view(), name='home'),
+
     # Hello World!
-    path('', HelloWorld.as_view(), name='hello_world'),
+    path('hello_world/', HelloWorld.as_view(), name='hello_world'),
 
     # WebSocket Ping Pong!
     path('ping_pong/', PingPong.as_view(), name='ping_pong'),
