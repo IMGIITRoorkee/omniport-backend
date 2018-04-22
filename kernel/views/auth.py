@@ -100,6 +100,7 @@ class ChangePassword(APIView):
             user = request.user
             if user.check_password(old_password):
                 user.set_password(new_password)
+                user.failed_reset_attempts = 0
                 user.save()
                 response = {
                     'data': {
@@ -193,6 +194,7 @@ class ResetPassword(APIView):
                 if user.failed_reset_attempts < 3:
                     if user.check_secret_answer(secret_answer):
                         user.set_password(new_password)
+                        user.failed_reset_attempts = 0
                         user.save()
                         response = {
                             'data': {
@@ -255,6 +257,7 @@ class Lockpick(APIView):
                         for _ in range(password_length)
                     )
                 user.set_password(new_password)
+                user.failed_reset_attempts = 0
                 user.save()
                 response = {
                     'data': {
