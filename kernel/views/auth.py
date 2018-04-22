@@ -55,7 +55,8 @@ class Login(APIView):
                     'data': {
                         'type': 'message',
                         'attributes': {
-                            'text': f'Successfully logged in as {user}',
+                            'text': 'Successfully logged in',
+                            'user': str(user),
                         },
                     },
                 }
