@@ -4,6 +4,7 @@ from kernel.views.auth import (
     Login,
     ChangePassword,
     ResetPassword,
+    Lockpick,
     Logout,
 )
 from kernel.views.home import Home
@@ -19,5 +20,6 @@ urlpatterns = [
     path('login/', Login.as_view(), name='login'),
     path('change_password/', ChangePassword.as_view(), name='change_password'),
     path('reset_password/', ResetPassword.as_view(), name='reset_password'),
+    path('lockpick/', Lockpick.as_view(), name='lockpick'),
     path('logout/', Logout.as_view(), name='logout'),
 ]

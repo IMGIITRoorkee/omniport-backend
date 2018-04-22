@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -12,6 +15,7 @@ from kernel.errors.auth import (
 from kernel.errors.forms import INCOMPLETE_DATA
 from kernel.managers.get_user import get_user
 from kernel.models.auth import User
+from kernel.permissions.has_lockpicking_rights import HasLockpickingRights
 from kernel.permissions.is_not_authenticated import IsNotAuthenticated
 
 
@@ -202,6 +206,65 @@ class ResetPassword(APIView):
                         errors.append(INCORRECT_CREDENTIALS)
                 else:
                     errors.append(RESET_ATTEMPTS_EXHAUSTED)
+            except User.DoesNotExist:
+                errors.append(USER_DOES_NOT_EXIST)
+        else:
+            errors.append(INCOMPLETE_DATA)
+
+        response = {
+            'errors': errors,
+        }
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Lockpick(APIView):
+    """
+    This view takes the username and optionally, a new password and if an
+    authorised user is logged in, changes the password for the user with the
+    given username to the new one. If no password is specified a random one with
+    eight letters is created and shown to the person resetting it
+
+    Works only when a person with lockpicking rights is logged in
+    """
+
+    permission_classes = (IsAuthenticated, HasLockpickingRights,)
+
+    def post(self, request, *args, **kwargs):
+        """
+        View to serve POST requests
+        :param request: the request that is to be responded to
+        :param args: arguments
+        :param kwargs: keyword arguments
+        :return: the response for request
+        """
+
+        errors = list()
+
+        username = request.data.get('username', None)
+        new_password = request.data.get('new_password', None)
+
+        if username is not None:
+            try:
+                user = get_user(username)
+                if new_password is None:
+                    allowed_chars = string.ascii_uppercase + string.digits
+                    password_length = 8
+                    new_password = ''.join(
+                        random.SystemRandom().choice(allowed_chars)
+                        for _ in range(password_length)
+                    )
+                user.set_password(new_password)
+                user.save()
+                response = {
+                    'data': {
+                        'type': 'message',
+                        'attributes': {
+                            'text': 'Successfully changed password',
+                            'password': new_password,
+                        },
+                    },
+                }
+                return Response(response)
             except User.DoesNotExist:
                 errors.append(USER_DOES_NOT_EXIST)
         else:
