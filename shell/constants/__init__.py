@@ -20,3 +20,7 @@ from shell.constants.faculty_designations import (
 from shell.constants.graduations import (
     GRADUATIONS,
 )
+from shell.constants.maintainer import (
+    MAINTAINER_DESIGNATIONS,
+    MAINTAINER_ROLES,
+)
