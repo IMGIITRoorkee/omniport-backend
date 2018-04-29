@@ -4,15 +4,18 @@
 # Compiled .pyc files
 __pycache__/
 
-# Ignore migrations ...
-*migrations/*
-# ... but commit the __init__.py file so that the folder gets created
-!*migrations/__init__.py
-
 # Ignore apps ...
 apps/*
 # ... but commit the README.md file so that the folder gets created
 !apps/README.md
+
+# Ignore services ...
+services/*
+# ... but commit the README.md file so that the folder gets created
+!services/README.md
+
+# Ignore shell
+shell/
 
 # Static files
 /static/
