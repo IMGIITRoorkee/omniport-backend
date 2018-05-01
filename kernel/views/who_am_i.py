@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from kernel.serialisers.person import PersonSerialiser
+from kernel.serializers.person import PersonSerializer
 
 
 class WhoAmI(APIView):
@@ -22,10 +22,10 @@ class WhoAmI(APIView):
         """
 
         person = request.user.person
-        serialiser = PersonSerialiser(
+        serializer = PersonSerializer(
             person,
             fields=[
                 'full_name',
             ]
         )
-        return Response(serialiser.data)
+        return Response(serializer.data)

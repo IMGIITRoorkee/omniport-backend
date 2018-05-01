@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 
-class ModelSerialiser(serializers.ModelSerializer):
+class ModelSerializer(serializers.ModelSerializer):
     """
-    This model serialiser should be inherited by all model serialisers
+    This model serializer should be inherited by all model serializers
     Allows you to specify fields via a keyword argument
     Do not inherit from serializers.ModelSerializer!
     """
@@ -19,7 +19,7 @@ class ModelSerialiser(serializers.ModelSerializer):
 
         fields = kwargs.pop('fields', None)
 
-        super(ModelSerialiser, self).__init__(*args, **kwargs)
+        super(ModelSerializer, self).__init__(*args, **kwargs)
 
         if fields is not None:
             allowed_fields = set(fields)
