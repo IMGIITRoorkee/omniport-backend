@@ -1,11 +1,11 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from django.urls import path, include
+from django.urls import path
 
 from omniport.urls import ws_urlpatterns
 
 ws_urlpatterns = [
-    path('ws/', include(ws_urlpatterns)),
+    path('ws/', URLRouter(ws_urlpatterns)),
 ]
 
 application = ProtocolTypeRouter({
