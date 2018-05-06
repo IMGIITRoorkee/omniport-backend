@@ -35,6 +35,23 @@ DATABASES = {
     },
 }
 
+# Channel layer
+# http://channels.readthedocs.io/en/latest/topics/channel_layers.html
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [
+                (
+                    os.getenv('CHANNEL_LAYER_HOST', 'channel-layer'),
+                    os.getenv('CHANNEL_LAYER_PORT', 6379),
+                )
+            ],
+        },
+    },
+}
+
+
 # Internationalisation and localisation
 
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE', 'en-gb')
