@@ -1,10 +1,10 @@
-aioredis==1.1.0
+aioredis==1.0.0
 argh==0.26.2
 argon2-cffi==16.3.0
 asgiref==2.3.0
 asn1crypto==0.24.0
 async-timeout==2.0.1
-attrs==17.4.0
+attrs==18.1.0
 autobahn==18.4.1
 Automat==0.6.0
 backcall==0.1.0
@@ -20,7 +20,7 @@ cryptography==2.2.2
 daphne==2.1.1
 decorator==4.3.0
 Django==2.0.4
-django-countries==5.2
+django-countries==5.3
 django-crispy-forms==1.7.2
 django-easy-select2==1.4.0
 django-filter==2.0.0.dev1
@@ -29,6 +29,7 @@ django-nested-admin==3.0.21
 django-permanent==1.1.6
 djangorestframework==3.8.2
 djangorestframework-jsonapi==2.4.0
+djangorestframework-simplejwt==3.2.3
 gunicorn==19.7.1
 h2==3.0.1
 hiredis==0.2.0
@@ -62,6 +63,7 @@ pyasn1==0.4.2
 pyasn1-modules==0.2.1
 pycparser==2.18
 Pygments==2.2.0
+PyJWT==1.6.1
 pyOpenSSL==17.5.0
 python-monkey-business==1.0.0
 pytz==2018.4
@@ -72,7 +74,7 @@ simplegeneric==0.8.1
 six==1.11.0
 swapper==1.1.0
 traitlets==4.3.2
-Twisted==18.4.0rc1
+Twisted==18.4.0
 txaio==2.10.0
 uritemplate==3.0.0
 urllib3==1.22
