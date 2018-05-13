@@ -25,7 +25,4 @@ http_urlpatterns = [
 
     # Django REST Framework URL dispatcher
     path('rest/', include('rest_framework.urls')),
-
-    # Kernel URL dispatcher
-    path('kernel/', include('kernel.urls')),
 ]

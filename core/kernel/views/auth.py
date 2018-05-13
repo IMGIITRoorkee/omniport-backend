@@ -1,7 +1,6 @@
 import random
 import string
 
-from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,59 +16,6 @@ from kernel.managers.get_user import get_user
 from kernel.models.auth import User
 from kernel.permissions.has_lockpicking_rights import HasLockpickingRights
 from kernel.permissions.is_not_authenticated import IsNotAuthenticated
-
-
-class Login(APIView):
-    """
-    This view takes the username and password and if correct, logs the user in
-    via cookie-based session authentication
-
-    Works only when not authenticated
-    """
-
-    permission_classes = (IsNotAuthenticated,)
-
-    def post(self, request, *args, **kwargs):
-        """
-        View to serve POST requests
-        :param request: the request that is to be responded to
-        :param args: arguments
-        :param kwargs: keyword arguments
-        :return: the response for request
-        """
-
-        errors = list()
-
-        username = request.data.get('username', None)
-        password = request.data.get('password', None)
-
-        if username is not None and password is not None:
-            user = authenticate(
-                request,
-                username=username,
-                password=password
-            )
-            if user is not None:
-                login(request, user)
-                response = {
-                    'data': {
-                        'type': 'message',
-                        'attributes': {
-                            'text': 'Successfully logged in',
-                            'user': str(user),
-                        },
-                    },
-                }
-                return Response(response)
-            else:
-                errors.append(INCORRECT_CREDENTIALS)
-        else:
-            errors.append(INCOMPLETE_DATA)
-
-        response = {
-            'errors': errors,
-        }
-        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePassword(APIView):
@@ -278,34 +224,3 @@ class Lockpick(APIView):
             'errors': errors,
         }
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
-
-
-class Logout(APIView):
-    """
-    This view deletes the cookie-based session authentication token from the
-    database, thereby logging out the user
-
-    Works only when authenticated
-    """
-
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, *args, **kwargs):
-        """
-        View to serve GET requests
-        :param request: the request that is to be responded to
-        :param args: arguments
-        :param kwargs: keyword arguments
-        :return: the response for request
-        """
-
-        logout(request)
-        response = {
-            'data': {
-                'type': 'message',
-                'attributes': {
-                    'text': 'Successfully logged out',
-                },
-            },
-        }
-        return Response(response)
