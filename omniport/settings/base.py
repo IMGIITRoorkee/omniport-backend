@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-# The location of this file
+import inflection
+
 from omniport.utils import populate_base_urls_map
 
+# The location of this file
 FILE_PATH = os.path.abspath(__file__)
 
 # The ``settings`` package inside the ``omniport`` package
@@ -26,11 +28,14 @@ OMNIPORT_DIR = os.path.dirname(SETTINGS_DIR)
 # The base directory, inside which the project rests
 BASE_DIR = os.path.dirname(OMNIPORT_DIR)
 
-# The ``apps`` directory where all Omniport drop-in apps will be loaded from
-APPS_DIR = os.path.join(BASE_DIR, 'apps')
+# The ``core`` directory where all Omniport core apps will be loaded from
+CORE_DIR = os.path.join(BASE_DIR, 'core')
 
 # The ``services`` directory where all Omniport service apps will be loaded from
 SERVICES_DIR = os.path.join(BASE_DIR, 'services')
+
+# The ``apps`` directory where all Omniport drop-in apps will be loaded from
+APPS_DIR = os.path.join(BASE_DIR, 'apps')
 
 # Application declarations
 INSTALLED_APPS = [
@@ -47,28 +52,37 @@ INSTALLED_APPS = [
     'django_countries',
     'easy_select2',
     'nested_admin',
-
-    # Kernel
-    'kernel.apps.KernelConfig',
-
-    # Shell
-    'shell.apps.ShellConfig',
 ]
 
-# The individual app directories
-APP_DIRS = [
+# The individual core directories
+CORE_DIRS = [
     folder
-    for folder in os.listdir(path=APPS_DIR)
-    if os.path.isdir(os.path.join(APPS_DIR, folder))
+    for folder in os.listdir(path=CORE_DIR)
+    if os.path.isdir(os.path.join(CORE_DIR, folder))
 ]
 
-# Create a path to the apps' AppConfig by parsing the app directories
-APP_CONFIGS = [
-    f'{folder}.apps.{folder[0].upper()}{folder[1:]}Config'
-    for folder in APP_DIRS
+# Create a path to the cores' AppConfig by parsing the core directories
+CORE_CONFIGS = [
+    f'{folder}.apps.{inflection.camelize(folder)}Config'
+    for folder in CORE_DIRS
 ]
 
-INSTALLED_APPS += APP_CONFIGS
+INSTALLED_APPS += CORE_CONFIGS
+
+# Check if shell present and if yes, add to installed apps
+SHELL_PRESENT = False
+try:
+    from shell.apps import ShellConfig
+
+    SHELL_PRESENT = True
+    INSTALLED_APPS.append(
+        'shell.apps.ShellConfig',
+    )
+except ImportError:
+    """
+    Shell has not been written
+    """
+    pass
 
 # The individual service directories
 SERVICE_DIRS = [
@@ -79,11 +93,31 @@ SERVICE_DIRS = [
 
 # Create a path to the services' AppConfig by parsing the service directories
 SERVICE_CONFIGS = [
-    f'{folder}.apps.{folder[0].upper()}{folder[1:]}Config'
+    f'{folder}.apps.{inflection.camelize(folder)}Config'
     for folder in SERVICE_DIRS
 ]
 
 INSTALLED_APPS += SERVICE_CONFIGS
+
+# The individual app directories
+APP_DIRS = [
+    folder
+    for folder in os.listdir(path=APPS_DIR)
+    if os.path.isdir(os.path.join(APPS_DIR, folder))
+]
+
+# Create a path to the apps' AppConfig by parsing the app directories
+APP_CONFIGS = [
+    f'{folder}.apps.{inflection.camelize(folder)}Config'
+    for folder in APP_DIRS
+]
+
+INSTALLED_APPS += APP_CONFIGS
+
+# Core-app-base URL mapping maintained for future purposes
+CORE_APP_BASE_URLS_MAP = dict()
+
+populate_base_urls_map(CORE_DIR, CORE_DIRS, CORE_APP_BASE_URLS_MAP)
 
 # App-base URL mapping maintained for future purposes
 APP_BASE_URLS_MAP = dict()
@@ -167,6 +201,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+# REST framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
+
 # Static files
 
 STATICFILES_DIRS = [
@@ -192,6 +235,10 @@ ASGI_APPLICATION = 'omniport.routing.application'
 # Swapper models
 
 try:
-    from shell.swapper import *
+    if SHELL_PRESENT:
+        from shell.swapper import *
 except ImportError:
+    """
+    Will never enter this block because of the SHELL_PRESENT check
+    """
     pass

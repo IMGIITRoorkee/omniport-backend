@@ -25,6 +25,26 @@ def populate_base_urls_map(apps_dir, app_dirs, app_base_urls_map):
             app_base_urls_map[app] = base_urls
 
 
+def get_core_urlpatterns(protocol):
+    """
+    Get the list of paths each mapping the URL of a core app to its dispatcher
+    :param protocol: the protocol for which the base URL is to be retrieved
+    :return: the list of paths mapping the URL of a core app to its dispatcher
+    """
+
+    core_urlpatterns = list()
+
+    for core_app, base_urls in settings.CORE_APP_BASE_URLS_MAP.items():
+        # Add the path mapping to the URL patterns
+        base_url = base_urls.get(protocol, None)
+        if base_url is not None:
+            core_urlpatterns.append(
+                path(f'{base_url}', include(f'{core_app}.{protocol}_urls'))
+            )
+
+    return core_urlpatterns
+
+
 def get_service_urlpatterns(protocol):
     """
     Get the list of paths each mapping the URL of a service to its dispatcher
