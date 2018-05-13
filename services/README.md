@@ -1,6 +1,6 @@
 # Services
 
-> A collection of core services that Omniport apps rely on for various utilities
+> A collection of services that Omniport apps rely on for various utilities
 
 Omniport ensures that code is structured in the best way possible and grouping 
 services into their own folder is the right way to organise code.
