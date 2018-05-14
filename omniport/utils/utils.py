@@ -27,6 +27,52 @@ def populate_base_urls_map(apps_dir, app_dirs, app_base_urls_map):
             app_base_urls_map[app] = base_urls
 
 
+def get_http_urlpatterns(app_base_urls_map, allowed_apps='__all__'):
+    """
+    Get the URL pattern list corresponding to the hypertext protocol
+    :param app_base_urls_map: the dictionary of apps and their base URLs
+    :param allowed_apps: the list of apps to allow in the URLs, or __all__
+    :return: the URL pattern list corresponding to the hypertext protocol
+    """
+
+    urlpatterns = list()
+
+    for app, base_urls in app_base_urls_map.items():
+        if allowed_apps == '__all__' or app in allowed_apps:
+            if 'http' in base_urls:
+                base_url = base_urls.get('http')
+                urlpatterns.append(
+                    path(f'{base_url}', include(f'{app}.http_urls'))
+                )
+
+    return urlpatterns
+
+
+def get_ws_urlpatterns(app_base_urls_map, allowed_apps='__all__'):
+    """
+    Get the URL pattern list corresponding to the websocket protocol
+    :param app_base_urls_map: the dictionary of apps and their base URLs
+    :param allowed_apps: the list of apps to allow in the URLs, or __all__
+    :return: the URL pattern list corresponding to the websocket protocol
+    """
+
+    urlpatterns = list()
+
+    for app, base_urls in app_base_urls_map.items():
+        if allowed_apps == '__all__' or app in allowed_apps:
+            if 'ws' in base_urls:
+                base_url = base_urls.get('ws')
+                module = importlib.import_module(f'{app}.ws_urls')
+                dict = module.__dict__
+                app_urlpatterns = dict['urlpatterns']
+                url_router = URLRouter(app_urlpatterns)
+                urlpatterns.append(
+                    path(f'{base_url}', url_router)
+                )
+
+    return urlpatterns
+
+
 def get_core_urlpatterns(protocol):
     """
     Get the list of paths each mapping the URL of a core app to its dispatcher
@@ -34,28 +80,11 @@ def get_core_urlpatterns(protocol):
     :return: the list of paths mapping the URL of a core app to its dispatcher
     """
 
-    core_urlpatterns = list()
+    if protocol == 'http':
+        return get_http_urlpatterns(settings.CORE_APP_BASE_URLS_MAP)
 
-    for core_app, base_urls in settings.CORE_APP_BASE_URLS_MAP.items():
-        # Add the path mapping to the URL patterns
-        base_url = base_urls.get(protocol, None)
-        if base_url is not None:
-            if protocol == 'http':
-                addendum = path(
-                    f'{base_url}',
-                    include(f'{core_app}.http_urls')
-                )
-            else:
-                module = importlib.import_module(f'{core_app}.{protocol}_urls')
-                dict = module.__dict__
-                urlpatterns = dict['urlpatterns']
-                addendum = path(
-                    f'{base_url}',
-                    URLRouter(urlpatterns)
-                )
-            core_urlpatterns.append(addendum)
-
-    return core_urlpatterns
+    if protocol == 'ws':
+        return get_ws_urlpatterns(settings.CORE_APP_BASE_URLS_MAP)
 
 
 def get_service_urlpatterns(protocol):
@@ -65,28 +94,11 @@ def get_service_urlpatterns(protocol):
     :return: the list of paths mapping the URL of a service to its dispatcher
     """
 
-    service_urlpatterns = list()
+    if protocol == 'http':
+        return get_http_urlpatterns(settings.SERVICE_BASE_URLS_MAP)
 
-    for service, base_urls in settings.SERVICE_BASE_URLS_MAP.items():
-        # Add the path mapping to the URL patterns
-        base_url = base_urls.get(protocol, None)
-        if base_url is not None:
-            if protocol == 'http':
-                addendum = path(
-                    f'{base_url}',
-                    include(f'{service}.http_urls')
-                )
-            else:
-                module = importlib.import_module(f'{service}.{protocol}_urls')
-                dict = module.__dict__
-                urlpatterns = dict['urlpatterns']
-                addendum = path(
-                    f'{base_url}',
-                    URLRouter(urlpatterns)
-                )
-            service_urlpatterns.append(addendum)
-
-    return service_urlpatterns
+    if protocol == 'ws':
+        return get_ws_urlpatterns(settings.SERVICE_BASE_URLS_MAP)
 
 
 def get_app_urlpatterns(protocol):
@@ -96,26 +108,14 @@ def get_app_urlpatterns(protocol):
     :return: the list of paths mapping the URL of an app to its dispatcher
     """
 
-    app_urlpatterns = list()
+    if protocol == 'http':
+        return get_http_urlpatterns(
+            settings.APP_BASE_URLS_MAP,
+            settings.ALLOWED_APPS
+        )
 
-    for app, base_urls in settings.APP_BASE_URLS_MAP.items():
-        if settings.ALLOWED_APPS == '__all__' or app in settings.ALLOWED_APPS:
-            # Add the path mapping to the URL patterns
-            base_url = base_urls.get(protocol, None)
-            if base_url is not None:
-                if protocol == 'http':
-                    addendum = path(
-                        f'{base_url}',
-                        include(f'{app}.http_urls')
-                    )
-                else:
-                    module = importlib.import_module(f'{app}.{protocol}_urls')
-                    dict = module.__dict__
-                    urlpatterns = dict['urlpatterns']
-                    addendum = path(
-                        f'{base_url}',
-                        URLRouter(urlpatterns)
-                    )
-                app_urlpatterns.append(addendum)
-
-    return app_urlpatterns
+    if protocol == 'ws':
+        return get_ws_urlpatterns(
+            settings.APP_BASE_URLS_MAP,
+            settings.ALLOWED_APPS
+        )
