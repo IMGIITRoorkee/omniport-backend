@@ -5,18 +5,19 @@ from rest_framework_simplejwt.serializers import PasswordField
 
 class LoginSerializer(serializers.Serializer):
     """
-
+    Stores the username and password for logging a user in
     """
 
     user = None
-    username = serializers.CharField(max_length=63)
+    username = serializers.CharField()
     password = PasswordField()
 
     def validate(self, data):
         """
-        Authenticate the username and password
-        :param data:
-        :return:
+        Authenticate the username and password to see if they are valid
+        :param data: the data to check for validity
+        :return: the data if it is valid
+        :raise ValidationError: if the username and password do not match
         """
 
         request = self.context.get('request')
