@@ -1,6 +1,8 @@
+import importlib
 import json
 import os
 
+from channels.routing import URLRouter
 from django.conf import settings
 from django.urls import path, include
 
@@ -38,9 +40,20 @@ def get_core_urlpatterns(protocol):
         # Add the path mapping to the URL patterns
         base_url = base_urls.get(protocol, None)
         if base_url is not None:
-            core_urlpatterns.append(
-                path(f'{base_url}', include(f'{core_app}.{protocol}_urls'))
-            )
+            if protocol == 'http':
+                addendum = path(
+                    f'{base_url}',
+                    include(f'{core_app}.http_urls')
+                )
+            else:
+                module = importlib.import_module(f'{core_app}.{protocol}_urls')
+                dict = module.__dict__
+                urlpatterns = dict['urlpatterns']
+                addendum = path(
+                    f'{base_url}',
+                    URLRouter(urlpatterns)
+                )
+            core_urlpatterns.append(addendum)
 
     return core_urlpatterns
 
@@ -58,9 +71,20 @@ def get_service_urlpatterns(protocol):
         # Add the path mapping to the URL patterns
         base_url = base_urls.get(protocol, None)
         if base_url is not None:
-            service_urlpatterns.append(
-                path(f'{base_url}', include(f'{service}.{protocol}_urls'))
-            )
+            if protocol == 'http':
+                addendum = path(
+                    f'{base_url}',
+                    include(f'{service}.http_urls')
+                )
+            else:
+                module = importlib.import_module(f'{service}.{protocol}_urls')
+                dict = module.__dict__
+                urlpatterns = dict['urlpatterns']
+                addendum = path(
+                    f'{base_url}',
+                    URLRouter(urlpatterns)
+                )
+            service_urlpatterns.append(addendum)
 
     return service_urlpatterns
 
@@ -79,8 +103,19 @@ def get_app_urlpatterns(protocol):
             # Add the path mapping to the URL patterns
             base_url = base_urls.get(protocol, None)
             if base_url is not None:
-                app_urlpatterns.append(
-                    path(f'{base_url}', include(f'{app}.{protocol}_urls'))
-                )
+                if protocol == 'http':
+                    addendum = path(
+                        f'{base_url}',
+                        include(f'{app}.http_urls')
+                    )
+                else:
+                    module = importlib.import_module(f'{app}.{protocol}_urls')
+                    dict = module.__dict__
+                    urlpatterns = dict['urlpatterns']
+                    addendum = path(
+                        f'{base_url}',
+                        URLRouter(urlpatterns)
+                    )
+                app_urlpatterns.append(addendum)
 
     return app_urlpatterns
