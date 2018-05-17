@@ -1,6 +1,12 @@
+"""
+This file extends the base settings with settings loaded from the JSON
+configuration files.
+"""
+
 import json
 
 from omniport.settings.base import *
+from omniport.utils.discovery import process_allowed_apps
 
 # Site ID helps in loading site-specific configuration
 SITE_ID = int(os.getenv('SITE_ID', '0'))
@@ -29,13 +35,17 @@ BRANDING = configuration.get('branding', {})
 
 INSTITUTE = BRANDING.get('institute', {})
 INSTITUTE_NAME = INSTITUTE.get('name', 'Institute')
-INSTITUTE_HOME_PAGE = INSTITUTE.get('homePage',
-                                    'https://dhruvkb.github.io/')
+INSTITUTE_HOME_PAGE = INSTITUTE.get(
+    'homePage',
+    'https://dhruvkb.github.io/'
+)
 
 MAINTAINERS = BRANDING.get('maintainers', {})
 MAINTAINERS_NAME = MAINTAINERS.get('name', 'Dhruv Bhanushali')
-MAINTAINERS_HOME_PAGE = MAINTAINERS.get('homePage',
-                                        'https://dhruvkb.github.io/')
+MAINTAINERS_HOME_PAGE = MAINTAINERS.get(
+    'homePage',
+    'https://dhruvkb.github.io/'
+)
 
 # Site
 
@@ -102,9 +112,11 @@ if DEBUG:
     # The list of hosts to which this application will respond
     ALLOWED_HOSTS = ['*']
     # The list of apps whose URLs will be loaded in this app
-    ALLOWED_APPS = '__all__'
+    allowed_apps = '__all__'
 else:
     # The list of hosts to which this application will respond
     ALLOWED_HOSTS = configuration.get('allowedHosts', [])
     # The list of apps whose URLs will be loaded in this app
-    ALLOWED_APPS = configuration.get('allowedApps', '__all__')
+    allowed_apps = configuration.get('allowedApps', '__all__')
+
+process_allowed_apps(allowed_apps, DISCOVERY.get('apps').get('apps'))

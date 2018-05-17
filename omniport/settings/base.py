@@ -12,9 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-import inflection
-
-from omniport.utils import populate_base_urls_map
+from omniport.utils.discovery import discover
 
 # The location of this file
 FILE_PATH = os.path.abspath(__file__)
@@ -57,22 +55,28 @@ INSTALLED_APPS = [
     'nested_admin',
 ]
 
-# The individual core directories
-CORE_DIRS = [
-    folder
-    for folder in os.listdir(path=CORE_DIR)
-    if os.path.isdir(os.path.join(CORE_DIR, folder))
-]
+DISCOVERY = {
+    'core': {
+        'directory': CORE_DIR,
+        'apps': list(),
+    },
+    'services': {
+        'directory': SERVICES_DIR,
+        'apps': list(),
+    },
+    'apps': {
+        'directory': APPS_DIR,
+        'apps': list(),
+    },
+}
 
-# Create a path to the cores' AppConfig by parsing the core directories
-CORE_CONFIGS = [
-    f'{folder}.apps.{inflection.camelize(folder)}Config'
-    for folder in CORE_DIRS
-]
+for _, app_group_info in DISCOVERY.items():
+    discover(app_group_info)
 
-INSTALLED_APPS += CORE_CONFIGS
+for app in DISCOVERY.get('core').get('apps'):
+    INSTALLED_APPS.append(app.get('listing'))
 
-# Check if shell present and if yes, add to installed apps
+# Check if shell present and if yes, add to INSTALLED_APPS
 SHELL_PRESENT = False
 try:
     from shell.apps import ShellConfig
@@ -82,55 +86,12 @@ try:
         'shell.apps.ShellConfig',
     )
 except ImportError:
-    """
-    Shell has not been written
-    """
+    # Shell has not been installed
     pass
 
-# The individual service directories
-SERVICE_DIRS = [
-    folder
-    for folder in os.listdir(path=SERVICES_DIR)
-    if os.path.isdir(os.path.join(SERVICES_DIR, folder))
-]
-
-# Create a path to the services' AppConfig by parsing the service directories
-SERVICE_CONFIGS = [
-    f'{folder}.apps.{inflection.camelize(folder)}Config'
-    for folder in SERVICE_DIRS
-]
-
-INSTALLED_APPS += SERVICE_CONFIGS
-
-# The individual app directories
-APP_DIRS = [
-    folder
-    for folder in os.listdir(path=APPS_DIR)
-    if os.path.isdir(os.path.join(APPS_DIR, folder))
-]
-
-# Create a path to the apps' AppConfig by parsing the app directories
-APP_CONFIGS = [
-    f'{folder}.apps.{inflection.camelize(folder)}Config'
-    for folder in APP_DIRS
-]
-
-INSTALLED_APPS += APP_CONFIGS
-
-# Core-app-base URL mapping maintained for future purposes
-CORE_APP_BASE_URLS_MAP = dict()
-
-populate_base_urls_map(CORE_DIR, CORE_DIRS, CORE_APP_BASE_URLS_MAP)
-
-# App-base URL mapping maintained for future purposes
-APP_BASE_URLS_MAP = dict()
-
-populate_base_urls_map(APPS_DIR, APP_DIRS, APP_BASE_URLS_MAP)
-
-# Service-base URL mapping maintained for future purposes
-SERVICE_BASE_URLS_MAP = dict()
-
-populate_base_urls_map(SERVICES_DIR, SERVICE_DIRS, SERVICE_BASE_URLS_MAP)
+for app_group in ['services', 'apps']:
+    for app in DISCOVERY.get(app_group).get('apps'):
+        INSTALLED_APPS.append(app.get('listing'))
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -241,7 +202,5 @@ try:
     if SHELL_PRESENT:
         from shell.swapper import *
 except ImportError:
-    """
-    Will never enter this block because of the SHELL_PRESENT check
-    """
+    # Will never enter this block because of the SHELL_PRESENT check
     pass
