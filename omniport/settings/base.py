@@ -28,6 +28,9 @@ OMNIPORT_DIR = os.path.dirname(SETTINGS_DIR)
 # The base directory, inside which the project rests
 BASE_DIR = os.path.dirname(OMNIPORT_DIR)
 
+# The ``configuration`` directory where all settings will be loaded from
+CONFIGURATION_DIR = os.path.join(BASE_DIR, 'configuration')
+
 # The ``core`` directory where all Omniport core apps will be loaded from
 CORE_DIR = os.path.join(BASE_DIR, 'core')
 

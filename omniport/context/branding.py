@@ -76,8 +76,8 @@ def branding_text(_=None):
     """
 
     data = dict()
-    data['INSTITUTE'] = settings.INSTITUTE
+    data['INSTITUTE_NAME'] = settings.INSTITUTE_NAME
     data['INSTITUTE_HOME_PAGE'] = settings.INSTITUTE_HOME_PAGE
-    data['MAINTAINERS'] = settings.MAINTAINERS
+    data['MAINTAINERS_NAME'] = settings.MAINTAINERS_NAME
     data['MAINTAINERS_HOME_PAGE'] = settings.MAINTAINERS_HOME_PAGE
     return data
