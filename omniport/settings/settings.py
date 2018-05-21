@@ -34,14 +34,18 @@ configuration = {**base_configuration, **site_configuration}
 BRANDING = configuration.get('branding', {})
 
 INSTITUTE = BRANDING.get('institute', {})
+
 INSTITUTE_NAME = INSTITUTE.get('name', 'Institute')
+
 INSTITUTE_HOME_PAGE = INSTITUTE.get(
     'homePage',
     'https://dhruvkb.github.io/'
 )
 
 MAINTAINERS = BRANDING.get('maintainers', {})
+
 MAINTAINERS_NAME = MAINTAINERS.get('name', 'Dhruv Bhanushali')
+
 MAINTAINERS_HOME_PAGE = MAINTAINERS.get(
     'homePage',
     'https://dhruvkb.github.io/'
