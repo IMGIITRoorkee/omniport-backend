@@ -6,7 +6,6 @@ configuration files.
 import json
 
 from omniport.settings.base import *
-from omniport.utils.discovery import process_allowed_apps
 
 # Site ID helps in loading site-specific configuration
 SITE_ID = int(os.getenv('SITE_ID', '0'))
@@ -98,7 +97,13 @@ CHANNEL_LAYERS = {
 
 NETWORK_RINGS = configuration.get('networkRings')
 
-IP_ADDRESS_PATTERNS = configuration.get('ipAddressPatterns')
+IP_ADDRESS_PATTERNS = dict()
+
+ip_address_patterns = configuration.get('ipAddressPatterns')
+for ip_address_pattern in ip_address_patterns:
+    ring_name = ip_address_pattern.get('ringName')
+    patterns = ip_address_pattern.get('patterns')
+    IP_ADDRESS_PATTERNS[ring_name] = patterns
 
 # Internationalisation and localisation
 
@@ -129,4 +134,8 @@ else:
     # The list of apps whose URLs will be loaded in this app
     allowed_apps = configuration.get('allowedApps', '__all__')
 
-process_allowed_apps(allowed_apps, DISCOVERY.get('apps').get('apps'))
+for app in DISCOVERY.get('apps').get('apps'):
+    if allowed_apps == '__all__' or app.get('name') in allowed_apps:
+        app['isAllowed'] = True
+    else:
+        app['isAllowed'] = False

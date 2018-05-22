@@ -38,17 +38,3 @@ def config(directory):
     config_file = open(os.path.join(directory, 'config.json'))
     configuration = json.load(config_file)
     return configuration
-
-
-def process_allowed_apps(allowed_apps, apps):
-    """
-    Process allowed apps and set the flag in their DISCOVERY instance
-    :param allowed_apps: the list of app names that are allowed
-    :param apps: the list of app instances from DISCOVERY
-    """
-
-    for app in apps:
-        if allowed_apps == '__all__' or app.get('name') in allowed_apps:
-            app['isAllowed'] = True
-        else:
-            app['isAllowed'] = False
