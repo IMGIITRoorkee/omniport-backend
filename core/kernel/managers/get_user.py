@@ -7,19 +7,14 @@ from kernel.models import User, ContactInformation
 def get_user(username):
     """
     Get the user corresponding to the given username
-    :param username: the username provided to identify the user
-    :return: the user, if a user with the given username is found
-    :raise: User.DoesNotExist, if no user with the given username is found
-    """
 
-    """
     This method is different from User.objects.get(username=username) because
-    it looks at a spectrum of other fields in related models to identify the 
-    user. These fields are
+    it looks at a spectrum of other fields in related models to identify the
+    user. These fields are:
 
     User
     - username
-    
+
     Student
     - enrolment_number
 
@@ -28,6 +23,10 @@ def get_user(username):
     - secondary_phone_number
     - email_address
     - institute_webmail_address
+
+    :param username: the username provided to identify the user
+    :return: the user, if a user with the given username is found
+    :raise: User.DoesNotExist, if no user with the given username is found
     """
 
     Person = swapper.load_model('kernel', 'Person')
