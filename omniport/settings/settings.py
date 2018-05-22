@@ -94,6 +94,12 @@ CHANNEL_LAYERS = {
     },
 }
 
+# Network rings
+
+NETWORK_RINGS = configuration.get('networkRings')
+
+IP_ADDRESS_PATTERNS = configuration.get('ipAddressPatterns')
+
 # Internationalisation and localisation
 
 I18N = configuration.get('i18n', {})
