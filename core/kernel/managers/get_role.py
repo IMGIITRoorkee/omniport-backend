@@ -1,13 +1,15 @@
 import swapper
 from django.core.exceptions import ImproperlyConfigured
 
+from kernel.mixins.period_mixin import ActiveStatus
 
-def get_role(person, role_name, filter_active=True, silent=False):
+
+def get_role(person, role_name, active_status=ActiveStatus.ANY, silent=False):
     """
     Get a role corresponding to a person
     :param person: an instance of the Person model whose roles are sought
     :param role_name: the name of the role class whose instance is required
-    :param filter_active: whether to filter out the roles other than active
+    :param active_status: whether the role was, is, isn't or will be active
     :param silent: whether to fail silently or raise exceptions
     :return: the role, if the person fulfills it
     :raise: Role.DoesNotExist, if the given role is not fulfilled by the person
@@ -17,10 +19,7 @@ def get_role(person, role_name, filter_active=True, silent=False):
     try:
         Role = swapper.load_model('kernel', role_name)
         try:
-            if filter_active:
-                query_set = Role.all_filter_active()
-            else:
-                query_set = Role.objects.all()
+            query_set = Role.objects_filter(active_status)
             role = query_set.get(person=person)
             return role
         except Role.DoesNotExist:
