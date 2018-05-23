@@ -18,6 +18,7 @@ class ActiveStatus(Flag):
     # Aliases
     IS_INACTIVE = ~IS_ACTIVE
     ANY = HAS_BEEN_ACTIVE | IS_ACTIVE | WILL_BE_ACTIVE
+    NONE = 0
 
 
 class PeriodMixin(Model):
