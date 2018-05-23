@@ -1,7 +1,23 @@
 import datetime
+from enum import auto, Flag
 
 from django.db import models
 from django.db.models import Q, Model
+
+
+class ActiveStatus(Flag):
+    """
+    These flags describe whether the
+    """
+
+    # Base flags
+    HAS_BEEN_ACTIVE = auto()
+    IS_ACTIVE = auto()
+    WILL_BE_ACTIVE = auto()
+
+    # Aliases
+    IS_INACTIVE = ~IS_ACTIVE
+    ANY = HAS_BEEN_ACTIVE | IS_ACTIVE | WILL_BE_ACTIVE
 
 
 class PeriodMixin(Model):
@@ -11,7 +27,7 @@ class PeriodMixin(Model):
     """
 
     start_date = models.DateField()
-    # A blank end date is considered active
+    # A blank end date denotes that the end date is not known and in the future
     end_date = models.DateField(
         blank=True,
         null=True,
@@ -25,47 +41,37 @@ class PeriodMixin(Model):
         abstract = True
 
     @classmethod
-    def all_filter_will_be_active(cls):
+    def objects_filter(cls, active_status):
         """
-        Return a query set of objects filtering only the to-be-active ones
-        :return: a query set of to-be-active objects
-        """
-
-        if hasattr(cls, 'objects'):
-            today = datetime.date.today()
-            return cls.objects.all().filter(start_date__gt=today)
-        else:
-            raise AttributeError('Class does not have attribute \'objects\'')
-
-    @classmethod
-    def all_filter_active(cls):
-        """
-        Return a query set of objects filtering only the currently active ones
-        :return: a query set of currently active objects
+        Return a query set of objects that match the specified active status
+        :param active_status: the active status of objects to keep in the set
+        :return: a query set of objects with the specified active status
         """
 
         if hasattr(cls, 'objects'):
             today = datetime.date.today()
-            q_end_missing = Q(end_date=None)
-            q_end_not_passed = Q(end_date__gte=today)
-            q = Q(
-                q_end_missing
-                | q_end_not_passed
-            )
-            return cls.objects.all().filter(start_date__lte=today).filter(q)
-        else:
-            raise AttributeError('Class does not have attribute \'objects\'')
 
-    @classmethod
-    def all_filter_has_been_active(cls):
-        """
-        Return a query set of objects filtering only the has-been-active ones
-        :return: a query set of has-been-active objects
-        """
+            if ActiveStatus.HAS_BEEN_ACTIVE in active_status:
+                q_has_been_active = Q(end_date__lt=today)
+            else:
+                q_has_been_active = Q()
 
-        if hasattr(cls, 'objects'):
-            today = datetime.date.today()
-            return cls.objects.all().filter(end_date_lt=today)
+            if ActiveStatus.IS_ACTIVE in active_status:
+                q_start = Q(start_date__lte=today)
+                q_end_missing = Q(end_date=None)
+                q_end_not_passed = Q(end_date__gte=today)
+                q_end = Q(q_end_missing | q_end_not_passed)
+                q_is_active = Q(q_start & q_end)
+            else:
+                q_is_active = Q()
+
+            if ActiveStatus.WILL_BE_ACTIVE in active_status:
+                q_will_be_active = Q(start_date__gt=today)
+            else:
+                q_will_be_active = Q()
+
+            q = q_has_been_active | q_is_active | q_will_be_active
+            return cls.objects.filter(q)
         else:
             raise AttributeError('Class does not have attribute \'objects\'')
 
@@ -104,6 +110,20 @@ class PeriodMixin(Model):
             return self.end_date < today
         else:
             return False
+
+    @property
+    def active_status(self):
+        """
+        Return a flag from ActiveStatus denoting the instance's active status
+        :return: a flag from ActiveStatus denoting the instance's active status
+        """
+
+        if self.is_active:
+            return ActiveStatus.IS_ACTIVE
+        elif self.has_already_ended:
+            return ActiveStatus.HAS_BEEN_ACTIVE
+        elif self.is_yet_to_begin:
+            return ActiveStatus.WILL_BE_ACTIVE
 
     @property
     def start_year(self):
