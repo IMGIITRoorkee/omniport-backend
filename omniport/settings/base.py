@@ -103,6 +103,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'omniport.middleware.network_rings.NetworkRings',
+    'omniport.middleware.person_roles.PersonRoles',
 ]
 
 ROOT_URLCONF = 'omniport.urls'
