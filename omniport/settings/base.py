@@ -206,3 +206,7 @@ try:
 except ImportError:
     # Will never enter this block because of the SHELL_PRESENT check
     pass
+
+# Roles
+
+ROLES = list()
