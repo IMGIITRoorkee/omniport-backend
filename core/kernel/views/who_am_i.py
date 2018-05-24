@@ -21,7 +21,7 @@ class WhoAmI(APIView):
         :return: the response for request
         """
 
-        person = request.user.person
+        person = request.person
         serializer = PersonSerializer(
             person,
             fields=[
