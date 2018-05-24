@@ -22,7 +22,6 @@ Branch = swapper.load_model('kernel', 'Branch')
 
 Student = swapper.load_model('kernel', 'Student')
 FacultyMember = swapper.load_model('kernel', 'FacultyMember')
-
 Maintainer = swapper.load_model('kernel', 'Maintainer')
 
 # Register all models
@@ -46,5 +45,4 @@ omnipotence.register(Branch)
 
 omnipotence.register(Student)
 omnipotence.register(FacultyMember)
-
 omnipotence.register(Maintainer)
