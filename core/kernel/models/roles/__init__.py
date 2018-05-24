@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from kernel.models.roles.faculty_member import (
     AbstractFacultyMember,
 
@@ -13,3 +15,10 @@ from kernel.models.roles.student import (
 
     Student,
 )
+
+# Add the names of roles to the list maintained in settings
+settings.ROLES.extend([
+    'Student',
+    'FacultyMember',
+    'Maintainer',
+])
