@@ -1,9 +1,9 @@
 """
-This file extends the base settings with settings loaded from the JSON
+This file extends the base settings with settings loaded from the YAML
 configuration files.
 """
 
-import json
+import yaml
 
 from omniport.settings.base import *
 
@@ -14,38 +14,38 @@ SITE_ID = int(os.getenv('SITE_ID', '0'))
 
 base_config_file = open(os.path.join(
     CONFIGURATION_DIR,
-    'base.json'
+    'base.yml'
 ))
-base_configuration = json.load(base_config_file)
+base_configuration = yaml.load(base_config_file)
 
 site_config_file = open(os.path.join(
     CONFIGURATION_DIR,
     'sites',
-    f'site_{SITE_ID}.json'
+    f'site_{SITE_ID}.yml'
 ))
-site_configuration = json.load(site_config_file)
+site_configuration = yaml.load(site_config_file)
 
 # Note that site_configuration overrides base_configuration
 configuration = {**base_configuration, **site_configuration}
 
 # Branding
 
-BRANDING = configuration.get('branding', {})
+branding = configuration.get('branding', {})
 
-INSTITUTE = BRANDING.get('institute', {})
+institute = branding.get('institute', {})
 
-INSTITUTE_NAME = INSTITUTE.get('name', 'Institute')
+INSTITUTE_NAME = institute.get('name', 'Institute')
 
-INSTITUTE_HOME_PAGE = INSTITUTE.get(
+INSTITUTE_HOME_PAGE = institute.get(
     'homePage',
     'https://dhruvkb.github.io/'
 )
 
-MAINTAINERS = BRANDING.get('maintainers', {})
+maintainers = branding.get('maintainers', {})
 
-MAINTAINERS_NAME = MAINTAINERS.get('name', 'Dhruv Bhanushali')
+MAINTAINERS_NAME = maintainers.get('name', 'Dhruv Bhanushali')
 
-MAINTAINERS_HOME_PAGE = MAINTAINERS.get(
+MAINTAINERS_HOME_PAGE = maintainers.get(
     'homePage',
     'https://dhruvkb.github.io/'
 )

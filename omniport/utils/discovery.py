@@ -1,7 +1,7 @@
-import json
 import os
 
 import inflection
+import yaml
 
 
 def discover(app_group_info):
@@ -35,6 +35,6 @@ def config(directory):
     :return: the configuration of every app being scanned
     """
 
-    config_file = open(os.path.join(directory, 'config.json'))
-    configuration = json.load(config_file)
+    config_file = open(os.path.join(directory, 'config.yml'))
+    configuration = yaml.load(config_file)
     return configuration
