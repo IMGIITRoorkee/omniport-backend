@@ -12,11 +12,11 @@ from kernel.managers import auth
 from kernel.utils.rights import has_omnipotence_rights
 
 
-def upload_to(user, filename):
+def upload_to(user_instance, filename):
     """
     Compute the location of where to store the display picture, removing any
     existing file with the same name
-    :param user: the user whose display picture is being uploaded
+    :param user_instance: the user whose display picture is being uploaded
     :param filename: the original filename of the image, not used
     :return: the path to the uploaded image
     """
@@ -29,7 +29,7 @@ def upload_to(user, filename):
     destination = os.path.join(
         'kernel',
         'display_pictures',
-        f'{user.id}{extension}',
+        f'{user_instance.id}{extension}',
     )
 
     try:
