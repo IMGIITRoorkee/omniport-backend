@@ -102,6 +102,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'omniport.middleware.drf_auth.DrfAuth',
+
     'omniport.middleware.network_rings.NetworkRings',
     'omniport.middleware.person_roles.PersonRoles',
 ]
