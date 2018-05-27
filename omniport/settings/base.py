@@ -173,11 +173,33 @@ USE_TZ = True
 # REST framework
 
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'rest_framework_json_api'
+                         '.exceptions.exception_handler',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework_json_api'
+                                '.pagination.PageNumberPagination',
+    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api'
+                              '.metadata.JSONAPIMetadata',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_json_api.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
 }
+
+# REST framework JSON API
+
+JSON_API_PLURALIZE_TYPES = True
+JSON_API_FORMAT_TYPES = 'dasherize'
+
+JSON_API_FORMAT_KEYS = 'camelize'
 
 # Static files
 
