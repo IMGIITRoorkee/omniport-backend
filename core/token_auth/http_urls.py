@@ -1,8 +1,9 @@
 from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView as ObtainPair,
-    TokenRefreshView as Refresh,
-    TokenVerifyView as Verify,
+
+from token_auth.views import (
+    ObtainPair,
+    Refresh,
+    Verify,
 )
 
 app_name = 'token_auth'
