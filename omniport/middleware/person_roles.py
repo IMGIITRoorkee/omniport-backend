@@ -27,27 +27,31 @@ class PersonRoles:
         :return: the processed response
         """
 
-        person = request.user.person
-        request.person = person
+        if request.user and request.user.is_authenticated:
+            person = request.user.person
+            request.person = person
 
-        # Get the list of all roles maintained in settings
-        roles = settings.ROLES
-        for role_name in roles:
-            try:
-                role = get_role(
-                    person=person,
-                    role_name=role_name,
-                    active_status=ActiveStatus.ANY,
-                    silent=False
-                )
-                active_status = role.active_status
-                request.roles = dict()
-                request.roles[role_name] = {
-                    'instance': role,
-                    'activeStatus': active_status,
-                }
-            except ObjectDoesNotExist:
-                pass
+            # Get the list of all roles maintained in settings
+            roles = settings.ROLES
+            for role_name in roles:
+                try:
+                    role = get_role(
+                        person=person,
+                        role_name=role_name,
+                        active_status=ActiveStatus.ANY,
+                        silent=False
+                    )
+                    active_status = role.active_status
+                    request.roles = dict()
+                    request.roles[role_name] = {
+                        'instance': role,
+                        'activeStatus': active_status,
+                    }
+                except ObjectDoesNotExist:
+                    pass
+        else:
+            request.person = None
+            request.roles = None
 
         response = self.get_response(request)
 
