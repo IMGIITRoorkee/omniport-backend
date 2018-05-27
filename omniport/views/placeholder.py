@@ -15,14 +15,9 @@ class Placeholder(APIView):
         """
 
         response = {
-            'data': {
-                'type': 'message',
-                'attributes': {
-                    'text': 'Coming soon!',
-                    'subtext': 'This view is under development and will be '
-                               'live very soon, so stay tuned',
-                },
-            },
+            'message': 'Coming soon!',
+            'description': 'This view is under development and will be live'
+                           'very soon, so stay tuned',
         }
         return Response(response)
 

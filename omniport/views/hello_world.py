@@ -17,13 +17,8 @@ class HelloWorld(APIView):
         """
 
         response = {
-            'data': {
-                'type': 'message',
-                'attributes': {
-                    'text': 'Hello World!',
-                    'timestamp': datetime.datetime.now(),
-                },
-            },
+            'message': 'Hello World!',
+            'timestamp': datetime.datetime.now(),
         }
         return Response(response)
 

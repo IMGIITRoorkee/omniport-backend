@@ -20,11 +20,6 @@ class EnsureCsrf(APIView):
         """
 
         response = {
-            'data': {
-                'type': 'message',
-                'attributes': {
-                    'text': 'Successfully set CSRF token',
-                },
-            },
+            'message': 'Successfully set CSRF token',
         }
         return Response(response)
