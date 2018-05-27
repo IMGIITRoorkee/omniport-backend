@@ -20,7 +20,6 @@ class Home(APIView):
         site_name = settings.SITE_VERBOSE_NAME
         response = {
             'app': 'kernel',
-            'appGroup': 'core',
             'description': f'Handles the core functionality of {site_name}, '
                            'including but not limited to the management of the '
                            'core database and auth',
