@@ -1,16 +1,17 @@
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from kernel.serializers.person import PersonSerializer
 
 
-class WhoAmI(APIView):
+class WhoAmI(GenericAPIView):
     """
     This view shows some personal information of the currently logged in user
     """
 
     permission_classes = (IsAuthenticated,)
+    serializer_class = PersonSerializer
 
     def get(self, request, *args, **kwargs):
         """
@@ -22,7 +23,7 @@ class WhoAmI(APIView):
         """
 
         person = request.person
-        serializer = PersonSerializer(
+        serializer = self.get_serializer_class()(
             person,
             fields=[
                 'full_name',
