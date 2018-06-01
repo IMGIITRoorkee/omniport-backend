@@ -93,6 +93,14 @@ CHANNEL_LAYERS = {
     },
 }
 
+# CORS configuration
+
+cors = configuration.get('cors', {})
+
+CORS_ALLOW_CREDENTIALS = cors.get('allowCredentials', False)
+
+CORS_ORIGIN_WHITELIST = cors.get('originWhitelist', list())
+
 # Network rings
 
 NETWORK_RINGS = configuration.get('networkRings')
