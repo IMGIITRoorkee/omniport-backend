@@ -23,7 +23,7 @@ def get_user_jwt(request):
         user_jwt, _ = JWTAuthentication().authenticate(Request(request))
         if user_jwt is not None:
             return user_jwt
-    except (AuthenticationFailed, InvalidToken, TokenError):
+    except (AuthenticationFailed, InvalidToken, TokenError, TypeError):
         # There may be other exceptions but these are the only ones I could see
         pass
 
