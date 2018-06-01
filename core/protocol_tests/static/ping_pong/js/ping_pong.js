@@ -2,7 +2,8 @@ var messageParagraph = document.getElementById('message');
 var sendPingButton = document.getElementById('send-ping');
 var sendPongButton = document.getElementById('send-pong');
 
-var socket = new WebSocket('ws://' + window.location.host + '/ws/');
+var url = 'ws://' + window.location.host + '/ws/protocol_tests/ping_pong/';
+var socket = new WebSocket(url);
 
 function onOpen() {
     console.log('WebSocket opened');
