@@ -101,6 +101,8 @@ CORS_ALLOW_CREDENTIALS = cors.get('allowCredentials', False)
 
 CORS_ORIGIN_WHITELIST = cors.get('originWhitelist', list())
 
+CORS_ORIGIN_ALLOW_ALL = cors.get('originAllowAll', False)
+
 # Network rings
 
 NETWORK_RINGS = configuration.get('networkRings')
