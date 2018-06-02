@@ -22,9 +22,14 @@ def get_http_urlpatterns(app_group):
         if app.get('isAllowed'):
             config = app.get('config')
             base_url = config.get('baseUrls', {}).get('http', None)
+            is_api = config.get('isApi', False)
             if base_url is not None:
+                if is_api:
+                    path_string = f'api/{base_url}'
+                else:
+                    path_string = f'{base_url}'
                 urlpatterns.append(
-                    path(f'{base_url}', include(f'{name}.http_urls'))
+                    path(path_string, include(f'{name}.http_urls'))
                 )
 
     return urlpatterns
@@ -47,13 +52,18 @@ def get_ws_urlpatterns(app_group):
         if app.get('isAllowed'):
             config = app.get('config')
             base_url = config.get('baseUrls', {}).get('ws', None)
+            is_api = config.get('isApi', False)
             if base_url is not None:
                 module = importlib.import_module(f'{name}.ws_urls')
                 dictionary = module.__dict__
                 app_urlpatterns = dictionary['urlpatterns']
                 url_router = URLRouter(app_urlpatterns)
+                if is_api:
+                    path_string = f'api/{base_url}'
+                else:
+                    path_string = f'{base_url}'
                 urlpatterns.append(
-                    path(f'{base_url}', url_router)
+                    path(path_string, url_router)
                 )
 
     return urlpatterns
