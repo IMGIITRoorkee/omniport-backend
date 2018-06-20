@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}404 Not Found{% endblock %}
+{% block title %}404: Not found{% endblock %}
 
-{% block error_title %}404 Not found{% endblock %}
+{% block error_title %}404: Not found{% endblock %}
 
 {% block box_content %}
-    <h1>404: Not found</h1>
-    <p>Now that <em>could be</em> our fault.</p>
+    <h1 data-tooltip="404: Not found">404: Foundn't</h1>
+    <p>Now that <em>could be</em> anyone's fault.</p>
     <div class="ui divider"></div>
     <i class="frown outline huge icon"></i>
     <p></p>
     <p>
-        This is as embarrassing for us as it is confusing for
-        you.<br>
-        We're already working on it.
+        If that was our link you followed we are sorry. In fact, we've been
+        notified and are already working on it.
+    </p>
+    <p>
+        But if it was a link from a third party, please inform them that their
+        link's broken. Maybe they'll fix it.
     </p>
     <button class="ui basic button" onclick="window.history.back();">
         Go back?
