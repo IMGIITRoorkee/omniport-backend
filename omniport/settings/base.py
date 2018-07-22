@@ -14,28 +14,37 @@ import os
 
 from omniport.utils.discovery import discover
 
+# The 'configuration' directory where all settings will be loaded from
+CONFIGURATION_DIR = os.path.join(os.sep, 'configuration')
+
+# The 'branding' directory where all branding imagery will be loaded from
+BRANDING_DIR = os.path.join(os.sep, 'branding')
+
+# The 'static' directory where all static files will be collected into
+STATIC_DIR = os.path.join(os.sep, 'static_files')
+
+# The 'media' directory where all uploaded media will be stored in
+MEDIA_DIR = os.path.join(os.sep, 'media_files')
+
 # The location of this file
 FILE_PATH = os.path.abspath(__file__)
 
-# The ``settings`` package inside the ``omniport`` package
+# The 'settings' package, inside the 'omniport' directory
 SETTINGS_DIR = os.path.dirname(FILE_PATH)
 
-# The ``omniport`` package
+# The 'omniport' package, inside the base directory
 OMNIPORT_DIR = os.path.dirname(SETTINGS_DIR)
 
 # The base directory, inside which the project rests
 BASE_DIR = os.path.dirname(OMNIPORT_DIR)
 
-# The ``configuration`` directory where all settings will be loaded from
-CONFIGURATION_DIR = os.path.join(BASE_DIR, 'configuration')
-
-# The ``core`` directory where all Omniport core apps will be loaded from
+# The 'core' directory where all Omniport core apps will be loaded from
 CORE_DIR = os.path.join(BASE_DIR, 'core')
 
-# The ``services`` directory where all Omniport service apps will be loaded from
+# The 'services' directory where all Omniport service apps will be loaded from
 SERVICES_DIR = os.path.join(BASE_DIR, 'services')
 
-# The ``apps`` directory where all Omniport drop-in apps will be loaded from
+# The 'apps' directory where all Omniport drop-in apps will be loaded from
 APPS_DIR = os.path.join(BASE_DIR, 'apps')
 
 # Application declarations
@@ -213,13 +222,13 @@ STATICFILES_DIRS = [
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = STATIC_DIR
 
 # Media files
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/media/'
+MEDIA_ROOT = MEDIA_DIR
 
 # WSGI application served by Gunicorn
 WSGI_APPLICATION = 'omniport.wsgi.application'

@@ -1,7 +1,6 @@
 import os
 
 from django.conf import settings
-from django.contrib.staticfiles import finders
 
 
 def singleton_image(name, extension):
@@ -12,13 +11,12 @@ def singleton_image(name, extension):
     :return: the relative path to the logo if found, None otherwise
     """
 
-    logo_relative_path = os.path.join(
-        'omniport',
-        'branding',
+    logo_path = os.path.join(
+        settings.BRANDING_DIR,
         f'{name}{extension}',
     )
-    if finders.find(logo_relative_path) is not None:
-        return logo_relative_path
+    if os.path.isfile(logo_path) is not None:
+        return logo_path
     else:
         return None
 
@@ -32,13 +30,12 @@ def indexed_image(name, extension, preferred_index):
     :return: the relative path to the logo if found, None otherwise
     """
 
-    logo_relative_path = os.path.join(
-        'omniport',
-        'branding',
+    logo_path = os.path.join(
+        settings.BRANDING_DIR,
         f'{name}_{preferred_index}{extension}',
     )
-    if finders.find(logo_relative_path) is not None:
-        return logo_relative_path
+    if os.path.isfile(logo_path) is not None:
+        return logo_path
     else:
         return singleton_image(name, extension)
 
