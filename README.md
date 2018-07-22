@@ -8,7 +8,7 @@ be extensible, customizable, performant and powerful.
 ## Features
 
 - Impressive modern technological stack
-- Customisable to adapt to almost any institutal structure
+- Customisable to adapt to almost any institutional structure
 - Extensible to include any number of associated applications
 - Pythonic code that complies with Django philosophies
 - Fully PEP-8 compliant, including the preposterous 80-character rule
