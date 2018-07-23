@@ -15,7 +15,7 @@ def singleton_image(name, extension):
         settings.BRANDING_DIR,
         f'{name}{extension}',
     )
-    if os.path.isfile(logo_path) is not None:
+    if os.path.isfile(logo_path):
         return logo_path
     else:
         return None
@@ -34,7 +34,7 @@ def indexed_image(name, extension, preferred_index):
         settings.BRANDING_DIR,
         f'{name}_{preferred_index}{extension}',
     )
-    if os.path.isfile(logo_path) is not None:
+    if os.path.isfile(logo_path):
         return logo_path
     else:
         return singleton_image(name, extension)
