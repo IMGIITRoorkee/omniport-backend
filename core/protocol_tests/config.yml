@@ -1,3 +1,0 @@
-baseUrls:
-    http: protocol_tests/
-    ws: protocol_tests/
