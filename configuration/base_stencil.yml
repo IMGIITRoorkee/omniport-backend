@@ -1,0 +1,36 @@
+branding:
+  institute: 
+      name:  # The name of the institute 
+      homePage:  # The URL to the home page of the institute
+  maintainers: 
+      name:  # The name of the maintainers
+      homePage:  # The URL to the home page of the maintainers
+i18n:
+  languageCode:  # The languge code of the portal, like en-gb
+  timeZone:  # The time zone of the portal, like Asia/Kolkata
+secretKey: ''  # 'fifty random characters'
+services:
+  database:
+    # Ideally copy the settings over from postgres/database.env
+    host:  # database, or your own server configuration
+    name:  # Same as database.env, or your own server configuration
+    user:  # Same as database.env, or your own server configuration
+    password:  # Same as database.env, or your own server configuration
+    port:  # 5432, or your own server configuration
+  channelLayer:
+    host:  # channel-layer, or your own server configuration
+    port:  # 6379, or your own server configuration
+  sessionStore:
+    host:  # session-store, or your own server configuration
+    port:  # 6379, or your own server configuration
+  messageBroker:
+    host:  # message-broker, or your own server configuration
+    user:  # Same as message_broker.env, or your own server configuration
+    password:  # Same as message_broker.env, or your own server configuration
+ipAddressPatterns:
+  # For as many rings as you anticipate, repeat
+  - ringName: # The name of the network ring
+    patterns: 
+    # For as many IP patterns as each ring contains, repeat
+    - ''  # 'the regex of the IP pattern'
+      
