@@ -1,0 +1,15 @@
+# Compiled .pyc files
+__pycache__/
+
+# Ignore apps ...
+apps/*
+# ... but commit the README.md file so that the folder gets created
+!apps/README.md
+
+# Ignore services ...
+services/*
+# ... but commit the README.md file so that the folder gets created
+!services/README.md
+
+# Ignore shell
+shell/

@@ -1,0 +1,5 @@
+# Ignore the base configuration YAML file
+base.yml
+
+# Ignore every site-specific configuration YAML file
+sites/site_[0-9].yml

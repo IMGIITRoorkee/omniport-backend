@@ -1,0 +1,10 @@
+# Ignore the institute logo
+institute_logo.png
+
+# Ignore the maintainers' logo
+maintainers_logo.png
+
+# Ignore all site logos and favicons
+site_logo.png
+site_favicon_[0-9].ico
+site_logo_[0-9].png
