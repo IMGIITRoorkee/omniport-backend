@@ -21,7 +21,7 @@ def has_omnipotence_rights(user):
         from shell.utils.rights import has_omnipotence_rights as omnipotence
         return omnipotence(user)
     except ImportError:
-        return False
+        return user.is_superuser or False
 
 
 def has_alohomora_rights(user):
@@ -35,7 +35,7 @@ def has_alohomora_rights(user):
         from shell.utils.rights import has_alohomora_rights as alohomora
         return alohomora(user)
     except ImportError:
-        return False
+        return user.is_superuser or False
 
 
 def has_lockpicking_rights(user):
@@ -49,4 +49,4 @@ def has_lockpicking_rights(user):
         from shell.utils.rights import has_lockpicking_rights as lockpicking
         return lockpicking(user)
     except ImportError:
-        return False
+        return user.is_superuser or False
