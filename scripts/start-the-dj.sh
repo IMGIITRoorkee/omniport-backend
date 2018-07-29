@@ -66,7 +66,7 @@ else
             docker container ls -a | grep ${i} &> /dev/null
             if [ $? -ne 0 ]; then
                 printf "\n"
-                start_django_server ${i} && break 2
+                start_django_server ${i}; break 2
             fi
         done
     done

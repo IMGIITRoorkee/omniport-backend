@@ -61,7 +61,7 @@ else
             docker container ls -a | grep ${i} &> /dev/null
             if [ $? -ne 0 ]; then
                 printf "\n"
-                start_theia_server ${i} && break 2
+                start_theia_server ${i}; break 2
             fi
         done
     done
