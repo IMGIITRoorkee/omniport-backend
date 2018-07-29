@@ -16,14 +16,14 @@
     <script src="{% static 'jquery/jquery.min.js' %}" defer></script>
     <script src="{% static 'semantic-ui/semantic.min.js' %}" defer></script>
 
-    <link rel="icon" href="{% static SITE_FAVICON %}">
+    <link rel="icon" href="{{ SITE_FAVICON }}">
 </head>
 <body>
 <header class="ui top attached segment">
     <div class="ui container" id="title-bar">
         <div id="portal-logo">
             <a href="{% url 'home' %}">
-                <img src="{% static SITE_LOGO %}" class="title-bar-logo">
+                <img src="{{ SITE_LOGO }}" class="title-bar-logo">
             </a>
         </div>
         <div id="site-name">
@@ -35,7 +35,7 @@
         </div>
         <div id="institute-logo">
             <a href="{{ INSTITUTE_HOME_PAGE }}">
-                <img src="{% static INSTITUTE_LOGO %}" class="title-bar-logo">
+                <img src="{{ INSTITUTE_LOGO }}" class="title-bar-logo">
             </a>
         </div>
     </div>
@@ -55,7 +55,7 @@
             Copyright &copy; {% now 'Y' %}
         </div>
         <a href="{{ MAINTAINERS_HOME_PAGE }}">
-            <img src="{% static MAINTAINERS_LOGO %}" id="maintainers-logo">
+            <img src="{{ MAINTAINERS_LOGO }}" id="maintainers-logo">
         </a>
         <div>
             {{ MAINTAINERS_NAME }}
