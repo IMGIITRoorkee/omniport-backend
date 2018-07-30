@@ -227,6 +227,12 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = STATIC_DIR
 
+# Branding files
+
+BRANDING_URL = '/branding/'
+
+BRANDING_ROOT = BRANDING_DIR
+
 # Media files
 
 MEDIA_URL = '/media/'
