@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
     <title>
         {% block title %}{% endblock %}: {{ SITE_VERBOSE_NAME }}
@@ -29,7 +29,6 @@
         <div id="site-name">
             {% block site_name %}{% endblock %}
         </div>
-        <div class="growing space"></div>
         <div id="institute">
             {% block institute %}{% endblock %}
         </div>
