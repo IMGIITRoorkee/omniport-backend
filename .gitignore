@@ -3,3 +3,9 @@
 
 # VSCode configuration
 .vscode/
+
+# Collected static files
+static_files/
+
+# User loaded media files
+media_files/
