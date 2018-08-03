@@ -3,12 +3,13 @@ site:
   name:  # A code name for the site
   verboseName:  # A verbose punctuated name for the site
 debug:  # Boolean that decides whether the site is in production or development
-allowedHosts:
-# For as many hostnames that point to this site, repeat
--  # The domain name that this site should serve to
-allowedApps:
-# For all the apps that are allowed to be served on this site, repeat
--  # The code name of the app that should be allowed
-networkRings:
-# For all the network rings that this site serves, repeat
--  # The name of the rings from base.yml that fall in the purview of this site
+allowances:
+  hosts:
+  # For as many hostnames that point to this site, repeat
+  -  # The domain name that this site should serve to
+  apps:
+  # For all the apps that are allowed to be served on this site, repeat
+  -  # The code name of the app that should be allowed
+  ipAddressRings:
+  # For all the network rings that this site serves, repeat
+  -  # The name of the rings from base.yml that fall in the purview of this site

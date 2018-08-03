@@ -2,16 +2,15 @@ from django.conf.urls.static import static
 
 from omniport.urls.http_urls import http_urlpatterns
 from omniport.urls.ws_urls import ws_urlpatterns
-from omniport.utils.urls import get_urlpatterns
 from django.conf import settings
 
-http_urlpatterns += get_urlpatterns('core', 'http')
-http_urlpatterns += get_urlpatterns('services', 'http')
-http_urlpatterns += get_urlpatterns('apps', 'http')
+settings.DISCOVERY.prepare_urlpatterns()
 
-ws_urlpatterns += get_urlpatterns('core', 'ws')
-ws_urlpatterns += get_urlpatterns('services', 'ws')
-ws_urlpatterns += get_urlpatterns('apps', 'ws')
+http_urlpatterns += settings.DISCOVERY.service_http_urlpatterns
+http_urlpatterns += settings.DISCOVERY.app_http_urlpatterns
+
+ws_urlpatterns += settings.DISCOVERY.service_ws_urlpatterns
+ws_urlpatterns += settings.DISCOVERY.app_ws_urlpatterns
 
 if settings.DEBUG:
     http_urlpatterns += static(

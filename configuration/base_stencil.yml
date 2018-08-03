@@ -13,10 +13,10 @@ services:
   database:
     # Ideally copy the settings over from postgres/database.env
     host:  # database, or your own server configuration
-    name:  # Same as database.env, or your own server configuration
+    port:  # 5432, or your own server configuration
     user:  # Same as database.env, or your own server configuration
     password:  # Same as database.env, or your own server configuration
-    port:  # 5432, or your own server configuration
+    name:  # Same as database.env, or your own server configuration
   channelLayer:
     host:  # channel-layer, or your own server configuration
     port:  # 6379, or your own server configuration
@@ -25,11 +25,12 @@ services:
     port:  # 6379, or your own server configuration
   messageBroker:
     host:  # message-broker, or your own server configuration
+    port:  # 5672, or your own server configuration
     user:  # Same as message_broker.env, or your own server configuration
     password:  # Same as message_broker.env, or your own server configuration
-ipAddressPatterns:
+ipAddressRings:
   # For as many rings as you anticipate, repeat
-  - ringName: # The name of the network ring
+  - name: # The name of the network ring
     patterns: 
     # For as many IP patterns as each ring contains, repeat
     - ''  # 'the regex of the IP pattern'

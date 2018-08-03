@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
-from omniport.utils.discovery import discover
+from discovery.discovery import Discovery
 
 # The location of this file
 FILE_PATH = os.path.abspath(__file__)
@@ -66,28 +66,12 @@ INSTALLED_APPS = [
     'easy_select2',
     'nested_admin',
     'corsheaders',
+
+    # Core apps
+    'kernel',
+    'session_auth',
+    'token_auth',
 ]
-
-DISCOVERY = {
-    'core': {
-        'directory': CORE_DIR,
-        'apps': list(),
-    },
-    'services': {
-        'directory': SERVICES_DIR,
-        'apps': list(),
-    },
-    'apps': {
-        'directory': APPS_DIR,
-        'apps': list(),
-    },
-}
-
-for _, app_group_info in DISCOVERY.items():
-    discover(app_group_info)
-
-for app in DISCOVERY.get('core').get('apps'):
-    INSTALLED_APPS.append(app.get('listing'))
 
 # Check if shell present and if yes, add to INSTALLED_APPS
 SHELL_PRESENT = False
@@ -102,9 +86,16 @@ except ImportError:
     # Shell has not been installed
     pass
 
-for app_group in ['services', 'apps']:
-    for app in DISCOVERY.get(app_group).get('apps'):
-        INSTALLED_APPS.append(app.get('listing'))
+# Discovery
+
+DISCOVERY = Discovery(SERVICES_DIR, APPS_DIR)
+DISCOVERY.discover()
+
+DISCOVERY.prepare_installed_apps()
+
+INSTALLED_APPS += DISCOVERY.service_installed_apps
+
+INSTALLED_APPS += DISCOVERY.app_installed_apps
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -119,7 +110,7 @@ MIDDLEWARE = [
 
     'omniport.middleware.drf_auth.DrfAuth',
 
-    'omniport.middleware.network_rings.NetworkRings',
+    'omniport.middleware.ip_address_rings.IpAddressRings',
     'omniport.middleware.person_roles.PersonRoles',
 ]
 
@@ -246,7 +237,6 @@ WSGI_APPLICATION = 'omniport.wsgi.application'
 ASGI_APPLICATION = 'omniport.routing.application'
 
 # Swapper models
-
 try:
     if SHELL_PRESENT:
         from shell.swapper import *
@@ -255,5 +245,4 @@ except ImportError:
     pass
 
 # Roles
-
 ROLES = list()

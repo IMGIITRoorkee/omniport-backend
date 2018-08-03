@@ -16,4 +16,9 @@ http_urlpatterns = [
 
     # Django REST Framework URL dispatcher
     path('rest/', include('rest_framework.urls')),
+
+    # Core URL dispatchers
+    path('kernel/', include('kernel.http_urls')),
+    path('session_auth/', include('session_auth.http_urls')),
+    path('token_auth/', include('token_auth.http_urls')),
 ]

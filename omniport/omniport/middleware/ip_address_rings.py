@@ -3,7 +3,7 @@ import re
 from django.conf import settings
 
 
-class NetworkRings:
+class IpAddressRings:
     """
     Set the network_ring attribute on the request object based on the IP from
     which the request was made
@@ -42,16 +42,16 @@ class NetworkRings:
             )
         )
 
-        network_rings = settings.NETWORK_RINGS
-        ip_address_patterns = settings.IP_ADDRESS_PATTERNS
+        ip_address_rings = settings.IP_ADDRESS_RINGS
+        allowed_ip_address_rings = settings.ALLOWED_IP_ADDRESS_RINGS
 
-        for ring in network_rings:
-            patterns = ip_address_patterns[ring]
+        for ring in allowed_ip_address_rings:
+            patterns = ip_address_rings[ring]
             if re.search('|'.join(patterns), ip_address):
                 request.network_ring = ring
                 break
         else:
-            request.network_ring = network_rings[-1]
+            request.network_ring = ip_address_rings[-1]
 
         response = self.get_response(request)
 
