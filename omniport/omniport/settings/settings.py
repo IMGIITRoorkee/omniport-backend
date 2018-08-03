@@ -127,6 +127,8 @@ else:
 if ALLOWED_IP_ADDRESS_RINGS == '__all__':
     ALLOWED_IP_ADDRESS_RINGS = list(IP_ADDRESS_RINGS.keys())
 
+for (app, app_configuration) in DISCOVERY.services:
+    app_configuration.is_allowed = True  # Hack to allow all services
 for (app, app_configuration) in DISCOVERY.apps:
     if (
             ALLOWED_APPS == '__all__'
