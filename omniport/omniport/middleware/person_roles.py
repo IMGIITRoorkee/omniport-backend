@@ -31,7 +31,7 @@ class PersonRoles:
             person = request.user.person
             request.person = person
 
-            # Get the list of all roles maintained in settings
+            request.roles = dict()
             roles = settings.ROLES
             for role_name in roles:
                 try:
@@ -42,7 +42,6 @@ class PersonRoles:
                         silent=False
                     )
                     active_status = role.active_status
-                    request.roles = dict()
                     request.roles[role_name] = {
                         'instance': role,
                         'activeStatus': active_status,
