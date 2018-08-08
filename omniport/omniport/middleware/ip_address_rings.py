@@ -41,6 +41,7 @@ class IpAddressRings:
                 )
             )
         )
+        request.source_ip_address = ip_address
 
         ip_address_rings = settings.IP_ADDRESS_RINGS
         allowed_ip_address_rings = settings.ALLOWED_IP_ADDRESS_RINGS
@@ -48,10 +49,10 @@ class IpAddressRings:
         for ring in allowed_ip_address_rings:
             patterns = ip_address_rings[ring]
             if re.search('|'.join(patterns), ip_address):
-                request.network_ring = ring
+                request.ip_address_ring = ring
                 break
         else:
-            request.network_ring = ip_address_rings[-1]
+            request.ip_address_ring = ip_address_rings[-1]
 
         response = self.get_response(request)
 
