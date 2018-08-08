@@ -109,23 +109,12 @@ SECRET_KEY = configuration.secret_key
 # This variable should be True in testing environments and False otherwise
 DEBUG = configuration.debug
 
-if DEBUG:
-    # The list of hosts to which this application will respond
-    ALLOWED_HOSTS = ['*']
-    # The list of apps whose URLs will be loaded in this app
-    ALLOWED_APPS = '__all__'
-    # The list of IP address rings which this app will service
-    ALLOWED_IP_ADDRESS_RINGS = '__all__'
-else:
-    # The list of hosts to which this site will respond
-    ALLOWED_HOSTS = configuration.allowances.hosts
-    # The list of apps whose URLs will be loaded in this site
-    ALLOWED_APPS = configuration.allowances.apps
-    # The list of IP address rings which this site will service
-    ALLOWED_IP_ADDRESS_RINGS = configuration.allowances.ip_address_rings
+# The list of hosts to which this site will respond
+ALLOWED_HOSTS = configuration.allowances.hosts
 
-if ALLOWED_IP_ADDRESS_RINGS == '__all__':
-    ALLOWED_IP_ADDRESS_RINGS = list(IP_ADDRESS_RINGS.keys())
+# The list of apps whose URLs will be loaded in this site
+
+ALLOWED_APPS = configuration.allowances.apps
 
 for (app, app_configuration) in DISCOVERY.services:
     app_configuration.is_allowed = True  # Hack to allow all services
@@ -137,3 +126,10 @@ for (app, app_configuration) in DISCOVERY.apps:
         app_configuration.is_allowed = True
     else:
         app_configuration.is_allowed = False
+
+# The list of IP address rings which this site will service
+
+ALLOWED_IP_ADDRESS_RINGS = configuration.allowances.ip_address_rings
+
+if ALLOWED_IP_ADDRESS_RINGS == '__all__':
+    ALLOWED_IP_ADDRESS_RINGS = list(IP_ADDRESS_RINGS.keys())
