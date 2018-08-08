@@ -29,6 +29,9 @@ class Discovery:
         self.services = list()
         self.apps = list()
 
+        self.service_configuration_map = dict()
+        self.app_configuration_map = dict()
+
         self.service_installed_apps = list()
         self.app_installed_apps = list()
 
@@ -39,7 +42,7 @@ class Discovery:
         self.app_ws_urlpatterns = list()
 
     @staticmethod
-    def _discover(directory):
+    def _prepare_app_configuration_list(directory):
         """
         Produce a list of tuples of apps and their configurations after scanning
         the specified directory
@@ -76,14 +79,40 @@ class Discovery:
         ]
         return apps_and_configs
 
+    @staticmethod
+    def _prepare_app_configuration_map(app_set):
+        """
+        Generate a dictionary for the given list of tuples of apps and
+        configuration objects
+        :param app_set: the given list of tuples of apps and their configuration
+        objects
+        :return: the dictionary version of the list of tuples
+        """
+
+        app_configuration_map = dict()
+        for (app, app_configuration) in app_set:
+            app_configuration_map[app] = app_configuration
+        return app_configuration_map
+
     def discover(self):
         """
         Populate the values of apps and their configurations for both services
         and apps
         """
 
-        self.services = Discovery._discover(self.services_directory)
-        self.apps = Discovery._discover(self.apps_directory)
+        self.services = Discovery._prepare_app_configuration_list(
+            self.services_directory
+        )
+        self.service_configuration_map = self._prepare_app_configuration_map(
+            self.services
+        )
+
+        self.apps = Discovery._prepare_app_configuration_list(
+            self.apps_directory
+        )
+        self.app_configuration_map = self._prepare_app_configuration_map(
+            self.apps
+        )
 
     @staticmethod
     def _prepare_installed_apps(app_set):
@@ -180,3 +209,12 @@ class Discovery:
         self.app_ws_urlpatterns = self._prepare_ws_urlpatterns(
             self.apps
         )
+
+    def get_app_configuration(self, app):
+        """
+        Get the AppConfiguration object of the mentioned app
+        :param app: the name of the app to get the AppConfiguration object for
+        :return: the AppConfiguration object of the given app
+        """
+
+        return self.app_configuration_map.get(app)
