@@ -8,11 +8,13 @@ from kernel.models.institute import (
     AbstractDepartment,
     AbstractCentre,
     AbstractBranch,
+    AbstractCourse,
 
     # Concrete models for default implementation
     Department,
     Centre,
-    Branch
+    Branch,
+    Course,
 )
 from kernel.models.person import (
     # Abstract models for customised implementations
