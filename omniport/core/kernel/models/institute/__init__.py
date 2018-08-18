@@ -13,3 +13,8 @@ from kernel.models.institute.department import (
 
     Department,
 )
+from kernel.models.institute.course import (
+    AbstractCourse,
+
+    Course,
+)
