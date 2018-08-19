@@ -31,7 +31,6 @@ class AbstractCourse(Model):
 
     prerequisites = models.ManyToManyField(
         to=swapper.get_model_name('kernel', 'Course'),
-        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
