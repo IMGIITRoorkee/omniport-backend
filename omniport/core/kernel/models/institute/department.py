@@ -13,7 +13,6 @@ class AbstractDepartment(Model):
 
     code = models.CharField(
         max_length=7,
-        primary_key=True,
         unique=True,
     )
     name = models.CharField(

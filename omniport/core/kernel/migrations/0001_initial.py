@@ -42,10 +42,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Branch',
             fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('removed', models.DateTimeField(blank=True, default=None, editable=False, null=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
-                ('code', models.CharField(max_length=7, primary_key=True, serialize=False, unique=True)),
+                ('code', models.CharField(max_length=7, serialize=False, unique=True)),
                 ('name', models.CharField(max_length=127)),
                 ('degree', models.CharField(max_length=63)),
                 ('graduation', models.CharField(max_length=63)),
@@ -59,10 +60,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Centre',
             fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('removed', models.DateTimeField(blank=True, default=None, editable=False, null=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
-                ('code', models.CharField(max_length=7, primary_key=True, serialize=False, unique=True)),
+                ('code', models.CharField(max_length=7, serialize=False, unique=True)),
                 ('name', models.CharField(max_length=127)),
             ],
             options={
@@ -72,10 +74,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Department',
             fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('removed', models.DateTimeField(blank=True, default=None, editable=False, null=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
-                ('code', models.CharField(max_length=7, primary_key=True, serialize=False, unique=True)),
+                ('code', models.CharField(max_length=7, serialize=False, unique=True)),
                 ('name', models.CharField(max_length=127)),
             ],
             options={
@@ -148,12 +151,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Student',
             fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('removed', models.DateTimeField(blank=True, default=None, editable=False, null=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
                 ('start_date', models.DateField()),
                 ('end_date', models.DateField(blank=True, null=True)),
-                ('enrolment_number', models.CharField(max_length=15, primary_key=True, serialize=False, unique=True)),
+                ('enrolment_number', models.CharField(max_length=15, serialize=False, unique=True)),
                 ('current_year', models.IntegerField()),
                 ('current_semester', models.IntegerField()),
                 ('current_cgpa', models.DecimalField(blank=True, decimal_places=3, max_digits=5, null=True, validators=[django.core.validators.MaxValueValidator(10.0), django.core.validators.MinValueValidator(0.0)], verbose_name='current CGPA')),

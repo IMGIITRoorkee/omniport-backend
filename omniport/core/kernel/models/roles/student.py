@@ -18,7 +18,6 @@ class AbstractStudent(PeriodMixin, Model):
 
     enrolment_number = models.CharField(
         max_length=15,
-        primary_key=True,
         unique=True,
     )
 
