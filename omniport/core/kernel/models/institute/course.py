@@ -17,7 +17,6 @@ class AbstractCourse(Model):
 
     code = models.CharField(
         max_length=7,
-        primary_key=True,
         unique=True,
     )
     name = models.CharField(
@@ -32,7 +31,6 @@ class AbstractCourse(Model):
     prerequisites = models.ManyToManyField(
         to=swapper.get_model_name('kernel', 'Course'),
         blank=True,
-        null=True,
     )
 
     class Meta:
