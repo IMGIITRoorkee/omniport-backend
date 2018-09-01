@@ -10,6 +10,7 @@ from django.db import models
 
 from kernel.managers import auth
 from kernel.utils.rights import has_omnipotence_rights
+from kernel.utils.upload_to import UploadTo
 
 
 def upload_to(user_instance, filename):
@@ -85,7 +86,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     )
 
     display_picture = models.ImageField(
-        upload_to=upload_to,
+        upload_to=UploadTo('kernel', 'display_pictures'),
         max_length=255,
         blank=True,
         null=True,
