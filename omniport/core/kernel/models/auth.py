@@ -1,8 +1,4 @@
-import mimetypes
-import os
-
 import swapper
-from django.conf import settings
 from django.contrib.auth import models as auth_models
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -13,36 +9,15 @@ from kernel.utils.rights import has_omnipotence_rights
 from kernel.utils.upload_to import UploadTo
 
 
-def upload_to(user_instance, filename):
+def upload_to():
     """
-    Compute the location of where to store the display picture, removing any
-    existing file with the same name
-    :param user_instance: the user whose display picture is being uploaded
-    :param filename: the original filename of the image, not used
-    :return: the path to the uploaded image
+    This dummy function must live on because its name has been etched into a
+    migration forever
+
+    Removal will result in an exception.
     """
 
-    extension = filename.split('.')[-1]
-    extension = f'.{extension}'
-    if extension not in mimetypes.types_map.keys():
-        extension = ''
-
-    destination = os.path.join(
-        'kernel',
-        'display_pictures',
-        f'{user_instance.id}{extension}',
-    )
-
-    try:
-        path = os.path.join(
-            settings.MEDIA_ROOT,
-            destination,
-        )
-        os.remove(path)
-    except FileNotFoundError:
-        pass
-
-    return destination
+    pass
 
 
 class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
