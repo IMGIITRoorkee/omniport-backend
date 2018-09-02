@@ -29,16 +29,14 @@ Maintainer = swapper.load_model('kernel', 'Maintainer')
 # If any are being overridden, they will show up separately in the Django admin
 
 omnipotence.register(User)
-omnipotence.register(Group)
+omnipotence.register(ContactInformation)
+omnipotence.register(LocationInformation)
 
 omnipotence.register(Person)
 
 omnipotence.register(BiologicalInformation)
 omnipotence.register(FinancialInformation)
 omnipotence.register(PoliticalInformation)
-
-omnipotence.register(ContactInformation)
-omnipotence.register(LocationInformation)
 
 omnipotence.register(Department)
 omnipotence.register(Centre)

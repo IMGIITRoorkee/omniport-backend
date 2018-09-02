@@ -1,6 +1,6 @@
 from django import forms as django_forms
 from django.conf import settings
-from django.contrib.admin import sites, forms
+from django.contrib.admin import site, sites, forms
 
 from kernel.utils.rights import has_omnipotence_rights
 
@@ -39,6 +39,17 @@ class OmniportAdminSite(sites.AdminSite):
     index_title = f'{settings.SITE_VERBOSE_NAME} administration'
 
     login_form = OmniportAdminAuthenticationForm
+
+    def __init__(self, *args, **kwargs):
+        """
+        Add the registered model of the default Django admin site to Omnipotence
+        :param args: arguments
+        :param kwargs: keyword arguments
+        """
+
+        super(OmniportAdminSite, self).__init__(*args, **kwargs)
+        for model, _ in site._registry.items():
+            self.register(model)
 
     def has_permission(self, request):
         """
