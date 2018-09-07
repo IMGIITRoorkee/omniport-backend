@@ -2,6 +2,8 @@ from kernel.models.auth import User
 from kernel.models.generics import (
     ContactInformation,
     LocationInformation,
+    SocialInformation,
+    SocialLink,
 )
 from kernel.models.institute import (
     # Abstract models for customised implementations

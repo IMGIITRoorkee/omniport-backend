@@ -1,11 +1,12 @@
 import swapper
-from django.contrib.auth.models import Group
 
 from kernel.admin.site import omnipotence
 from kernel.models import (
     User,
     ContactInformation,
     LocationInformation,
+    SocialInformation,
+    SocialLink,
 )
 
 # Load all swappable models
@@ -31,6 +32,8 @@ Maintainer = swapper.load_model('kernel', 'Maintainer')
 omnipotence.register(User)
 omnipotence.register(ContactInformation)
 omnipotence.register(LocationInformation)
+omnipotence.register(SocialInformation)
+omnipotence.register(SocialLink)
 
 omnipotence.register(Person)
 

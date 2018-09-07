@@ -41,6 +41,12 @@ class AbstractPerson(Model):
         content_type_field='entity_content_type',
         object_id_field='entity_object_id',
     )
+    social_information = contenttypes_fields.GenericRelation(
+        to='SocialInformation',
+        related_query_name='person',
+        content_type_field='entity_content_type',
+        object_id_field='entity_object_id',
+    )
     location_information = contenttypes_fields.GenericRelation(
         to='LocationInformation',
         related_query_name='person',
