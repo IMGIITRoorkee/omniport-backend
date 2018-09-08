@@ -60,15 +60,14 @@ if [ ${PREFERRED_PORT} -ne -1 ]; then
         printf "Port ${PREFERRED_PORT} is not available\n"
     fi
 else
-    while :; do
-        printf "Searching for a free port\n"
-        for (( i = ${PORT_LOWER_LIMIT} ; i <= ${PORT_UPPER_LIMIT} ; i++ )); do
-            printf "Trying to assign port: ${i}\r"
-            docker container ls -a | grep ${i} &> /dev/null
-            if [ $? -ne 0 ]; then
-                printf "\n"
-                start_django_server ${i}; break 2
-            fi
-        done
+    printf "Searching for a free port\n"
+    for (( i = ${PORT_LOWER_LIMIT} ; i <= ${PORT_UPPER_LIMIT} ; i++ )); do
+        printf "Trying to assign port: ${i}\r"
+        docker container ls -a | grep ${i} &> /dev/null
+        if [ $? -ne 0 ]; then
+            printf "\n"
+            start_django_server ${i}; break 2
+        fi
     done
+    printf "Done\n"
 fi
