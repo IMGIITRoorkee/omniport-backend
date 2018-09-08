@@ -50,3 +50,17 @@ def has_lockpicking_rights(user):
         return lockpicking(user)
     except ImportError:
         return user.is_superuser or False
+
+
+def has_helpcentre_rights(user):
+    """
+    Check if the given user has enough privileges to access helpcentre
+    :param user: the user whose privileges are being tested
+    :return: True if the user has privileges, False otherwise
+    """
+
+    try:
+        from shell.utils.rights import has_helpcentre_rights as helpcentre
+        return helpcentre(user)
+    except ImportError:
+        return user.is_superuser or False
