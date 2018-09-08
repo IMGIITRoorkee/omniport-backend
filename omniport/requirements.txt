@@ -33,7 +33,7 @@ django-mptt==0.9.1
 django-nested-admin==3.1.1
 django-permanent==1.1.6
 djangorestframework==3.8.2
-djangorestframework-jsonapi==2.5.0
+djangorestframework-camel-case==0.2.0
 djangorestframework-simplejwt==3.2.3
 docutils==0.14
 gunicorn==19.9.0
