@@ -5,9 +5,12 @@ project, namely
 - omnipotence, the admin interface
 - alohomora, the impersonation ability
 - lockpicking, the no-questions-asked password reset ability
+- helpcentre, the ability to access and answer user queries
 
 These can, and most probably should, be overridden in shell.utils.rights
 """
+
+from django.conf import settings
 
 
 def has_omnipotence_rights(user):
@@ -17,11 +20,14 @@ def has_omnipotence_rights(user):
     :return: True if the user has privileges, False otherwise
     """
 
+    if settings.DEBUG:
+        return user.is_superuser
+
     try:
         from shell.utils.rights import has_omnipotence_rights as omnipotence
         return omnipotence(user)
     except ImportError:
-        return user.is_superuser or False
+        return user.is_superuser
 
 
 def has_alohomora_rights(user):
@@ -31,11 +37,14 @@ def has_alohomora_rights(user):
     :return: True if the user has privileges, False otherwise
     """
 
+    if settings.DEBUG:
+        return user.is_superuser
+
     try:
         from shell.utils.rights import has_alohomora_rights as alohomora
         return alohomora(user)
     except ImportError:
-        return user.is_superuser or False
+        return user.is_superuser
 
 
 def has_lockpicking_rights(user):
@@ -45,11 +54,14 @@ def has_lockpicking_rights(user):
     :return: True if the user has privileges, False otherwise
     """
 
+    if settings.DEBUG:
+        return user.is_superuser
+
     try:
         from shell.utils.rights import has_lockpicking_rights as lockpicking
         return lockpicking(user)
     except ImportError:
-        return user.is_superuser or False
+        return user.is_superuser
 
 
 def has_helpcentre_rights(user):
@@ -59,8 +71,11 @@ def has_helpcentre_rights(user):
     :return: True if the user has privileges, False otherwise
     """
 
+    if settings.DEBUG:
+        return user.is_superuser
+
     try:
         from shell.utils.rights import has_helpcentre_rights as helpcentre
         return helpcentre(user)
     except ImportError:
-        return user.is_superuser or False
+        return user.is_superuser
