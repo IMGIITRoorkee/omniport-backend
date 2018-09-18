@@ -195,7 +195,6 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
     'DEFAULT_FILTER_BACKENDS': (
-        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
