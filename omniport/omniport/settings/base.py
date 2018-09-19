@@ -168,6 +168,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Session store
+
+SESSION_ENGINE = 'redis_sessions.session'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 

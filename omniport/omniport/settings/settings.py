@@ -79,6 +79,28 @@ CHANNEL_LAYERS = {
     },
 }
 
+# Session store
+SESSION_REDIS = {
+    'host': configuration.services.session_store.host,
+    'port': configuration.services.session_store.port,
+    'db': 0,
+    'password': None,
+    'prefix': 'session',
+    'socket_timeout': 1,
+    'retry_on_timeout': False
+}
+
+# Cache
+# https://docs.djangoproject.com/en/2.1/topics/cache/
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': (f'{configuration.services.cache.host}'
+                     f':{configuration.services.cache.port}'),
+    },
+}
+
 # CORS configuration
 
 CORS_ALLOW_CREDENTIALS = configuration.cors.allow_credentials

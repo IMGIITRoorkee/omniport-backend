@@ -194,6 +194,36 @@ class SessionStore(Service):
         super().__init__(*args, **kwargs)
 
 
+class NotificationStore(Service):
+    """
+    This class stores information about the notification store service
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Defer to the base class to populate the data points
+        :param args: arguments
+        :param kwargs: keyword arguments
+        """
+
+        super().__init__(*args, **kwargs)
+
+
+class Cache(Service):
+    """
+    This class stores information about the cache service
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Defer to the base class to populate the data points
+        :param args: arguments
+        :param kwargs: keyword arguments
+        """
+
+        super().__init__(*args, **kwargs)
+
+
 class Services:
     """
     This class stores the Service objects for all the services involved
@@ -217,6 +247,12 @@ class Services:
         )
         self.session_store = SessionStore(
             dictionary=dictionary.get('sessionStore')
+        )
+        self.notification_store = NotificationStore(
+            dictionary=dictionary.get('notificationStore')
+        )
+        self.cache = Cache(
+            dictionary=dictionary.get('cache')
         )
         self.message_broker = MessageBroker(
             dictionary=dictionary.get('messageBroker')

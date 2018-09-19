@@ -23,6 +23,12 @@ services:
   sessionStore:
     host:  # session-store, or your own server configuration
     port:  # 6379, or your own server configuration
+  notificationStore:
+    host:  # notification-store, or your own server configuration
+    port:  # 6379, or your own server configuration
+  cache:
+    host:  # cache, or your own server configuration
+    port:  # 11211, or your own server configuration
   messageBroker:
     host:  # message-broker, or your own server configuration
     port:  # 5672, or your own server configuration
