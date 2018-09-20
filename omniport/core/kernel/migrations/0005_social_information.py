@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('contenttypes', '0002_remove_content_type_name'),
-        ('kernel', '0005_generic_upload_to'),
+        ('kernel', '0004_course'),
     ]
 
     operations = [

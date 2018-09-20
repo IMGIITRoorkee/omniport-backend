@@ -8,6 +8,7 @@ from django.db import migrations, models
 import django.db.models.deletion
 import django_countries.fields
 import kernel.models.auth
+import kernel.utils.upload_to
 
 
 class Migration(migrations.Migration):
@@ -125,6 +126,7 @@ class Migration(migrations.Migration):
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
                 ('short_name', models.CharField(blank=True, max_length=63)),
                 ('full_name', models.CharField(max_length=255)),
+                ('display_picture', models.ImageField(blank=True, max_length=255, null=True, upload_to=kernel.utils.upload_to.UploadTo('kernel', 'profile_pictures'))),
             ],
             options={
                 'verbose_name_plural': 'people',
@@ -177,7 +179,6 @@ class Migration(migrations.Migration):
                 ('secret_question', models.CharField(blank=True, max_length=127)),
                 ('secret_answer', models.CharField(blank=True, max_length=2047)),
                 ('failed_reset_attempts', models.IntegerField(default=0, validators=[django.core.validators.MaxValueValidator(3), django.core.validators.MinValueValidator(0)])),
-                ('display_picture', models.ImageField(blank=True, max_length=255, null=True, upload_to=kernel.models.auth.upload_to)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
                 ('person', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=swapper.get_model_name('kernel', 'Person'))),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
