@@ -3,6 +3,18 @@ from django.contrib.contenttypes import fields as contenttypes_fields
 from django.db import models
 
 from kernel.models.root import Model
+from kernel.utils.upload_to import UploadTo
+
+
+def upload_to():
+    """
+    This dummy function must live on because its name has been etched into a
+    migration forever
+
+    Removal will result in an exception.
+    """
+
+    pass
 
 
 class AbstractPerson(Model):
@@ -52,6 +64,13 @@ class AbstractPerson(Model):
         related_query_name='person',
         content_type_field='entity_content_type',
         object_id_field='entity_object_id',
+    )
+
+    display_picture = models.ImageField(
+        upload_to=UploadTo('kernel', 'display_pictures'),
+        max_length=255,
+        blank=True,
+        null=True,
     )
 
     class Meta:

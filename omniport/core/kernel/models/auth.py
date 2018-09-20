@@ -9,17 +9,6 @@ from kernel.utils.rights import has_omnipotence_rights
 from kernel.utils.upload_to import UploadTo
 
 
-def upload_to():
-    """
-    This dummy function must live on because its name has been etched into a
-    migration forever
-
-    Removal will result in an exception.
-    """
-
-    pass
-
-
 class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     """
     This model holds the authentication information of a person
@@ -58,13 +47,6 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
             MinValueValidator(0),
         ],
         default=0,
-    )
-
-    display_picture = models.ImageField(
-        upload_to=UploadTo('kernel', 'display_pictures'),
-        max_length=255,
-        blank=True,
-        null=True,
     )
 
     objects = auth.UserManager()
