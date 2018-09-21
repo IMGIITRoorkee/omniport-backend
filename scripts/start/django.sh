@@ -38,7 +38,7 @@ start_django_server() {
         --rm \
         --userns host \
         --user $(id -u $(whoami)) \
-        --network=omniport-docker_default \
+        --network=omniport-docker_network \
         --publish ${PORT}:${PORT}/tcp \
         --mount type=bind,src=${CWD}/omniport,dst=/omniport \
         --mount type=bind,src=${CWD}/configuration,dst=/configuration \
