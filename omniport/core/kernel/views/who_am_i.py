@@ -2,7 +2,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from kernel.serializers.person import PersonSerializer
+from kernel.serializers.person import AvatarSerializer
 
 
 class WhoAmI(GenericAPIView):
@@ -11,7 +11,7 @@ class WhoAmI(GenericAPIView):
     """
 
     permission_classes = (IsAuthenticated,)
-    serializer_class = PersonSerializer
+    serializer_class = AvatarSerializer
 
     def get(self, request, *args, **kwargs):
         """
@@ -23,10 +23,5 @@ class WhoAmI(GenericAPIView):
         """
 
         person = request.person
-        serializer = self.get_serializer_class()(
-            person,
-            fields=[
-                'full_name',
-            ]
-        )
+        serializer = self.get_serializer_class()(person)
         return Response(serializer.data)
