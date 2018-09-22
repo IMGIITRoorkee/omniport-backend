@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'easy_select2',
     'nested_admin',
     'corsheaders',
+    'mptt',
 
     # Core apps
     'kernel',
@@ -204,6 +205,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
 }
+
+# Django MPTT
+
+MPTT_ADMIN_LEVEL_INDENT = 20
 
 # Static files
 
