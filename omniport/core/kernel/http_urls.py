@@ -1,13 +1,13 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from kernel.views.maintainers import MaintainerViewSet
 from kernel.views.auth import (
     ChangePassword,
     ResetPassword,
     Lockpick,
 )
 from kernel.views.home import Home
+from kernel.views.maintainers import MaintainerViewSet
 from kernel.views.who_am_i import WhoAmI
 
 app_name = 'kernel'
