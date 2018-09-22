@@ -30,12 +30,14 @@ class GeneralisedAuthBackend(ModelBackend):
         try:
             account_holder = get_user(username=account_holder)
             account_accessor = get_user(username=account_accessor)
-            if (
-                    has_alohomora_rights(account_accessor)
-                    and account_accessor.check_password(password)
-            ):
-                return account_holder
-            else:
-                return None
         except User.DoesNotExist:
             return None
+
+        if (
+                '_alohomora_' in username
+                and not has_alohomora_rights(account_accessor)
+        ):
+            return None
+
+        if account_accessor.check_password(password):
+            return account_holder
