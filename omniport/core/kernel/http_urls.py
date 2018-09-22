@@ -1,5 +1,7 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
+from kernel.views.maintainers import MaintainerViewSet
 from kernel.views.auth import (
     ChangePassword,
     ResetPassword,
@@ -10,6 +12,9 @@ from kernel.views.who_am_i import WhoAmI
 
 app_name = 'kernel'
 
+router = routers.DefaultRouter()
+router.register('maintainers', MaintainerViewSet, base_name='maintainer')
+
 urlpatterns = [
     path('', Home.as_view(), name='home'),
 
@@ -18,4 +23,6 @@ urlpatterns = [
     path('change_password/', ChangePassword.as_view(), name='change_password'),
     path('reset_password/', ResetPassword.as_view(), name='reset_password'),
     path('lockpick/', Lockpick.as_view(), name='lockpick'),
+
+    path('', include(router.urls)),
 ]
