@@ -1,8 +1,4 @@
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-
-from kernel.managers.get_role import get_role
-from kernel.mixins.period_mixin import ActiveStatus
+from kernel.managers.get_role import get_all_roles
 
 
 class PersonRoles:
@@ -30,24 +26,7 @@ class PersonRoles:
         if request.user and request.user.is_authenticated:
             person = request.user.person
             request.person = person
-
-            request.roles = dict()
-            roles = settings.ROLES
-            for role_name in roles:
-                try:
-                    role = get_role(
-                        person=person,
-                        role_name=role_name,
-                        active_status=ActiveStatus.ANY,
-                        silent=False
-                    )
-                    active_status = role.active_status
-                    request.roles[role_name] = {
-                        'instance': role,
-                        'activeStatus': active_status,
-                    }
-                except ObjectDoesNotExist:
-                    pass
+            request.roles = get_all_roles(person)
         else:
             request.person = None
             request.roles = None
