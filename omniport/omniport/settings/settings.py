@@ -99,6 +99,19 @@ CACHES = {
         'LOCATION': (f'{configuration.services.cache.host}'
                      f':{configuration.services.cache.port}'),
     },
+    "notification": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": (
+            'redis://'
+            f'{configuration.services.notification_store.host}'
+            f':{configuration.services.notification_store.port}'
+            '/0'
+        ),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "SERIALIZER": "django_redis.serializers.json.JSONSerializer",
+        }
+    }
 }
 
 # CORS configuration
