@@ -32,6 +32,7 @@ django-js-asset==1.1.0
 django-mptt==0.9.1
 django-nested-admin==3.1.2
 django-permanent==1.1.6
+django-redis==4.9.0
 django-redis-sessions==0.6.1
 djangorestframework==3.8.2
 djangorestframework-camel-case==0.2.0
