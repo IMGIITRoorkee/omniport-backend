@@ -1,5 +1,6 @@
 import swapper
-from django.core.exceptions import ImproperlyConfigured
+from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
 from kernel.mixins.period_mixin import ActiveStatus
 
@@ -30,3 +31,30 @@ def get_role(person, role_name, active_status=ActiveStatus.ANY, silent=False):
             raise
 
     return None
+
+
+def get_all_roles(person):
+    """
+    Get all roles corresponding to a person
+    :param person: an instance of the Person model whose roles are sought
+    :return: a dictionary of all roles mapped to their instance and ActiveStatus
+    """
+
+    all_roles = dict()
+    roles = settings.ROLES
+    for role_name in roles:
+        try:
+            role = get_role(
+                person=person,
+                role_name=role_name,
+                active_status=ActiveStatus.ANY,
+                silent=False
+            )
+            active_status = role.active_status
+            all_roles[role_name] = {
+                'instance': role,
+                'activeStatus': active_status,
+            }
+        except ObjectDoesNotExist:
+            pass
+    return all_roles
