@@ -1,5 +1,6 @@
 import swapper
 
+from kernel.admin.models.user import UserAdmin
 from kernel.admin.site import omnipotence
 from kernel.models import (
     User,
@@ -29,7 +30,7 @@ Maintainer = swapper.load_model('kernel', 'Maintainer')
 # Register all models
 # If any are being overridden, they will show up separately in the Django admin
 
-omnipotence.register(User)
+omnipotence.register(User, UserAdmin)
 omnipotence.register(ContactInformation)
 omnipotence.register(LocationInformation)
 omnipotence.register(SocialInformation)
