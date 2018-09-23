@@ -60,14 +60,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # PyPI packages
-    'rest_framework',
-    'channels',
-    'django_countries',
-    'django_filters',
-    'easy_select2',
-    'nested_admin',
-    'corsheaders',
-    'mptt',
+    'rest_framework',  # JSON-based APIs in Django
+
+    'channels',  # HTTP/2.0 and sockets support
+    'corsheaders',  # Handles CORS headers on responses
+    'crispy_forms',  # Reusable forms
+    'django_countries',  # Country fields and widgets (with little flags!)
+    'django_filters',  # Dynamic queryset filtering
+    'guardian',  # Object permissions for DRF
+    'nested_admin',  # Define inlines on inline admin classes
+    'mptt',  # Infinite nesting of objects of the same model
 
     # Core apps
     'kernel',
@@ -146,6 +148,7 @@ AUTH_USER_MODEL = 'kernel.User'
 
 AUTHENTICATION_BACKENDS = [
     'kernel.auth_backends.generalised.GeneralisedAuthBackend',
+    'guardian.backends.ObjectPermissionBackend',  # Django Guardian
 ]
 
 # Password validation
