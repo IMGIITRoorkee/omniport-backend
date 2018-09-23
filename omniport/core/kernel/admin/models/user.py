@@ -30,6 +30,9 @@ class UserChangeForm(forms.ModelForm):
     def clean_password(self):
         return self.initial["password"]
 
+    def clean_secret_answer(self):
+        return self.initial["secret_answer"]
+
 
 class UserAdmin(auth_admin.UserAdmin):
     form = UserChangeForm
