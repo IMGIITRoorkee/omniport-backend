@@ -1,5 +1,6 @@
 import mimetypes
 import os
+import uuid
 
 from django.conf import settings
 from django.utils.deconstruct import deconstructible
@@ -34,11 +35,11 @@ class UploadTo:
         extension = f'.{extension}'
         if extension not in mimetypes.types_map.keys():
             extension = ''
-
+        uuid_key = uuid.uuid4()
         destination = os.path.join(
             self.app_name,
             self.folder_name,
-            f'{instance.id}{extension}',
+            f'{uuid_key}{extension}',
         )
 
         try:
