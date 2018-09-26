@@ -4,6 +4,9 @@
 # VSCode configuration
 .vscode/
 
+# macOS files
+.DS_Store
+
 # Collected static files
 static_files/
 
