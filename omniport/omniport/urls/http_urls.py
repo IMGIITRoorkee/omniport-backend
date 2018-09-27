@@ -17,6 +17,9 @@ http_urlpatterns = [
     # Django REST Framework URL dispatcher
     path('rest/', include('rest_framework.urls')),
 
+    # PyPI packages URL dispatcher
+    path('tinymce/', include('tinymce.urls')),
+
     # Core URL dispatchers
     path('kernel/', include('kernel.http_urls')),
     path('session_auth/', include('session_auth.http_urls')),

@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'guardian',  # Object permissions for DRF
     'nested_admin',  # Define inlines on inline admin classes
     'mptt',  # Infinite nesting of objects of the same model
+    'tinymce', # Text editor
 
     # Core apps
     'kernel',
