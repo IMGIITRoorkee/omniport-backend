@@ -33,6 +33,7 @@ django-nested-admin==3.1.2
 django-permanent==1.1.6
 django-redis==4.9.0
 django-redis-sessions==0.6.1
+django-tinymce4-lite==1.7.2
 djangorestframework==3.8.2
 djangorestframework-camel-case==0.2.0
 djangorestframework-simplejwt==3.2.3
