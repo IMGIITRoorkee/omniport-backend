@@ -48,6 +48,7 @@ start_django_server() {
         --mount type=bind,src=${CWD}/web_server_logs,dst=/web_server_logs \
         --name=${NAME} \
         --env SITE_ID=0 \
+        --env NAME=${NAME} \
         omniport-django:latest \
         python /omniport/manage.py runserver ${BIND}
 }
@@ -56,7 +57,7 @@ if [ ${PREFERRED_PORT} -ne -1 ]; then
     printf "Trying to assign port: ${PREFERRED_PORT}\n"
     docker container ls -a | grep ${PREFERRED_PORT} &> /dev/null
     if [ $? -ne 0 ]; then
-        start_django_server ${PREFERRED_PORT} && break 2
+        start_django_server ${PREFERRED_PORT}
     else
         printf "Port ${PREFERRED_PORT} is not available\n"
     fi
@@ -67,8 +68,8 @@ else
         docker container ls -a | grep ${i} &> /dev/null
         if [ $? -ne 0 ]; then
             printf "\n"
-            start_django_server ${i}; break 2
+            start_django_server ${i}; break
         fi
     done
-    printf "Done\n"
 fi
+printf "\nDone\n"
