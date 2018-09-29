@@ -45,6 +45,7 @@ start_django_server() {
         --mount type=bind,src=${CWD}/branding,dst=/branding \
         --mount type=bind,src=${CWD}/static_files,dst=/static_files \
         --mount type=bind,src=${CWD}/media_files,dst=/media_files \
+        --mount type=bind,src=${CWD}/personal_files,dst=/personal_files \
         --mount type=bind,src=${CWD}/web_server_logs,dst=/web_server_logs \
         --name=${NAME} \
         --env SITE_ID=0 \

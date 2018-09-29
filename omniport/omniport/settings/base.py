@@ -41,6 +41,9 @@ STATIC_DIR = os.path.join(PARENT_DIR, 'static_files')
 # The 'media' directory where all uploaded media will be stored in
 MEDIA_DIR = os.path.join(PARENT_DIR, 'media_files')
 
+# The 'personal' directory where all uploaded personal files will be stored in
+PERSONAL_DIR = os.path.join(PARENT_DIR, 'personal_files')
+
 # The 'core' directory where all Omniport core apps will be loaded from
 CORE_DIR = os.path.join(PROJECT_DIR, 'core')
 
@@ -235,6 +238,12 @@ BRANDING_ROOT = BRANDING_DIR
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = MEDIA_DIR
+
+# Personal files
+
+PERSONAL_URL = '/personal/'
+
+PERSONAL_FILES_ROOT = PERSONAL_DIR
 
 # WSGI application served by Gunicorn
 WSGI_APPLICATION = 'omniport.wsgi.application'
