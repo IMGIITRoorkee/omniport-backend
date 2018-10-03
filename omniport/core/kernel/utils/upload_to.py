@@ -12,15 +12,17 @@ class UploadTo:
 
     """
 
-    def __init__(self, app_name, folder_name):
+    def __init__(self, app_name, folder_name, file_manager=False):
         """
 
         :param app_name:
         :param folder_name:
+        :param file_manager:
         """
 
         self.app_name = app_name
         self.folder_name = folder_name
+        self.file_manager = file_manager
 
     def __call__(self, instance, filename):
         """
@@ -30,6 +32,10 @@ class UploadTo:
         :param filename: the original name of the file, not used
         :return: the path to the uploaded image
         """
+        if self.file_manager:
+            folder_name = str(instance.folder.folder_name())
+        else:
+            folder_name = self.folder_name
 
         extension = filename.split('.')[-1]
         extension = f'.{extension}'
@@ -38,7 +44,7 @@ class UploadTo:
         uuid_key = uuid.uuid4()
         destination = os.path.join(
             self.app_name,
-            self.folder_name,
+            folder_name,
             f'{uuid_key}{extension}',
         )
 
