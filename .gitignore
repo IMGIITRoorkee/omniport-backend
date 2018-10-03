@@ -13,5 +13,8 @@ static_files/
 # User loaded media files
 media_files/
 
+# Personal files of users
+personal_files/
+
 # Web server logs
 web_server_logs/
