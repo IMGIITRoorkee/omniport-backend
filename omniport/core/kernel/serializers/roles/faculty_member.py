@@ -3,12 +3,11 @@ import swapper
 from kernel.serializers.root import ModelSerializer
 from kernel.serializers.person import AvatarSerializer
 from kernel.serializers.institute.department import DepartmentSerializer
-from kernel.managers.get_role import get_all_roles
 
 
 class FacultyMemberSerializer(ModelSerializer):
     """
-    Serializer for Faculty member objects
+    Serializer for FacultyMember objects
     """
 
     person = AvatarSerializer(
