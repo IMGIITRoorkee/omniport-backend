@@ -26,4 +26,3 @@ class BranchSerializer(ModelSerializer):
             'degree',
             'department',
         )
-
