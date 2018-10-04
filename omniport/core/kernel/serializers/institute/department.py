@@ -5,12 +5,12 @@ from kernel.serializers.root import ModelSerializer
 
 class DepartmentSerializer(ModelSerializer):
     """
-    Serializer for Departments in Institute
+    Serializer for Departments objects
     """
 
     class Meta:
         """
-        Meta class for Depratmnts
+        Meta class for DepartmentSerializer
         """
 
         model = swapper.load_model('kernel', 'Department')
@@ -19,4 +19,3 @@ class DepartmentSerializer(ModelSerializer):
             'code',
             'name',
         )
-
