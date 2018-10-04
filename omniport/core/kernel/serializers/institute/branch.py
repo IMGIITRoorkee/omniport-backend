@@ -3,9 +3,10 @@ import swapper
 from kernel.serializers.root import ModelSerializer
 from kernel.serializers.institute.department import DepartmentSerializer
 
+
 class BranchSerializer(ModelSerializer):
     """
-    Serializer for Branch
+    Serializer for Branch objects
     """
 
     department = DepartmentSerializer(
@@ -14,7 +15,7 @@ class BranchSerializer(ModelSerializer):
 
     class Meta:
         """
-        Meta class for Branch
+        Meta class for BranchSerializer
         """
 
         model = swapper.load_model('kernel', 'Branch')
