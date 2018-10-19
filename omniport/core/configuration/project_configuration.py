@@ -319,6 +319,7 @@ class Site:
         self.id = dictionary.get('id') or 0
         self.name = dictionary.get('name') or 'omniport'
         self.verbose_name = dictionary.get('verboseName') or 'Omniport'
+        self.debug = dictionary.get('debug') or False
 
 
 class Allowances:
@@ -379,7 +380,6 @@ class ProjectConfiguration:
         self.cors = Cors(
             dictionary=dictionary.get('cors')
         )
-        self.debug = dictionary.get('debug') or False
         self.allowances = Allowances(
             dictionary=dictionary.get('allowances')
         )

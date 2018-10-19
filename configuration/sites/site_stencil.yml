@@ -2,7 +2,7 @@ site:
   id:  # A unique numeric ID for the site
   name:  # A code name for the site
   verboseName:  # A verbose punctuated name for the site
-debug:  # Boolean that decides whether the site is in production or development
+  debug:  # Boolean that decides whether the site is in production or development
 allowances:
   hosts:
   # For as many hostnames that point to this site, repeat
