@@ -7,7 +7,7 @@ from django.db.models import Q, Model
 
 class ActiveStatus(Flag):
     """
-    These flags describe whether the
+    These flags describe the active status of the model in question
     """
 
     # Base flags
@@ -146,3 +146,21 @@ class PeriodMixin(Model):
             return self.end_date.year
         else:
             raise ValueError('Period has not ended')
+
+
+class BlurryPeriodMixin(PeriodMixin):
+    """
+    This class extends period mixin allowing the user to skip entering the date,
+    which is then submitted as 1
+    """
+
+    is_full_date = models.BooleanField(
+        default=False,
+    )
+
+    class Meta:
+        """
+        Meta class for BlurryPeriodMixin
+        """
+
+        abstract = True
