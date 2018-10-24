@@ -10,6 +10,9 @@ from omniport.settings.third_party import *  # Settings for PyPI packages
 if SHELL_PRESENT:
     from shell.swapper import *
 
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+
 # Primary URLconf served by Gunicorn and Daphne
 ROOT_URLCONF = 'omniport.urls'
 

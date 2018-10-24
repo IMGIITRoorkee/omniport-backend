@@ -33,3 +33,5 @@ AUTH_PASSWORD_VALIDATORS = [
                 '.NumericPasswordValidator',
     },
 ]
+
+SESSION_COOKIE_NAME = 'omniport_session'
