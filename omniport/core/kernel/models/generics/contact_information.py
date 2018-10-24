@@ -23,8 +23,6 @@ class ContactInformation(Model):
 
     email_address = models.EmailField(
         unique=True,
-        blank=True,
-        null=True,
     )
     email_address_verified = models.BooleanField(
         default=False,
@@ -45,6 +43,14 @@ class ContactInformation(Model):
     entity = contenttypes_fields.GenericForeignKey(
         ct_field='entity_content_type',
         fk_field='entity_object_id',
+    )
+
+    video_conference_id = models.CharField(
+        verbose_name='video conference ID',
+        max_length=127,
+        unique=True,
+        blank=True,
+        null=True,
     )
 
     class Meta:
