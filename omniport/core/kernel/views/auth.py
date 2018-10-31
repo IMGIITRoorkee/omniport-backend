@@ -138,7 +138,7 @@ class Lockpick(GenericAPIView):
 
     permission_classes = (IsAuthenticated, HasLockpickingRights,)
 
-    serializer = LockpickingSerializer
+    serializer_class = LockpickingSerializer
 
     def post(self, request, *args, **kwargs):
         """
