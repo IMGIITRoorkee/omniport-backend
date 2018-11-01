@@ -10,7 +10,7 @@ import os
 
 import yaml
 
-from configuration.project_configuration import ProjectConfiguration
+from configuration.project.project import ProjectConfiguration
 from omniport.settings.base.directories import CONFIGURATION_DIR
 
 # Site ID helps in loading site-specific configuration

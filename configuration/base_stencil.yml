@@ -1,14 +1,17 @@
 branding:
-  institute: 
-      name:  # The name of the institute 
-      homePage:  # The URL to the home page of the institute
-  maintainers: 
-      name:  # The name of the maintainers
-      homePage:  # The URL to the home page of the maintainers
+  institute:
+    acronym:  # The acronym that institute goes by
+    name:  # The name of the institute
+    homePage:  # The URL to the home page of the institute
+  maintainers:
+    acronym:  # The acronym that maintainers go by
+    name:  # The name of the maintainers
+    homePage:  # The URL to the home page of the maintainers
 i18n:
   languageCode:  # The languge code of the portal, like en-gb
   timeZone:  # The time zone of the portal, like Asia/Kolkata
-secretKey: ''  # 'fifty random characters'
+secrets:
+  secretKey: ''  # 'fifty random characters'
 services:
   database:
     # Ideally copy the settings over from postgres/database.env
@@ -35,9 +38,9 @@ services:
     user:  # Same as message_broker.env, or your own server configuration
     password:  # Same as message_broker.env, or your own server configuration
 ipAddressRings:
-  # For as many rings as you anticipate, repeat
-  - name: # The name of the network ring
-    patterns: 
-    # For as many IP patterns as each ring contains, repeat
-    - ''  # 'the regex of the IP pattern'
+# For as many rings as you anticipate, repeat
+- name: # The name of the network ring
+  patterns:
+  # For as many IP patterns as each ring contains, repeat
+  - ''  # 'the regex of the IP pattern'
       

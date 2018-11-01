@@ -6,7 +6,7 @@ import yaml
 from channels.routing import URLRouter
 from django.urls import path, include
 
-from configuration.app_configuration import AppConfiguration
+from configuration.app.app import AppConfiguration
 
 
 class Discovery:
