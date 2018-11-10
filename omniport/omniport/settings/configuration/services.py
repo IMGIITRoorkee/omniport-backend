@@ -32,18 +32,6 @@ CHANNEL_LAYERS = {
     },
 }
 
-# Session store
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS = {
-    'host': _conf.services.session_store.host,
-    'port': _conf.services.session_store.port,
-    'db': 0,
-    'password': None,
-    'prefix': 'session',
-    'socket_timeout': 1,
-    'retry_on_timeout': False
-}
-
 # Cache
 CACHES = {
     'default': {
@@ -62,6 +50,19 @@ CACHES = {
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
-        }
+        },
+    },
+    'session': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': (
+            'redis://'
+            f'{_conf.services.session_store.host}'
+            f':{_conf.services.session_store.port}'
+            f'/0'
+        ),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
+        },
     }
 }

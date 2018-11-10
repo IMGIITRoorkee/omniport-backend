@@ -1,0 +1,4 @@
+# Tools for developers
+ipdb
+ipython
+pipdeptree

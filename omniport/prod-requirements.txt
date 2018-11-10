@@ -1,0 +1,37 @@
+# General Python libraries
+inflection
+PyYAML
+celery
+firebase-admin
+
+# Dependencies of Django
+psycopg2-binary
+Pillow
+gunicorn
+
+# Django
+Django
+Django[argon2]
+
+# Django Channels
+channels
+channels_redis
+Twisted[tls,http2]
+
+# Django REST framework
+djangorestframework
+Markdown
+django-crispy-forms
+django-filter
+django-guardian
+djangorestframework-camel-case
+djangorestframework-simplejwt
+
+# Other minor Django libraries
+django-cors-headers
+django-countries
+django-mptt
+django-permanent
+django-redis
+django-tinymce4-lite
+swapper

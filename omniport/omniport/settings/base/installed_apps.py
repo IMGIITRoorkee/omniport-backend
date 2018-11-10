@@ -19,15 +19,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # PyPI packages
-    'rest_framework',  # JSON-based APIs in Django
-
     'channels',  # HTTP/2.0 and sockets support
-    'corsheaders',  # Handles CORS headers on responses
-    'crispy_forms',  # Reusable forms
-    'django_countries',  # Country fields and widgets (with little flags!)
-    'django_filters',  # Dynamic queryset filtering
+
+    'rest_framework',  # JSON-based APIs in Django
+    'crispy_forms',  # Reusable forms used by DRF
     'guardian',  # Object permissions for DRF
-    'nested_admin',  # Define inlines on inline admin classes
+    'django_filters',  # Dynamic queryset filtering in DRF
+
+    'corsheaders',  # Handles CORS headers on responses
+    'django_countries',  # Country fields and widgets (with little flags!)
     'mptt',  # Infinite nesting of objects of the same model
     'tinymce',  # Rich text editor
 
