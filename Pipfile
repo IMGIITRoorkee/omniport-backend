@@ -1,0 +1,39 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+ipdb = "*"
+ipython = "*"
+pipdeptree = "*"
+
+[packages]
+inflection = "*"
+pyyaml = "*"
+celery = "*"
+firebase-admin = "*"
+psycopg2-binary = "*"
+pillow = "*"
+gunicorn = "*"
+django = {extras = ["argon2"],version = "*"}
+channels = "*"
+channels-redis = "*"
+djangorestframework = "*"
+twisted = {extras = ["http2", "tls"],version = "*"}
+markdown = "*"
+django-crispy-forms = "*"
+django-filter = "*"
+django-guardian = "*"
+djangorestframework-camel-case = "*"
+djangorestframework-simplejwt = "*"
+django-cors-headers = "*"
+django-countries = "*"
+django-mptt = "*"
+django-permanent = "*"
+django-redis = "*"
+django-tinymce4-lite = "*"
+swapper = "*"
+
+[requires]
+python_version = "3.7"
