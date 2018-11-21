@@ -32,3 +32,4 @@ class AppConfiguration:
         self.acceptables = Acceptables(
             dictionary=dictionary.get('acceptables')
         )
+        self.is_api = dictionary.get('isApi') or False

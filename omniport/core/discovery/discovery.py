@@ -41,6 +41,9 @@ class Discovery:
         self.service_ws_urlpatterns = list()
         self.app_ws_urlpatterns = list()
 
+        self.service_staticfiles_dirs = list()
+        self.app_staticfiles_dirs = list()
+
     @staticmethod
     def _prepare_app_configuration_list(directory):
         """
@@ -55,28 +58,15 @@ class Discovery:
             for sub_directory in os.listdir(path=directory)
             if os.path.isdir(os.path.join(directory, sub_directory))
         ]
-        apps_and_configs = [
-            (
-                sub_directory,
-                os.path.join(directory, sub_directory, 'config.yml'),
-            )
-            for sub_directory in sub_directories
-        ]
-        apps_and_configs = [
-            (
-                app,
-                yaml.load(open(config_path))
-            )
-            for (app, config_path) in apps_and_configs
-            if os.path.isfile(config_path)
-        ]
-        apps_and_configs = [
-            (
-                app,
-                AppConfiguration(dictionary=config_dictionary)
-            )
-            for (app, config_dictionary) in apps_and_configs
-        ]
+        apps_and_configs = list()
+        for sub_directory in sub_directories:
+            config_path = os.path.join(directory, sub_directory, 'config.yml')
+            if os.path.isfile(config_path):
+                config_dictionary = yaml.load(open(config_path))
+                config_object = AppConfiguration(dictionary=config_dictionary)
+                apps_and_configs.append(
+                    (sub_directory, config_object,)
+                )
         return apps_and_configs
 
     @staticmethod
@@ -159,7 +149,7 @@ class Discovery:
             if app_configuration.is_allowed:
                 url = app_configuration.base_urls.http
                 if url is not None:
-                    if app_configuration.base_urls.is_api:
+                    if app_configuration.is_api:
                         url = f'api/{url}'
                     http_urlpatterns.append(
                         path(url, include(f'{app}.http_urls'))
@@ -207,6 +197,44 @@ class Discovery:
             self.apps
         )
         self.app_ws_urlpatterns = self._prepare_ws_urlpatterns(
+            self.apps
+        )
+
+    @staticmethod
+    def _prepare_staticfiles_dirs(directory, app_set):
+        """
+        Generate STATICFILES_DIRS entries for the given list of tuples of apps
+        and configuration objects
+        :param directory: the directory to scan for apps
+        :param app_set: the given list of tuples of apps and their configuration
+        objects
+        :return: the STATICFILES_DIRS entries
+        """
+
+        additional_staticfiles_dirs = list()
+        for (app, app_configuration) in app_set:
+            static_path = os.path.join(directory, app, 'static')
+            if os.path.isdir(static_path):
+                additional_staticfiles_dirs.append(
+                    (
+                        app_configuration.base_urls.static[:-1],
+                        static_path,
+                    )
+                )
+        return additional_staticfiles_dirs
+
+    def prepare_staticfiles_dirs(self):
+        """
+        Populate the values of static file directories for both services and
+        apps
+        """
+
+        self.service_staticfiles_dirs = Discovery._prepare_staticfiles_dirs(
+            self.services_directory,
+            self.services
+        )
+        self.app_staticfiles_dirs = Discovery._prepare_staticfiles_dirs(
+            self.apps_directory,
             self.apps
         )
 

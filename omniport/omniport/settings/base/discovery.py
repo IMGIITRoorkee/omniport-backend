@@ -1,16 +1,28 @@
 """
 Omniport is equipped with Discovery. Not going into details, Discovery finds
-and populates services in INSTALLED_APPS.
+and populates apps and services in INSTALLED_APPS and their static files in
+STATICFILES_DIRS.
 
 This settings file exposes installed apps and the discovery object.
 """
 
+import os
+
 from discovery.discovery import Discovery
-from omniport.settings.base.directories import APPS_DIR, SERVICES_DIR
+from omniport.settings.base.directories import (
+    OMNIPORT_DIR,
+    APPS_DIR,
+    SERVICES_DIR,
+)
 from omniport.settings.base.shell import SHELL_PRESENT
+
+# Discovery
+DISCOVERY = Discovery(SERVICES_DIR, APPS_DIR)
+DISCOVERY.discover()
 
 # Application declarations
 INSTALLED_APPS = [
+    # Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -36,22 +48,24 @@ INSTALLED_APPS = [
     'session_auth',
     'token_auth',
 ]
-
-# If shell is present, add to INSTALLED_APPS
 if SHELL_PRESENT:
-    INSTALLED_APPS.append(
-        'shell.apps.ShellConfig',
-    )
-
-# Discovery
-DISCOVERY = Discovery(SERVICES_DIR, APPS_DIR)
-DISCOVERY.discover()
+    INSTALLED_APPS.append('shell.apps.ShellConfig')
 
 DISCOVERY.prepare_installed_apps()
 INSTALLED_APPS += DISCOVERY.service_installed_apps
 INSTALLED_APPS += DISCOVERY.app_installed_apps
 
+# Static files directories
+STATICFILES_DIRS = [
+    os.path.join(OMNIPORT_DIR, 'static'),
+]
+
+DISCOVERY.prepare_staticfiles_dirs()
+STATICFILES_DIRS += DISCOVERY.service_staticfiles_dirs
+STATICFILES_DIRS += DISCOVERY.app_staticfiles_dirs
+
 __all__ = [
-    'INSTALLED_APPS',
     'DISCOVERY',
+    'INSTALLED_APPS',
+    'STATICFILES_DIRS',
 ]

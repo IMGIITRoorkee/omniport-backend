@@ -3,10 +3,7 @@ This setting file maps Django's file variables and similar variables of our own
 to various directories defined in the 'directories' setting file.
 """
 
-import os
-
 from omniport.settings.base.directories import (
-    OMNIPORT_DIR,
     STATIC_DIR,
     BRANDING_DIR,
     MEDIA_DIR,
@@ -14,9 +11,6 @@ from omniport.settings.base.directories import (
 )
 
 # Static files
-STATICFILES_DIRS = [
-    os.path.join(OMNIPORT_DIR, 'static'),
-]
 STATIC_URL = '/static/'
 STATIC_ROOT = STATIC_DIR
 
@@ -33,7 +27,6 @@ PERSONAL_URL = '/personal/'
 PERSONAL_ROOT = PERSONAL_DIR
 
 __all__ = [
-    'STATICFILES_DIRS',
     'STATIC_URL',
     'STATIC_ROOT',
     'BRANDING_URL',

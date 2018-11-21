@@ -16,4 +16,4 @@ class BaseUrls:
         dictionary = kwargs.get('dictionary') or dict()
         self.http = dictionary.get('http')
         self.ws = dictionary.get('ws')
-        self.is_api = dictionary.get('isApi') or False
+        self.static = dictionary.get('static')

@@ -5,7 +5,7 @@ external YAML files.
 This settings file exposes settings pertaining to allowances.
 """
 
-from omniport.settings.base.installed_apps import DISCOVERY as _DISCOVERY
+from omniport.settings.base.discovery import DISCOVERY as _DISCOVERY
 from omniport.settings.configuration.base import configuration as _conf
 
 # Allowed hosts
