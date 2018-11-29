@@ -1,6 +1,4 @@
-# Omniport
-
-## Backend
+<img src="branding/site/wordmark.svg" height="98px" />
 
 > The backend of the one true portal for any and every educational institute
 
