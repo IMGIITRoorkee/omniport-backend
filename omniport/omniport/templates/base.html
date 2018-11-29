@@ -3,10 +3,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
     <title>
-        {% block title %}{% endblock %}: {{ SITE_VERBOSE_NAME }}
+        {% block title %}{% endblock %}: {{ site.nomenclature.verbose_name }}
     </title>
 
     <link rel="stylesheet" href="{% static 'semantic-ui/semantic.min.css' %}">
@@ -16,25 +17,29 @@
     <script src="{% static 'jquery/jquery.min.js' %}" defer></script>
     <script src="{% static 'semantic-ui/semantic.min.js' %}" defer></script>
 
-    <link rel="icon" href="{{ SITE_FAVICON }}">
+    <link rel="icon" href="{{ site.imagery.favicon }}">
 </head>
 <body>
 <header class="ui top attached segment">
     <div class="ui container" id="title-bar">
         <div id="portal-logo">
             <a href="{% url 'home' %}">
-                <img src="{{ SITE_LOGO }}" class="title-bar-logo">
+                {% if site.imagery.wordmark %}
+                    <img src="{{ site.imagery.wordmark }}"
+                         class="title-bar-logo">
+                {% else %}
+                    <h1>{{ site.nomenclature.verbose_name }}</h1>
+                {% endif %}
             </a>
         </div>
-        <div id="site-name">
-            {% block site_name %}{% endblock %}
-        </div>
-        <div id="institute">
-            {% block institute %}{% endblock %}
-        </div>
         <div id="institute-logo">
-            <a href="{{ INSTITUTE_HOME_PAGE }}">
-                <img src="{{ INSTITUTE_LOGO }}" class="title-bar-logo">
+            <a href="{{ institute.text.home_page }}">
+                {% if institute.imagery.wordmark %}
+                    <img src="{{ institute.imagery.wordmark }}"
+                         class="title-bar-logo">
+                {% else %}
+                    <h1>{{ institute.text.name }}</h1>
+                {% endif %}
             </a>
         </div>
     </div>
@@ -51,14 +56,17 @@
 <footer class="ui bottom attached segment">
     <div class="ui container" id="end-bar">
         <div>
-            Copyright &copy; {% now 'Y' %}
+            &copy; {% now 'Y' %}
         </div>
-        <a href="{{ MAINTAINERS_HOME_PAGE }}">
-            <img src="{{ MAINTAINERS_LOGO }}" id="maintainers-logo">
+        <a href="{{ maintainers.text.home_page }}">
+            {% if maintainers.imagery.logo %}
+                <img src="{{ maintainers.imagery.logo }}"
+                     id="maintainers-logo">
+            {% else %}
+                &nbsp;
+            {% endif %}
+            {{ maintainers.text.name }}
         </a>
-        <div>
-            {{ MAINTAINERS_NAME }}
-        </div>
     </div>
 </footer>
 </body>

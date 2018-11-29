@@ -2,11 +2,11 @@
 {% load i18n %}
 
 {% block title %}
-    {% if name %}{{ name }} – {% endif %}{% trans SITE_VERBOSE_NAME %}
+    {% if name %}{{ name }} – {% endif %}{% trans site.nomenclature.verbose_name %}
 {% endblock %}
 
 {% block branding %}
     <a href="#" class="navbar-brand">
-        {% trans SITE_VERBOSE_NAME %}
+        {% trans site.nomenclature.verbose_name %}
     </a>
 {% endblock %}

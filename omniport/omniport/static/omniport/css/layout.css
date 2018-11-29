@@ -50,8 +50,7 @@ footer.ui.bottom.attached.segment {
 }
 
 .title-bar-logo {
-    height: 5em;
-    display: block;
+    height: 3.5em;
 }
 
 /* Customisations in the main section */
@@ -71,7 +70,8 @@ main .ui.container .ui.segment {
 }
 
 #maintainers-logo {
-    height: 2em;
-    margin-left: 2em;
+    height: 16px;
+    margin-left: 0.5em;
     margin-right: 0.5em;
+    vertical-align: middle;
 }
