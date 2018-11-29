@@ -1,6 +1,6 @@
-from configuration.app.acceptables import Acceptables
-from configuration.app.base_urls import BaseUrls
-from configuration.app.nomenclature import Nomenclature
+from configuration.models.app.acceptables import Acceptables
+from configuration.models.app.base_urls import BaseUrls
+from configuration.models.app.nomenclature import Nomenclature
 
 
 class AppConfiguration:
@@ -21,15 +21,19 @@ class AppConfiguration:
 
         dictionary = kwargs.get('dictionary') or dict()
 
-        self.is_allowed = None
-
         self.nomenclature = Nomenclature(
             dictionary=dictionary.get('nomenclature')
         )
+        self.is_api = dictionary.get('isApi') or False
+        self.description = dictionary.get('description')
         self.base_urls = BaseUrls(
             dictionary=dictionary.get('baseUrls')
         )
         self.acceptables = Acceptables(
             dictionary=dictionary.get('acceptables')
         )
-        self.is_api = dictionary.get('isApi') or False
+
+        # Processed variables
+        self.is_allowed = None
+        self.has_static = None
+        self.assets = None

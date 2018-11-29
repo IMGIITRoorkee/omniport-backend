@@ -1,9 +1,10 @@
-from configuration.project.allowances import IpAddressRing, Allowances
-from configuration.project.branding import Branding
-from configuration.project.i18n import I18n
-from configuration.project.secrets import Secrets
-from configuration.project.services import Services
-from configuration.project.site import Site
+from configuration.models.project.allowances import Allowances
+from configuration.models.project.branding import Branding
+from configuration.models.project.i18n import I18n
+from configuration.models.project.ip_address_ring import IpAddressRing
+from configuration.models.project.secrets import Secrets
+from configuration.models.project.services import Services
+from configuration.models.project.site import Site
 
 
 class ProjectConfiguration:

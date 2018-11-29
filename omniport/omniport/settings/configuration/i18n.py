@@ -8,11 +8,11 @@ Omniport supports and enables both i18n and L10n by default.
 This settings file exposes the variables for enabling i18n and L10n.
 """
 
-from omniport.settings.configuration.base import configuration as _conf
+from omniport.settings.configuration.base import CONFIGURATION as _CONF
 
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LANGUAGE_CODE = _conf.i18n.language_code
-TIME_ZONE = _conf.i18n.time_zone
+LANGUAGE_CODE = _CONF.i18n.language_code
+TIME_ZONE = _CONF.i18n.time_zone

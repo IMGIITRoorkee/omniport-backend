@@ -3,17 +3,17 @@ This settings files exposes configurations for various services that run
 alongside Django such as databases and message brokers.
 """
 
-from omniport.settings.configuration.base import configuration as _conf
+from omniport.settings.configuration.base import CONFIGURATION as _CONF
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': _conf.services.database.name,
-        'HOST': _conf.services.database.host,
-        'PORT': _conf.services.database.port,
-        'USER': _conf.services.database.user,
-        'PASSWORD': _conf.services.database.password,
+        'NAME': _CONF.services.database.name,
+        'HOST': _CONF.services.database.host,
+        'PORT': _CONF.services.database.port,
+        'USER': _CONF.services.database.user,
+        'PASSWORD': _CONF.services.database.password,
     },
 }
 
@@ -24,8 +24,8 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [
                 (
-                    _conf.services.channel_layer.host,
-                    _conf.services.channel_layer.port,
+                    _CONF.services.channel_layer.host,
+                    _CONF.services.channel_layer.port,
                 )
             ],
         },
@@ -36,15 +36,15 @@ CHANNEL_LAYERS = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': (f'{_conf.services.cache.host}'
-                     f':{_conf.services.cache.port}'),
+        'LOCATION': (f'{_CONF.services.cache.host}'
+                     f':{_CONF.services.cache.port}'),
     },
     'notification': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': (
             'redis://'
-            f'{_conf.services.notification_store.host}'
-            f':{_conf.services.notification_store.port}'
+            f'{_CONF.services.notification_store.host}'
+            f':{_CONF.services.notification_store.port}'
             '/0'
         ),
         'OPTIONS': {
@@ -56,8 +56,8 @@ CACHES = {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': (
             'redis://'
-            f'{_conf.services.session_store.host}'
-            f':{_conf.services.session_store.port}'
+            f'{_CONF.services.session_store.host}'
+            f':{_CONF.services.session_store.port}'
             f'/0'
         ),
         'OPTIONS': {

@@ -6,7 +6,8 @@ import yaml
 from channels.routing import URLRouter
 from django.urls import path, include
 
-from configuration.app.app import AppConfiguration
+from configuration.models.app.app import AppConfiguration
+from configuration.models.app.assets import Assets
 
 
 class Discovery:
@@ -26,23 +27,29 @@ class Discovery:
         self.services_directory = services_directory
         self.apps_directory = apps_directory
 
+        # App directory - configuration tuples
         self.services = list()
         self.apps = list()
 
+        # App name - configuration maps
         self.service_configuration_map = dict()
         self.app_configuration_map = dict()
 
+        # INSTALLED_APPS additional entries
         self.service_installed_apps = list()
         self.app_installed_apps = list()
 
+        # STATICFILES_DIRS additional entries
+        self.service_staticfiles_dirs = list()
+        self.app_staticfiles_dirs = list()
+
+        # http_urls additional entries
         self.service_http_urlpatterns = list()
         self.app_http_urlpatterns = list()
 
+        # ws_urls additional entries
         self.service_ws_urlpatterns = list()
         self.app_ws_urlpatterns = list()
-
-        self.service_staticfiles_dirs = list()
-        self.app_staticfiles_dirs = list()
 
     @staticmethod
     def _prepare_app_configuration_list(directory):
@@ -58,6 +65,7 @@ class Discovery:
             for sub_directory in os.listdir(path=directory)
             if os.path.isdir(os.path.join(directory, sub_directory))
         ]
+
         apps_and_configs = list()
         for sub_directory in sub_directories:
             config_path = os.path.join(directory, sub_directory, 'config.yml')
@@ -81,7 +89,8 @@ class Discovery:
 
         app_configuration_map = dict()
         for (app, app_configuration) in app_set:
-            app_configuration_map[app] = app_configuration
+            app_name = app_configuration.nomenclature.name
+            app_configuration_map[app_name] = app_configuration
         return app_configuration_map
 
     def discover(self):
@@ -131,6 +140,67 @@ class Discovery:
             self.services
         )
         self.app_installed_apps = Discovery._prepare_installed_apps(
+            self.apps
+        )
+
+    @staticmethod
+    def _prepare_assets(directory, app_configuration):
+        """
+        
+        :param directory: 
+        :param app_configuration: 
+        :return: 
+        """
+
+        assets_path = os.path.join(directory, 'assets')
+        if os.path.isdir(assets_path):
+            assets = Assets(directory=assets_path)
+            app_configuration.assets = assets
+
+    @staticmethod
+    def _prepare_staticfiles_dirs(directory, app_set):
+        """
+        Generate STATICFILES_DIRS entries for the given list of tuples of apps
+        and configuration objects
+        :param directory: the directory to scan for apps
+        :param app_set: the given list of tuples of apps and their configuration
+        objects
+        :return: the STATICFILES_DIRS entries
+        """
+
+        additional_staticfiles_dirs = list()
+        for (app, app_configuration) in app_set:
+            static_path = os.path.join(directory, app, 'static')
+            if os.path.isdir(static_path):
+                app_configuration.has_static = True
+
+                # Additional files can be found at the URL
+                # /<static URL>/<namespace>/<static path>
+                additional_staticfiles_dirs.append(
+                    (
+                        app_configuration.base_urls.static[:-1],  # <namespace>
+                        static_path,  # <static path>
+                    )
+                )
+
+                Discovery._prepare_assets(static_path, app_configuration)
+            else:
+                app_configuration.has_static = False
+
+        return additional_staticfiles_dirs
+
+    def prepare_staticfiles_dirs(self):
+        """
+        Populate the values of static file directories for both services and
+        apps
+        """
+
+        self.service_staticfiles_dirs = Discovery._prepare_staticfiles_dirs(
+            self.services_directory,
+            self.services
+        )
+        self.app_staticfiles_dirs = Discovery._prepare_staticfiles_dirs(
+            self.apps_directory,
             self.apps
         )
 
@@ -197,44 +267,6 @@ class Discovery:
             self.apps
         )
         self.app_ws_urlpatterns = self._prepare_ws_urlpatterns(
-            self.apps
-        )
-
-    @staticmethod
-    def _prepare_staticfiles_dirs(directory, app_set):
-        """
-        Generate STATICFILES_DIRS entries for the given list of tuples of apps
-        and configuration objects
-        :param directory: the directory to scan for apps
-        :param app_set: the given list of tuples of apps and their configuration
-        objects
-        :return: the STATICFILES_DIRS entries
-        """
-
-        additional_staticfiles_dirs = list()
-        for (app, app_configuration) in app_set:
-            static_path = os.path.join(directory, app, 'static')
-            if os.path.isdir(static_path):
-                additional_staticfiles_dirs.append(
-                    (
-                        app_configuration.base_urls.static[:-1],
-                        static_path,
-                    )
-                )
-        return additional_staticfiles_dirs
-
-    def prepare_staticfiles_dirs(self):
-        """
-        Populate the values of static file directories for both services and
-        apps
-        """
-
-        self.service_staticfiles_dirs = Discovery._prepare_staticfiles_dirs(
-            self.services_directory,
-            self.services
-        )
-        self.app_staticfiles_dirs = Discovery._prepare_staticfiles_dirs(
-            self.apps_directory,
             self.apps
         )
 

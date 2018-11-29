@@ -1,12 +1,12 @@
-class Site:
+class Nomenclature:
     """
-    This class stores information about a site, namely the ID, code name and
-    verbose name
+    This class stores information about an app's nomenclature, namely the code
+    name and verbose name
     """
 
     def __init__(self, *args, **kwargs):
         """
-        Create an instance of Site from a dictionary
+        Create a Nomenclature instance, from a dictionary
         :param args: arguments
         :param kwargs: keyword arguments, including 'dictionary'
         """
@@ -14,7 +14,5 @@ class Site:
         super().__init__()
 
         dictionary = kwargs.get('dictionary') or dict()
-        self.id = dictionary.get('id') or 0
         self.name = dictionary.get('name') or 'omniport'
         self.verbose_name = dictionary.get('verboseName') or 'Omniport'
-        self.debug = dictionary.get('debug') or False

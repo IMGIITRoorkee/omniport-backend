@@ -1,0 +1,4 @@
+# Ignore all branding imagery for institute
+favicon.ico
+logo.*
+wordmark.*

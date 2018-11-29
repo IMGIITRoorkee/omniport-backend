@@ -1,21 +1,25 @@
+from configuration.models.project.text import Text
+
+
 class Brand:
     """
-    This class stores information about a brand, namely the name and home page
+    This class stores information about a brand
     """
 
     def __init__(self, *args, **kwargs):
         """
         Create an instance of Brand from a dictionary
         :param args: arguments
-        :param kwargs: keyword arguments, includes 'dictionary'
+        :param kwargs: keyword arguments, including 'dictionary'
         """
 
-        super().__init__()
-
         dictionary = kwargs.get('dictionary') or dict()
-        self.acronym = dictionary.get('acronym')
-        self.name = dictionary.get('name')
-        self.home_page = dictionary.get('homePage')
+        self.text = Text(
+            dictionary=dictionary
+        )
+
+        # Processed variables
+        self.imagery = None
 
 
 class Institute(Brand):
@@ -59,8 +63,6 @@ class Branding:
         :param args: arguments
         :param kwargs: keyword arguments, includes 'dictionary'
         """
-
-        super().__init__()
 
         dictionary = kwargs.get('dictionary') or dict()
         self.institute = Institute(

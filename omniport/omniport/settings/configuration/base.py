@@ -10,8 +10,10 @@ import os
 
 import yaml
 
-from configuration.project.project import ProjectConfiguration
-from omniport.settings.base.directories import CONFIGURATION_DIR
+from configuration.models.project.imagery import Imagery
+from configuration.models.project.project import ProjectConfiguration
+from omniport.settings.base.directories import CONFIGURATION_DIR, BRANDING_DIR
+from omniport.settings.base.files import BRANDING_URL
 
 # Site ID helps in loading site-specific configuration
 site_id = int(os.getenv('SITE_ID', '0'))
@@ -31,4 +33,26 @@ site_configuration = yaml.load(site_config_file)
 
 # Note that site_configuration overrides base_configuration
 configuration = {**base_configuration, **site_configuration}
-configuration = ProjectConfiguration(dictionary=configuration)
+CONFIGURATION = ProjectConfiguration(dictionary=configuration)
+
+# Imagery
+site_imagery_directory = os.path.join(BRANDING_DIR, f'site_{site_id}')
+if not os.path.isdir(site_imagery_directory):
+    site_imagery_directory = os.path.join(BRANDING_DIR, 'site')
+
+CONFIGURATION.site.imagery = Imagery(
+    directory=os.path.join(BRANDING_DIR, site_imagery_directory),
+    url=BRANDING_URL,
+)
+CONFIGURATION.branding.institute.imagery = Imagery(
+    directory=os.path.join(BRANDING_DIR, 'institute'),
+    url=BRANDING_URL,
+)
+CONFIGURATION.branding.maintainers.imagery = Imagery(
+    directory=os.path.join(BRANDING_DIR, 'maintainers'),
+    url=BRANDING_URL,
+)
+
+__all__ = [
+    'CONFIGURATION',
+]

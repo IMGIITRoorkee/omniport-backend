@@ -34,9 +34,9 @@ class OmniportAdminSite(sites.AdminSite):
     - the permission framework
     """
 
-    site_header = f'{settings.SITE_VERBOSE_NAME} administration'
-    site_title = f'{settings.SITE_VERBOSE_NAME} administration'
-    index_title = f'{settings.SITE_VERBOSE_NAME} administration'
+    site_header = f'{settings.SITE.nomenclature.verbose_name} administration'
+    site_title = f'{settings.SITE.nomenclature.verbose_name} administration'
+    index_title = f'{settings.SITE.nomenclature.verbose_name} administration'
 
     login_form = OmniportAdminAuthenticationForm
 
