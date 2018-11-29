@@ -10,25 +10,39 @@ class AbstractMaintainer(PeriodMixin, Model):
     This model holds information pertaining to a maintainer
     """
 
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         to=swapper.get_model_name('kernel', 'Person'),
         on_delete=models.CASCADE,
     )
 
-    # Indicates the maintainer's role within the organisation
-    # Here it is used to identify developers and designers
+    """
+    Indicates the maintainer's role within the organisation.
+    Here it is used to identify the core duty of the maintainer.
+    
+    Example: developer, designer
+    """
     role = models.CharField(
         max_length=127,
         blank=True,
     )
-    # Indicates the maintainer's hierarchical level in the organization
-    # This field rises as the maintainer moves up in the hierarchy
+
+    """
+    Indicates the maintainer's hierarchical level in the organization.
+    This field rises as the maintainer moves up in the hierarchy.
+    
+    Example: webmaster, hub-coordinator, project leader, coordinator
+    """
     designation = models.CharField(
         max_length=127,
         blank=True,
     )
-    # This is a floating field in case the upper two are not enough or flexible
-    # Here it is used to assign duties to each maintainer
+
+    """
+    This is a floating field in case the upper two are not enough or flexible.
+    Here it is used to assign duties to each maintainer.
+    
+    Example: chief technology coordinator, chief security coordinator
+    """
     post = models.CharField(
         max_length=127,
         blank=True,

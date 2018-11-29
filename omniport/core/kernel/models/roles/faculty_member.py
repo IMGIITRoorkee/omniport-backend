@@ -10,7 +10,7 @@ class AbstractFacultyMember(PeriodMixin, Model):
     This model holds information pertaining to a faculty member
     """
 
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         to=swapper.get_model_name('kernel', 'Person'),
         on_delete=models.CASCADE,
     )
