@@ -8,7 +8,7 @@ from omniport.settings.third_party import *  # Settings for PyPI packages
 
 # Import shell models to replace swappable models from other apps
 if SHELL_PRESENT:
-    from shell.swapper import *
+    from shell.swapper_replacements import *
 
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
