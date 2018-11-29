@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,7 +11,7 @@ class Rights(GenericAPIView):
     This view shows some personal information of the currently logged in user
     """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
         """
@@ -26,9 +27,16 @@ class Rights(GenericAPIView):
         try:
             rights_function = getattr(rights, f'has_{which}_rights')
             has_rights = rights_function(user)
+            response = {
+                'hasRights': has_rights,
+            }
+            return Response(response, status=status.HTTP_200_OK)
         except AttributeError:
-            has_rights = False
-        response = {
-            'hasRights': has_rights,
-        }
-        return Response(response)
+            response = {
+                'errors': {
+                    "which": [
+                        "Non-existent right",
+                    ],
+                },
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)

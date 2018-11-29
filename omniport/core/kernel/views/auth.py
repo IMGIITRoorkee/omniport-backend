@@ -20,7 +20,7 @@ class ChangePassword(GenericAPIView):
     Works only when authenticated
     """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated, ]
 
     serializer_class = ChangePasswordSerializer
 
@@ -136,7 +136,7 @@ class Lockpick(GenericAPIView):
     Works only when a person with lockpicking rights is logged in
     """
 
-    permission_classes = (IsAuthenticated, HasLockpickingRights,)
+    permission_classes = [IsAuthenticated, HasLockpickingRights, ]
 
     serializer_class = LockpickingSerializer
 

@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,7 +11,7 @@ class WhoAmI(GenericAPIView):
     This view shows some personal information of the currently logged in user
     """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAuthenticated, ]
     serializer_class = AvatarSerializer
 
     def get(self, request, *args, **kwargs):
@@ -24,4 +25,4 @@ class WhoAmI(GenericAPIView):
 
         person = request.person
         serializer = self.get_serializer_class()(person)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)

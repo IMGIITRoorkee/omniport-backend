@@ -13,16 +13,16 @@ class MaintainerViewSet(ModelViewSet):
     The view for CRUD operations of maintainers
     """
 
-    permission_classes = (
+    permission_classes = [
         IsAuthenticated,
         get_has_role('Maintainer'),
-    )
-
-    serializer_class = MaintainerSerializer
+    ]
 
     http_method_names = [
         'get',
     ]
+
+    serializer_class = MaintainerSerializer
 
     queryset = Maintainer.objects.all()
 
