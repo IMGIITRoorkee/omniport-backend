@@ -11,12 +11,14 @@ from kernel.models.institute import (
     AbstractCentre,
     AbstractBranch,
     AbstractCourse,
+    AbstractDegree,
 
     # Concrete models for default implementation
     Department,
     Centre,
     Branch,
     Course,
+    Degree,
 )
 from kernel.models.person import (
     # Abstract models for customised implementations

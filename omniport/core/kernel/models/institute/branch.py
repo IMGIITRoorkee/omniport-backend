@@ -23,11 +23,9 @@ class AbstractBranch(Model):
         max_length=127,
     )
 
-    degree = models.CharField(
-        max_length=63,
-    )
-    graduation = models.CharField(
-        max_length=63,
+    models.ForeignKey(
+        to=swapper.get_model_name('kernel', 'Degree'),
+        on_delete=models.CASCADE,
     )
     semester_count = models.IntegerField(
         blank=True,
