@@ -1,9 +1,13 @@
-<img src="branding/site/wordmark.svg" height="98px" />
+<img src="readme-assets/site/wordmark.svg" height="98px" />
 
 > The backend of the one true portal for any and every educational institute
 
+## Backend
+
 Omniport is a portal for educational institutes, designed from the ground up to
-be extensible, customizable, performant and powerful.
+be extensible, customizable, performant and powerful. Omniport also comes with 
+a powerful collection of apps and is simple enough for you to be able to write
+your own.
 
 ## Technological stack
 
@@ -12,9 +16,14 @@ be extensible, customizable, performant and powerful.
 - Reverse proxy: `NGINX`
 - WSGI server: `Gunicorn`
 - ASGI server: `Daphne`
-- Database: `PostgreSQL` + `Psycopg2`
+- Database: `PostgreSQL`
+- Cache: `Memcached`
+- In-memory store: `Redis`
 
-A Dockerised setup is the preferred mode of installation.
+A Dockerised setup is the preferred mode of installation. One such is provided 
+by us on our GitHub account. You can however set all the components up yourself, 
+after suffering a reasonable amount of headbanging, cursing, and physical and 
+mental pain.
 
 ## Contribution guidelines
 
@@ -26,3 +35,7 @@ A Dockerised setup is the preferred mode of installation.
 - Get your pull request merged.
 
 It's that simple!
+
+## Credits
+
+<img src="readme-assets/maintainers/logo.svg" height="32px" /> <img src="readme-assets/maintainers/wordmark.svg" height="32px" />
