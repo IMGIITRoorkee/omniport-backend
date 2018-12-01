@@ -6,10 +6,10 @@ said user.
 This setting file exposes variables pertaining to authentication.
 """
 
-AUTH_USER_MODEL = 'kernel.User'
+AUTH_USER_MODEL = 'base_auth.User'
 
 AUTHENTICATION_BACKENDS = [
-    'kernel.auth_backends.generalised.GeneralisedAuthBackend',
+    'base_auth.backends.generalised.GeneralisedAuthBackend',  # Custom backend
     'guardian.backends.ObjectPermissionBackend',  # Django Guardian
 ]
 

@@ -5,8 +5,7 @@ from kernel.admin.site import omnipotence
 from omniport.views.csrf import EnsureCsrf
 
 http_urlpatterns = [
-    # The root path should serve the React app and assets from NGINX itself
-    path('', TemplateView.as_view(template_name='404.html'), name='home'),
+    path('', TemplateView.as_view(template_name='hello.html'), name='hello'),
 
     # Ensures a CSRF cookie on the client
     path('ensure_csrf/', EnsureCsrf.as_view(), name='ensure_csrf'),
@@ -14,14 +13,14 @@ http_urlpatterns = [
     # Django admin URL dispatcher
     path('omnipotence/', omnipotence.urls),
 
-    # Django REST Framework URL dispatcher
-    path('rest/', include('rest_framework.urls')),
-
     # PyPI packages URL dispatcher
     path('tinymce/', include('tinymce.urls')),
 
-    # Core URL dispatchers
+    # The almighty swappable kernel
     path('kernel/', include('kernel.http_urls')),
+
+    # Authentication
+    path('base_auth/', include('base_auth.http_urls')),
     path('session_auth/', include('session_auth.http_urls')),
     path('token_auth/', include('token_auth.http_urls')),
 ]

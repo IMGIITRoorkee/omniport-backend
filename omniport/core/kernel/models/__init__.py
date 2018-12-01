@@ -1,4 +1,3 @@
-from kernel.models.auth import User
 from kernel.models.generics import (
     ContactInformation,
     LocationInformation,

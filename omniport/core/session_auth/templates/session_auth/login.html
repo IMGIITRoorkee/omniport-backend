@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block error_title %}Login{% endblock %}
+
+{% block box_content %}
+    <h1 data-tooltip="Who dis?">Log in</h1>
+    <p>Please tell us who you are.</p>
+    <div class="ui divider"></div>
+
+    {% if errors %}
+        <div class="ui error message">
+            {% for kind, kind_errors in errors.items %}
+                <strong>{{ kind|title }}:</strong>
+                {% for error in kind_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% else %}
+        {% if data %}
+            <div class="ui success message">
+                <p>Logged in successfully!</p>
+            </div>
+            <a class="ui basic button" href="{% url 'kernel:who_am_i' %}">
+                Who am I?
+            </a>
+        {% else %}
+            {% if request.user.is_authenticated %}
+                <div class="ui info message">
+                    <p>You are already logged in.</p>
+                </div>
+                <a class="ui basic button" href="{% url 'kernel:who_am_i' %}">
+                    Who am I?
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+    {% if not request.user.is_authenticated %}
+        <div class="ui left aligned container">
+            <form action="{% url 'session_auth:login' %}" method="POST" class="ui form">
+                {% csrf_token %}
+                <div class="required field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required/>
+                </div>
+                <div class="required field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required/>
+                </div>
+                <button class="ui primary basic button" type="submit">
+                    Login
+                </button>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

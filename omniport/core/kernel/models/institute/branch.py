@@ -23,7 +23,7 @@ class AbstractBranch(Model):
         max_length=127,
     )
 
-    models.ForeignKey(
+    degree = models.ForeignKey(
         to=swapper.get_model_name('kernel', 'Degree'),
         on_delete=models.CASCADE,
     )

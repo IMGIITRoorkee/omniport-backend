@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import admin as auth_admin
 from django.contrib.auth import forms as auth_forms
 
-from kernel.models import User
+from base_auth.models import User
 
 
 class UserChangeForm(forms.ModelForm):

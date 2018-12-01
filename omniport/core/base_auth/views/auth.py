@@ -3,13 +3,13 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from kernel.permissions.has_lockpicking_rights import HasLockpickingRights
-from kernel.serializers.auth import (
+from base_auth.serializers.auth import (
     UserRetrievalSerializer,
     ChangePasswordSerializer,
     ResetPasswordSerializer,
     LockpickingSerializer,
 )
+from kernel.permissions.has_lockpicking_rights import HasLockpickingRights
 
 
 class ChangePassword(GenericAPIView):

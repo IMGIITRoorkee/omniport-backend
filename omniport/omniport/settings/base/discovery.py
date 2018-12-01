@@ -44,12 +44,15 @@ INSTALLED_APPS = [
     'tinymce',  # Rich text editor
 
     # Core apps
-    'kernel',
-    'session_auth',
-    'token_auth',
+    'kernel.apps.KernelConfig',
+    'base_auth.apps.BaseAuthConfig',
+    'session_auth.apps.SessionAuthConfig',
+    'token_auth.apps.TokenAuthConfig',
 ]
 if SHELL_PRESENT:
     INSTALLED_APPS.append('shell.apps.ShellConfig')
+
+print(INSTALLED_APPS)
 
 DISCOVERY.prepare_installed_apps()
 INSTALLED_APPS += DISCOVERY.service_installed_apps

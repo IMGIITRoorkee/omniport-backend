@@ -1,7 +1,8 @@
 import swapper
 from django.db.models import Q
 
-from kernel.models import User, ContactInformation
+from base_auth.models import User
+from kernel.models import ContactInformation
 
 
 def get_user(username):

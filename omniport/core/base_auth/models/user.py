@@ -1,25 +1,17 @@
-import swapper
 from django.contrib.auth import models as auth_models
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from kernel.managers import auth
+from base_auth.managers import user
 from kernel.utils.rights import has_omnipotence_rights
-from kernel.utils.upload_to import UploadTo
 
 
 class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
     """
     This model holds the authentication information of a person
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        blank=True,
-        null=True,
-        on_delete=models.CASCADE,
-    )
 
     # This is an alternate username for logging in
     # This field is completely optional and makes for a fun easter egg
@@ -49,7 +41,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
         default=0,
     )
 
-    objects = auth.UserManager()
+    objects = user.UserManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
@@ -108,7 +100,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
 
         try:
             return self.person.get_short_name()
-        except AttributeError:
+        except ObjectDoesNotExist:
             return str(self.id)
 
     def get_full_name(self):
@@ -119,7 +111,7 @@ class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
 
         try:
             return self.person.get_full_name()
-        except AttributeError:
+        except ObjectDoesNotExist:
             return str(self.id)
 
     def __str__(self):

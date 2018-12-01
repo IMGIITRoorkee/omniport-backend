@@ -1,4 +1,5 @@
 import swapper
+from django.conf import settings
 from django.contrib.contenttypes import fields as contenttypes_fields
 from django.db import models
 
@@ -6,21 +7,17 @@ from kernel.models.root import Model
 from kernel.utils.upload_to import UploadTo
 
 
-def upload_to():
-    """
-    This dummy function must live on because its name has been etched into a
-    migration forever
-
-    Removal will result in an exception.
-    """
-
-    pass
-
-
 class AbstractPerson(Model):
     """
     This model describes a person who uses Omniport
     """
+
+    user = models.OneToOneField(
+        to=settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+    )
 
     short_name = models.CharField(
         max_length=63,

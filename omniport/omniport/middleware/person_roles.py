@@ -1,4 +1,8 @@
+import swapper
+
 from kernel.managers.get_role import get_all_roles
+
+Person = swapper.load_model('kernel', 'Person')
 
 
 class PersonRoles:
@@ -24,9 +28,13 @@ class PersonRoles:
         """
 
         if request.user and request.user.is_authenticated:
-            person = request.user.person
-            request.person = person
-            request.roles = get_all_roles(person)
+            try:
+                person = request.user.person
+                request.person = person
+                request.roles = get_all_roles(person)
+            except Person.DoesNotExist:
+                request.person = None
+                request.roles = None
         else:
             request.person = None
             request.roles = None

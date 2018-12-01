@@ -1,7 +1,7 @@
 from django.contrib.auth.backends import ModelBackend
 
-from kernel.managers.get_user import get_user
-from kernel.models import User
+from base_auth.managers.get_user import get_user
+from base_auth.models import User
 from kernel.utils.rights import has_alohomora_rights
 
 

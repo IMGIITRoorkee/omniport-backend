@@ -1,8 +1,7 @@
 from django.db import models
-from django_permanent import models as permanent_models
 
 
-class Model(permanent_models.PermanentModel):
+class Model(models.Model):
     """
     This abstract root model should be inherited by all model classes
     Provides additional features like soft delete and datetime information

@@ -1,8 +1,24 @@
-{% extends 'rest_framework/base.html' %}
+{% extends 'rest_framework/api.html' %}
 {% load i18n %}
 
 {% block title %}
     {% if name %}{{ name }} – {% endif %}{% trans site.nomenclature.verbose_name %}
+{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+
+    <link rel="icon" href="{{ site.imagery.favicon }}">
+{% endblock %}
+
+{% block userlinks %}
+    {{ block.super }}
+
+    {% if request.user.is_authenticated %}
+        <li><a href="{% url 'session_auth:logout' %}">Log out</a></li>
+    {% else %}
+        <li><a href="{% url 'session_auth:login' %}">Log in</a></li>
+    {% endif %}
 {% endblock %}
 
 {% block branding %}

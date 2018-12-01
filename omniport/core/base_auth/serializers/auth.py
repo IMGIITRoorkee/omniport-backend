@@ -4,8 +4,8 @@ import string
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import PasswordField
 
-from kernel.managers.get_user import get_user
-from kernel.models import User
+from base_auth.managers.get_user import get_user
+from base_auth.models import User
 
 
 class UserRetrievalSerializer(serializers.Serializer):
