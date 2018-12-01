@@ -3,7 +3,7 @@ backcall==0.1.0
 decorator==4.3.0
 ipdb==0.11
 ipython-genutils==0.2.0
-ipython==7.1.1
+ipython==7.2.0
 jedi==0.13.1
 parso==0.3.1
 pexpect==4.6.0 ; sys_platform != 'win32'
@@ -11,7 +11,7 @@ pickleshare==0.7.5
 pipdeptree==0.13.1
 prompt-toolkit==2.0.7
 ptyprocess==0.6.0
-pygments==2.2.0
+pygments==2.3.0
 six==1.11.0
 traitlets==4.3.2
 wcwidth==0.1.7

@@ -34,6 +34,7 @@ django-permanent = "*"
 django-redis = "*"
 django-tinymce4-lite = "*"
 swapper = "*"
+weasyprint = "*"
 
 [requires]
 python_version = "3.7"
