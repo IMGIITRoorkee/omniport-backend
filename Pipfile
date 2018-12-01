@@ -35,6 +35,8 @@ django-redis = "*"
 django-tinymce4-lite = "*"
 swapper = "*"
 weasyprint = "*"
+python-memcached = "*"
+django-celery-results = "*"
 
 [requires]
 python_version = "3.7"

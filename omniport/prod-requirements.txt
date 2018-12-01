@@ -24,6 +24,7 @@ cryptography==2.4.2
 cssselect2==0.2.1
 daphne==2.2.3
 defusedxml==0.5.0
+django-celery-results==1.0.4
 django-cors-headers==2.4.0
 django-countries==5.3.2
 django-crispy-forms==1.7.2
@@ -72,6 +73,7 @@ pyhamcrest==1.9.0
 pyjwt==1.6.4
 pyopenssl==18.0.0
 pyphen==0.9.5
+python-memcached==1.59
 pytz==2018.7
 pyyaml==3.13
 redis==3.0.1
