@@ -12,17 +12,31 @@
 {% endblock %}
 
 {% block userlinks %}
-    {{ block.super }}
-
     {% if request.user.is_authenticated %}
-        <li><a href="{% url 'session_auth:logout' %}">Log out</a></li>
+        <li class="dropdown">
+            <a href="#"
+               class="dropdown-toggle"
+               data-toggle="dropdown"
+               role="button"
+               aria-haspopup="true"
+               aria-expanded="false">
+                {{ request.user }} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right">
+                {# TODO Show a link to Omnipotence if user has rights #}
+                <li><a href="{% url 'admin:index' %}">Omnipotence</a></li>
+                <li role="separator" class="divider"></li>
+
+                <li><a href="{% url 'session_auth:logout' %}">Log out</a></li>
+            </ul>
+        </li>
     {% else %}
         <li><a href="{% url 'session_auth:login' %}">Log in</a></li>
     {% endif %}
 {% endblock %}
 
 {% block branding %}
-    <a href="#" class="navbar-brand">
+    <a href="{% url 'hello' %}" class="navbar-brand">
         {% trans site.nomenclature.verbose_name %}
     </a>
 {% endblock %}
