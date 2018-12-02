@@ -52,8 +52,6 @@ INSTALLED_APPS = [
 if SHELL_PRESENT:
     INSTALLED_APPS.append('shell.apps.ShellConfig')
 
-print(INSTALLED_APPS)
-
 DISCOVERY.prepare_installed_apps()
 INSTALLED_APPS += DISCOVERY.service_installed_apps
 INSTALLED_APPS += DISCOVERY.app_installed_apps
