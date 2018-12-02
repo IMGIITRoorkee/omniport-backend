@@ -6,6 +6,18 @@ from base_auth.models import User
 
 
 class UserChangeForm(forms.ModelForm):
+    """
+    Replicate the form shown when the user model supplied by Django is not
+    replaced with our own by copying most of the code
+    """
+
+    username = auth_forms.UsernameField(
+        help_text="This username is optional because authentication is "
+                  "generalized to work with other attributes such as email "
+                  "addresses and phone numbers.",
+        required=False,
+    )
+
     password = auth_forms.ReadOnlyPasswordHashField(
         help_text="Raw passwords are not stored, so there is no way to see "
                   "this user's password, but you can change the password "
@@ -18,6 +30,10 @@ class UserChangeForm(forms.ModelForm):
     )
 
     class Meta:
+        """
+        Meta class for UserChangeForm
+        """
+
         model = User
         fields = '__all__'
 
@@ -35,6 +51,10 @@ class UserChangeForm(forms.ModelForm):
 
 
 class UserAdmin(auth_admin.UserAdmin):
+    """
+    Customize the presentation of the model User in Omnipotence
+    """
+
     form = UserChangeForm
 
     fieldsets = (
@@ -42,7 +62,6 @@ class UserAdmin(auth_admin.UserAdmin):
             'fields': (
                 'username',
                 'password',
-                'person',
             )
         }),
         ('Important dates', {
@@ -68,7 +87,6 @@ class UserAdmin(auth_admin.UserAdmin):
     add_fieldsets = (
         ('Authentication', {
             'fields': (
-                'person',
                 'password1',
                 'password2',
             )
@@ -84,4 +102,4 @@ class UserAdmin(auth_admin.UserAdmin):
     )
     list_filter = tuple()
 
-    search_fields = ('username', 'person__full_name',)
+    search_fields = ['id', 'username', 'person__full_name', ]
