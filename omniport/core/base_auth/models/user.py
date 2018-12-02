@@ -3,12 +3,17 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from guardian import mixins as guardian_mixins
 
 from base_auth.managers import user
 from kernel.utils.rights import has_omnipotence_rights
 
 
-class User(auth_models.PermissionsMixin, auth_models.AbstractBaseUser):
+class User(
+    auth_models.PermissionsMixin,
+    auth_models.AbstractBaseUser,
+    guardian_mixins.GuardianUserMixin,
+):
     """
     This model holds the authentication information of a person
     """
