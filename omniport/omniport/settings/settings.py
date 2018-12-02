@@ -6,15 +6,16 @@ from omniport.settings.base import *  # Hardcoded settings
 from omniport.settings.configuration import *  # Settings parsed from YAML files
 from omniport.settings.third_party import *  # Settings for PyPI packages
 
+if DEBUG:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+else:
+    SESSION_COOKIE_SECURE = True
+
 # Import shell models to replace swappable models from other apps
 if SHELL_PRESENT:
     from shell.swapper_replacements import *
-
-if not DEBUG:
-    SESSION_COOKIE_SECURE = True
-
-# Primary URLconf served by Gunicorn and Daphne
-ROOT_URLCONF = 'omniport.urls'
 
 # Roles
 ROLES = list()

@@ -10,3 +10,6 @@ WSGI_APPLICATION = 'omniport.wsgi.application'
 
 # ASGI application served by Daphne
 ASGI_APPLICATION = 'omniport.routing.application'
+
+# Primary URLconf served by Gunicorn and Daphne
+ROOT_URLCONF = 'omniport.urls'
