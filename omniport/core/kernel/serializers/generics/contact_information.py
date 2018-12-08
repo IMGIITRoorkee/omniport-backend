@@ -1,25 +1,25 @@
 import swapper
 
 from kernel.serializers.root import ModelSerializer
-from kernel.serializers.institute.department import DepartmentSerializer
+
 
 class ContactInformationSerializer(ModelSerializer):
     """
-    Serializer for Contact information
+    Serializer for ContactInformation objects
     """
 
     class Meta:
         """
-        Meta class for Contact information
+        Meta class for ContactInformationSerializer
         """
 
         model = swapper.load_model('kernel', 'ContactInformation')
-        fields = (
+
+        fields = [
             'primary_phone_number',
             'secondary_phone_number',
             'email_address',
-            'institute_webmail_address',
             'email_address_verified',
+            'institute_webmail_address',
             'video_conference_id',
-        )
-
+        ]
