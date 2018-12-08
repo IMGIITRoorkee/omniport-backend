@@ -1,7 +1,7 @@
 import swapper
 
-from kernel.serializers.root import ModelSerializer
 from kernel.serializers.institute.department import DepartmentSerializer
+from kernel.serializers.root import ModelSerializer
 
 
 class BranchSerializer(ModelSerializer):
@@ -19,10 +19,11 @@ class BranchSerializer(ModelSerializer):
         """
 
         model = swapper.load_model('kernel', 'Branch')
-        fields = (
+
+        fields = [
             'id',
             'code',
             'name',
             'degree',
             'department',
-        )
+        ]

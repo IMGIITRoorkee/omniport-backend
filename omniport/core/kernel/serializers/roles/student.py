@@ -1,9 +1,8 @@
 import swapper
 
-from kernel.serializers.root import ModelSerializer
-from kernel.serializers.person import AvatarSerializer
 from kernel.serializers.institute.branch import BranchSerializer
-from kernel.managers.get_role import get_all_roles
+from kernel.serializers.person import AvatarSerializer
+from kernel.serializers.root import ModelSerializer
 
 
 class StudentSerializer(ModelSerializer):
@@ -24,9 +23,10 @@ class StudentSerializer(ModelSerializer):
         """
 
         model = swapper.load_model('kernel', 'Student')
-        fields = (
+
+        fields = [
             'person',
             'branch',
             'current_year',
             'current_semester',
-        )
+        ]

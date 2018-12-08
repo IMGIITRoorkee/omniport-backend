@@ -1,7 +1,7 @@
 import swapper
 
-from kernel.serializers.root import ModelSerializer
 from kernel.serializers.person import AvatarSerializer
+from kernel.serializers.root import ModelSerializer
 
 
 class MaintainerSerializer(ModelSerializer):
@@ -19,10 +19,9 @@ class MaintainerSerializer(ModelSerializer):
         """
 
         model = swapper.load_model('kernel', 'Maintainer')
-        fields = (
-            'id',
+
+        fields = [
             'person',
             'role',
             'post',
-        )
-
+        ]

@@ -1,8 +1,9 @@
 import swapper
+from rest_framework import serializers
 
 from kernel.managers.get_role import get_all_roles
 from kernel.serializers.root import ModelSerializer
-from rest_framework import serializers
+
 
 def process_roles(person):
     """
@@ -20,31 +21,6 @@ def process_roles(person):
         for key in roles
     ]
     return roles
-
-
-class PersonSerializer(ModelSerializer):
-    """
-    Serializer for Person objects
-    """
-
-    roles = serializers.SerializerMethodField()
-
-    def get_roles(self, person):
-        """
-        Populates the roles field of the serializer
-        :param person: the person being serialized
-        :return: the roles of the person
-        """
-
-        return process_roles(person)
-
-    class Meta:
-        """
-        Meta class for PersonSerializer
-        """
-
-        model = swapper.load_model('kernel', 'Person')
-        fields = '__all__'
 
 
 class ProfileSerializer(ModelSerializer):
@@ -69,10 +45,7 @@ class ProfileSerializer(ModelSerializer):
         """
 
         model = swapper.load_model('kernel', 'Person')
-        exclude = (
-            'datetime_modified',
-            'removed',
-        )
+        fields = '__all__'
 
 
 class AvatarSerializer(ModelSerializer):
@@ -97,10 +70,10 @@ class AvatarSerializer(ModelSerializer):
         """
 
         model = swapper.load_model('kernel', 'Person')
-        fields = (
+
+        fields = [
             'short_name',
             'full_name',
             'display_picture',
             'roles',
-        )
-
+        ]

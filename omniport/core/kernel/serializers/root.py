@@ -5,7 +5,8 @@ class ModelSerializer(serializers.ModelSerializer):
     """
     This model serializer should be inherited by all model serializers
     Allows you to specify fields via a keyword argument
-    Do not inherit from serializers.ModelSerializer!
+    Such a feature may be a nifty little addition to the existing
+    ModelSerializer functionality
     """
 
     def __init__(self, *args, **kwargs):

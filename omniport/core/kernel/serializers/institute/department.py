@@ -14,8 +14,9 @@ class DepartmentSerializer(ModelSerializer):
         """
 
         model = swapper.load_model('kernel', 'Department')
-        fields = (
+
+        fields = [
             'id',
             'code',
             'name',
-        )
+        ]
