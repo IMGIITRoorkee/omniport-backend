@@ -11,8 +11,13 @@ body {
     flex-direction: column;
 }
 
-header.ui.top.attached.segment {
+body > * {
+    flex-shrink: 0;
+}
+
+header {
     flex-grow: 0;
+    padding: 1em;
 }
 
 main {
@@ -22,9 +27,9 @@ main {
     align-items: center;
 }
 
-footer.ui.bottom.attached.segment {
+footer {
     flex-grow: 0;
-    margin-bottom: 0;
+    padding: 1em;
 }
 
 /* Customisations in the title bar */
