@@ -13,3 +13,8 @@ from kernel.models.personal_information.political_information import (
 
     PoliticalInformation,
 )
+from kernel.models.personal_information.residential_information import (
+    AbstractResidentialInformation,
+
+    ResidentialInformation,
+)

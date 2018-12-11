@@ -45,6 +45,19 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name='Residence',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('datetime_created', models.DateTimeField(auto_now_add=True)),
+                ('datetime_modified', models.DateTimeField(auto_now=True)),
+                ('code', models.CharField(max_length=7, unique=True)),
+                ('name', models.CharField(max_length=127)),
+            ],
+            options={
+                'swappable': swapper.swappable_setting('kernel', 'Residence'),
+            },
+        ),
+        migrations.CreateModel(
             name='Branch',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -203,6 +216,19 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name_plural': 'political information',
                 'swappable': swapper.swappable_setting('kernel', 'PoliticalInformation'),
+            },
+        ),
+        migrations.CreateModel(
+            name='ResidentialInformation',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('datetime_created', models.DateTimeField(auto_now_add=True)),
+                ('datetime_modified', models.DateTimeField(auto_now=True)),
+                ('room_number', models.CharField(max_length=15)),
+            ],
+            options={
+                'verbose_name_plural': 'residential information',
+                'swappable': swapper.swappable_setting('kernel', 'ResidentialInformation'),
             },
         ),
 

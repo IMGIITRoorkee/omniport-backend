@@ -102,4 +102,14 @@ class Migration(migrations.Migration):
             name='person',
             field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=swapper.get_model_name('kernel', 'Person')),
         ),
+        migrations.AddField(
+            model_name='residentialinformation',
+            name='person',
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=swapper.get_model_name('kernel', 'Person')),
+        ),
+        migrations.AddField(
+            model_name='residentialinformation',
+            name='residence',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=swapper.get_model_name('kernel', 'Residence')),
+        ),
     ]

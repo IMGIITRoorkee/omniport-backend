@@ -11,6 +11,7 @@ from kernel.models.institute import (
     AbstractBranch,
     AbstractCourse,
     AbstractDegree,
+    AbstractResidence,
 
     # Concrete models for default implementation
     Department,
@@ -18,6 +19,7 @@ from kernel.models.institute import (
     Branch,
     Course,
     Degree,
+    Residence,
 )
 from kernel.models.person import (
     # Abstract models for customised implementations
@@ -31,11 +33,13 @@ from kernel.models.personal_information import (
     AbstractBiologicalInformation,
     AbstractPoliticalInformation,
     AbstractFinancialInformation,
+    AbstractResidentialInformation,
 
     # Concrete models for default implementation
     BiologicalInformation,
     FinancialInformation,
     PoliticalInformation,
+    ResidentialInformation,
 )
 from kernel.models.roles import (
     # Abstract models for customised implementations

@@ -23,3 +23,8 @@ from kernel.models.institute.department import (
 
     Department,
 )
+from kernel.models.institute.residence import (
+    AbstractResidence,
+
+    Residence,
+)
