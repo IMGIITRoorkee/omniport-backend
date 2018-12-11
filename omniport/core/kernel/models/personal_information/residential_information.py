@@ -37,7 +37,9 @@ class AbstractResidentialInformation(Model):
         """
 
         person = self.person
-        return f'{person}'
+        room_number = self.room_number
+        residence = self.residence
+        return f'{person} - {room_number}, {residence}'
 
 
 class ResidentialInformation(AbstractResidentialInformation):
