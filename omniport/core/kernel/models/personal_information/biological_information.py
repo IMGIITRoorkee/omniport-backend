@@ -96,4 +96,5 @@ class BiologicalInformation(AbstractBiologicalInformation):
         """
 
         verbose_name_plural = 'biological information'
-        swappable = swapper.swappable_setting('kernel', 'BiologicalInformation')
+        swappable = swapper.swappable_setting('kernel',
+                                              'BiologicalInformation')

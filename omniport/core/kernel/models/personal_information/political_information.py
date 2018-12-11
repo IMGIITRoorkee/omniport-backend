@@ -62,4 +62,5 @@ class PoliticalInformation(AbstractPoliticalInformation):
         """
 
         verbose_name_plural = 'political information'
-        swappable = swapper.swappable_setting('kernel', 'PoliticalInformation')
+        swappable = swapper.swappable_setting('kernel',
+                                              'PoliticalInformation')

@@ -59,4 +59,5 @@ class FinancialInformation(AbstractFinancialInformation):
         """
 
         verbose_name_plural = 'financial information'
-        swappable = swapper.swappable_setting('kernel', 'FinancialInformation')
+        swappable = swapper.swappable_setting('kernel',
+                                              'FinancialInformation')
