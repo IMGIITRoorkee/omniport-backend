@@ -21,4 +21,5 @@ MIDDLEWARE = [
 
     'omniport.middleware.ip_address_rings.IpAddressRings',
     'omniport.middleware.person_roles.PersonRoles',
+    'omniport.middleware.last_seen.LastSeen',
 ]
