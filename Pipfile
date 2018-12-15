@@ -37,6 +37,7 @@ swapper = "*"
 weasyprint = "*"
 python-memcached = "*"
 django-celery-results = "*"
+user-agents = "*"
 
 [requires]
 python_version = "3.7"
