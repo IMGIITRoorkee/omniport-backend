@@ -25,10 +25,19 @@ class LastSeen:
         """
 
         if request.user and request.user.is_authenticated:
-            session_key = request.session.session_key
-            session_map = SessionMap.objects.get(session_key=session_key)
-            session_map.datetime_modified = datetime.datetime.now()
-            session_map.save()
+            try:
+                session_key = request.session.session_key
+                if session_key is not None and not session_key == '':
+                    try:
+                        session_map = SessionMap.objects.get(
+                            session_key=session_key
+                        )
+                        session_map.datetime_modified = datetime.datetime.now()
+                        session_map.save()
+                    except SessionMap.DoesNotExist:
+                        SessionMap.create_session_map(request)
+            except AttributeError:
+                pass
 
         response = self.get_response(request)
 
