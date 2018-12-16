@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
                 ('session_key', models.CharField(max_length=63, unique=True)),
-                ('ip_address', models.GenericIPAddressField()),
+                ('ip_address', models.GenericIPAddressField(verbose_name='IP address')),
                 ('location', models.CharField(max_length=255)),
                 ('user_agent', models.CharField(max_length=255)),
                 ('browser_family', models.CharField(max_length=31)),

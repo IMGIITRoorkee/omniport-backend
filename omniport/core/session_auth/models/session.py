@@ -24,7 +24,9 @@ class SessionMap(Model):
         db_index=True,
     )
 
-    ip_address = models.GenericIPAddressField()
+    ip_address = models.GenericIPAddressField(
+        verbose_name='IP address',
+    )
     location = models.CharField(
         max_length=255,
     )
