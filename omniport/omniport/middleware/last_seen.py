@@ -28,6 +28,7 @@ class LastSeen:
             try:
                 session_key = request.session.session_key
                 if session_key is not None and not session_key == '':
+                    # Session authentication was used to log in
                     try:
                         session_map = SessionMap.objects.get(
                             session_key=session_key
@@ -35,7 +36,14 @@ class LastSeen:
                         session_map.datetime_modified = datetime.datetime.now()
                         session_map.save()
                     except SessionMap.DoesNotExist:
-                        SessionMap.create_session_map(request)
+                        SessionMap.create_session_map(
+                            request=request,
+                            user=request.user,
+                            new=False
+                        )
+                else:
+                    # JWT authentication was used to log in
+                    pass
             except AttributeError:
                 pass
 

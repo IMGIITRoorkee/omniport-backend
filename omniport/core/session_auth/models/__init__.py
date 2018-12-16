@@ -1,1 +1,1 @@
-from session_auth.models.session import SessionMap
+from session_auth.models.session_map import SessionMap

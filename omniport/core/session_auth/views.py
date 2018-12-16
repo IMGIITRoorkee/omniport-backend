@@ -1,10 +1,9 @@
-from django.contrib.auth import login
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 
-from session_auth.models.session import SessionMap
+from session_auth.models import SessionMap
 from session_auth.serializers import LoginSerializer
 
 
@@ -48,8 +47,8 @@ class Login(GenericAPIView):
         if serializer.is_valid():
             user = serializer.user
 
-            login(request, user)
-            SessionMap.create_session_map(request)
+            # This is a direct replacement for django.contrib.auth.login()
+            SessionMap.create_session_map(request=request, user=user)
 
             response = {
                 'data': {
@@ -98,8 +97,8 @@ class Logout(GenericAPIView):
         :return: the response for request
         """
 
+        # This is a direct replacement for django.contrib.auth.logout()
         SessionMap.delete_session_map(request=request)
-        request.session.flush()
 
         response = {
             'data': {
