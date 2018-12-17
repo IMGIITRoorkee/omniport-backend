@@ -23,7 +23,7 @@ SOCIAL_SITES = (
     (DRIBBLE, 'Dribble'),
     (FACEBOOK, 'Facebook'),
     (FLICKR, 'Flickr'),
-    (GITHUB, 'Github'),
+    (GITHUB, 'GitHub'),
     (GOOGLE, 'Google'),
     (LINKEDIN, 'LinkedIn'),
     (MEDIUM, 'Medium'),
