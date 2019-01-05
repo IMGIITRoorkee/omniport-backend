@@ -1,6 +1,6 @@
 import swapper
 
-from kernel.admin.site import omnipotence
+from omniport.admin.site import omnipotence
 from kernel.models import (
     ContactInformation,
     LocationInformation,

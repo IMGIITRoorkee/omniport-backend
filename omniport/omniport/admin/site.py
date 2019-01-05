@@ -61,4 +61,4 @@ class OmniportAdminSite(sites.AdminSite):
         return request.user.is_active and has_omnipotence_rights(request.user)
 
 
-omnipotence = OmniportAdminSite(name='omniport_admin_site')
+omnipotence = OmniportAdminSite(name='omnipotence')

@@ -1,4 +1,4 @@
-from kernel.admin.site import omnipotence
+from omniport.admin.site import omnipotence
 
 from session_auth.models import SessionMap
 
