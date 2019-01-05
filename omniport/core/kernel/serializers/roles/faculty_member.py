@@ -25,6 +25,7 @@ class FacultyMemberSerializer(ModelSerializer):
         model = swapper.load_model('kernel', 'FacultyMember')
 
         fields = [
+            'id',
             'person',
             'department',
             'designation',

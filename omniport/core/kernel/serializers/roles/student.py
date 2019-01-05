@@ -25,6 +25,7 @@ class StudentSerializer(ModelSerializer):
         model = swapper.load_model('kernel', 'Student')
 
         fields = [
+            'id',
             'person',
             'branch',
             'current_year',

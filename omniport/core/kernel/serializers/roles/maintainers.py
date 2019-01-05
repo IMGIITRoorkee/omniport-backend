@@ -21,7 +21,9 @@ class MaintainerSerializer(ModelSerializer):
         model = swapper.load_model('kernel', 'Maintainer')
 
         fields = [
+            'id',
             'person',
             'role',
+            'designation',
             'post',
         ]

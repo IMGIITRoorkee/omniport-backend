@@ -72,6 +72,7 @@ class AvatarSerializer(ModelSerializer):
         model = swapper.load_model('kernel', 'Person')
 
         fields = [
+            'id',
             'short_name',
             'full_name',
             'display_picture',
