@@ -28,6 +28,8 @@ class LocationInformation(Model):
         validators=[
             RegexValidator(r'[0-9]{3,9}'),
         ],
+        blank=True,
+        null=True
     )
 
     latitude = models.DecimalField(

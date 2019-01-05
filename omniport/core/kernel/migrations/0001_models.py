@@ -262,7 +262,7 @@ class Migration(migrations.Migration):
                 ('city', models.CharField(max_length=127)),
                 ('state', models.CharField(max_length=127)),
                 ('country', django_countries.fields.CountryField(max_length=2)),
-                ('postal_code', models.IntegerField(validators=[django.core.validators.RegexValidator('[0-9]{3,9}')])),
+                ('postal_code', models.IntegerField(blank=True, null=True, validators=[django.core.validators.RegexValidator('[0-9]{3,9}')])),
                 ('latitude', models.DecimalField(blank=True, decimal_places=8, max_digits=12, null=True)),
                 ('longitude', models.DecimalField(blank=True, decimal_places=8, max_digits=12, null=True)),
                 ('entity_object_id', models.PositiveIntegerField()),
