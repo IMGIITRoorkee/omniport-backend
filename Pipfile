@@ -38,6 +38,8 @@ weasyprint = "*"
 python-memcached = "*"
 django-celery-results = "*"
 user-agents = "*"
+django-oauth-toolkit = "*"
+pydash = "*"
 
 [requires]
 python_version = "3.7"
