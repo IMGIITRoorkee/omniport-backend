@@ -1,10 +1,10 @@
-import swapper
-
+from django_countries.serializer_fields import CountryField
 from rest_framework import serializers
-from kernel.serializers.root import ModelSerializer
+
+from kernel.models import LocationInformation
 
 
-class CountrySerializer(serializers.Serializer):
+class CountryDetailSerializer(serializers.Serializer):
     """
     Serializer for django_countries.Country objects
     """
@@ -15,26 +15,29 @@ class CountrySerializer(serializers.Serializer):
     unicode_flag = serializers.CharField()
 
 
-class LocationInformationSerializer(ModelSerializer):
+class LocationInformationSerializer(serializers.ModelSerializer):
     """
     Serializer for LocationInformation objects
     """
 
-    country = CountrySerializer()
+    country_detail = CountryDetailSerializer(
+        source='country',
+        read_only=True,
+    )
+    country = CountryField(
+        write_only=True,
+    )
 
     class Meta:
         """
         Meta class for LocationInformationSerializer
         """
 
-        model = swapper.load_model('kernel', 'LocationInformation')
+        model = LocationInformation
 
-        fields = [
-            'address',
-            'city',
-            'state',
-            'country',
-            'postal_code',
-            'latitude',
-            'longitude',
+        exclude = [
+            'datetime_created',
+            'datetime_modified',
+            'entity_content_type',
+            'entity_object_id',
         ]
