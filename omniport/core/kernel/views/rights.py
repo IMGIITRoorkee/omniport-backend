@@ -8,7 +8,7 @@ from kernel.utils import rights
 
 class Rights(GenericAPIView):
     """
-    This view shows some personal information of the currently logged in user
+    This view shows if the current user has the given rights
     """
 
     permission_classes = [IsAuthenticated, ]
