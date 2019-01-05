@@ -9,7 +9,7 @@ from base_auth.serializers.auth import (
     ResetPasswordSerializer,
     LockpickingSerializer,
 )
-from kernel.permissions.has_lockpicking_rights import HasLockpickingRights
+from kernel.permissions.lockpicking import HasLockpickingRights
 
 
 class ChangePassword(GenericAPIView):
