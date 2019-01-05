@@ -21,6 +21,15 @@ class SocialLink(Model):
     )
 
     @property
+    def site_name(self):
+        """
+        Return the name of the site as is displayed to the user
+        :return: the name of the site as is displayed to the user
+        """
+
+        return self.get_site_display()
+
+    @property
     def site_logo(self):
         """
         Return the identifier from the Font Awesome library for this site
@@ -35,7 +44,7 @@ class SocialLink(Model):
         :return: a string representation of the model
         """
 
-        site = self.get_site_display()
+        site = self.site_name
         url = self.url
 
         return f'{site}: {url}'
