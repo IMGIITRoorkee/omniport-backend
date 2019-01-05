@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-from kernel.admin.site import omnipotence
+from omniport.admin.site import omnipotence
 from omniport.views.csrf import EnsureCsrf
 
 http_urlpatterns = [
@@ -23,4 +23,8 @@ http_urlpatterns = [
     path('base_auth/', include('base_auth.http_urls')),
     path('session_auth/', include('session_auth.http_urls')),
     path('token_auth/', include('token_auth.http_urls')),
+    path('open_auth/', include('open_auth.http_urls')),
+
+    # Bootstrapping
+    path('bootstrap/', include('bootstrap.http_urls')),
 ]

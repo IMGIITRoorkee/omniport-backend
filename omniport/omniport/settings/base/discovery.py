@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'guardian',  # Object permissions for DRF
     'django_filters',  # Dynamic queryset filtering in DRF
 
+    'oauth2_provider',  # OAuth provider for third-party applications
+
     'corsheaders',  # Handles CORS headers on responses
     'django_countries',  # Country fields and widgets (with little flags!)
     'mptt',  # Infinite nesting of objects of the same model
@@ -46,9 +48,13 @@ INSTALLED_APPS = [
 
     # Core apps
     'kernel.apps.KernelConfig',
+
     'base_auth.apps.BaseAuthConfig',
-    'session_auth.apps.SessionAuthConfig',
-    'token_auth.apps.TokenAuthConfig',
+    'session_auth.apps.SessionAuthConfig',  # Session-based authentication
+    'token_auth.apps.TokenAuthConfig',  # Token-based authentication
+    'open_auth.apps.OpenAuthConfig',  # OAuth2-based authentication
+
+    'bootstrap.apps.BootstrapConfig',
 ]
 if SHELL_PRESENT:
     INSTALLED_APPS.append('shell.apps.ShellConfig')
