@@ -278,7 +278,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
-                ('site', models.CharField(choices=[('beh', 'Behance'), ('blo', 'Blogger'), ('dri', 'Dribble'), ('fac', 'Facebook'), ('fli', 'Flickr'), ('git', 'GitHub'), ('goo', 'Google'), ('lin', 'LinkedIn'), ('med', 'Medium'), ('pin', 'Pinterest'), ('red', 'Reddit'), ('sky', 'Skype'), ('sna', 'Snapchat'), ('tum', 'Tumblr'), ('twi', 'Twitter'), ('you', 'YouTube'), ('oth', 'Other website')], max_length=7)),
+                ('site', models.CharField(choices=[('beh', 'Behance'), ('blo', 'Blogger'), ('dri', 'Dribbble'), ('fac', 'Facebook'), ('fli', 'Flickr'), ('git', 'GitHub'), ('goo', 'Google'), ('lin', 'LinkedIn'), ('med', 'Medium'), ('pin', 'Pinterest'), ('red', 'Reddit'), ('sky', 'Skype'), ('sna', 'Snapchat'), ('tum', 'Tumblr'), ('twi', 'Twitter'), ('you', 'YouTube'), ('oth', 'Other website')], max_length=7)),
                 ('url', models.URLField(max_length=255, verbose_name='URL')),
             ],
             options={

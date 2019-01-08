@@ -1,7 +1,7 @@
 # Social sites
 BEHANCE = 'beh'
 BLOGGER = 'blo'
-DRIBBLE = 'dri'
+DRIBBBLE = 'dri'
 FACEBOOK = 'fac'
 FLICKR = 'fli'
 GITHUB = 'git'
@@ -20,7 +20,7 @@ OTHER = 'oth'
 SOCIAL_SITES = (
     (BEHANCE, 'Behance'),
     (BLOGGER, 'Blogger'),
-    (DRIBBLE, 'Dribble'),
+    (DRIBBBLE, 'Dribbble'),
     (FACEBOOK, 'Facebook'),
     (FLICKR, 'Flickr'),
     (GITHUB, 'GitHub'),
@@ -40,7 +40,7 @@ SOCIAL_SITES = (
 SOCIAL_SITE_ICONS = {
     BEHANCE: 'behance',
     BLOGGER: 'blogger',
-    DRIBBLE: 'dribble',
+    DRIBBBLE: 'dribbble',
     FACEBOOK: 'facebook',
     FLICKR: 'flickr',
     GITHUB: 'github',
