@@ -1,4 +1,4 @@
-import pydash as _
+from pydash import py_
 from django.core.validators import URLValidator
 from oauth2_provider.models import AbstractApplication
 from rest_framework import serializers
@@ -7,6 +7,8 @@ from kernel.admin import Person
 from kernel.relations.person import PersonRelatedField
 from kernel.serializers.person import AvatarSerializer
 from open_auth.models import Application
+
+from open_auth.constants import data_points as data_point_constants
 
 
 class ApplicationListSerializer(serializers.ModelSerializer):
@@ -26,6 +28,49 @@ class ApplicationListSerializer(serializers.ModelSerializer):
             'logo',
             'is_approved',
         ]
+
+
+class ApplicationAuthoriseSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Application objects that exposes only the information that
+    user needs to Allow or Deny an application
+    """
+
+    class Meta:
+        """
+        Meta class for ApplicationAuthoriseSerializer
+        """
+
+        model = Application
+        fields = [
+            'client_id',
+            'redirect_uris',
+            'name',
+            'logo',
+            'data_points',
+        ]
+
+    def to_representation(self, instance):
+        """
+        Replace the array of data point codes in the serialized data with a
+        dictionary mapping codes to their display names
+        :param instance: the instance being represented
+        :return: the dictionary representation of the instance
+        """
+
+        representation = super().to_representation(instance)
+
+        data_points = representation.pop('data_points')
+        data_point_tuples = py_.filter(
+            data_point_constants.DATA_POINTS,
+            lambda tup: tup[0] in data_points
+        )
+        data_point_map = dict()
+        for (code, name) in data_point_tuples:
+            data_point_map[code] = name
+        representation['data_points'] = data_point_map
+
+        return representation
 
 
 class ApplicationDetailSerializer(serializers.ModelSerializer):
@@ -53,7 +98,9 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         ]
         exclude = [
             'datetime_created',
+            'created',
             'datetime_modified',
+            'updated',
             'skip_authorization',
             'user',
         ]
@@ -66,7 +113,7 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         :raise: ValidationError, if validation fails
         """
 
-        word_count = len(_.strings.words(value))
+        word_count = len(py_.words(value))
 
         if word_count < 127:
             raise serializers.ValidationError('Use a minimum of 127 words.')
@@ -132,12 +179,11 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         """
 
         user = self.context.get('request').user
+        authorization_grant_type = AbstractApplication.GRANT_AUTHORIZATION_CODE
+
         validated_data['user'] = user
-
-        validated_data['authorization_grant_type'] = (
-            AbstractApplication.GRANT_AUTHORIZATION_CODE
-        )
-
+        validated_data['authorization_grant_type'] = authorization_grant_type
+        validated_data['agrees_to_terms'] = True
         application = super().create(validated_data)
 
         person = self.context.get('request').person
@@ -154,10 +200,10 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         :return: whatever super().update() returns
         """
 
-        if 'agrees_to_terms' in validated_data:
-            del validated_data['agrees_to_terms']
-
         if 'data_points' in validated_data:
             del validated_data['data_points']
 
-        return super().update(instance, validated_data)
+        validated_data['agrees_to_terms'] = True
+        application = super().update(instance, validated_data)
+
+        return application
