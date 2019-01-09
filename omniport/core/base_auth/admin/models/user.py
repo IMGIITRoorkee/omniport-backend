@@ -74,6 +74,7 @@ class UserAdmin(auth_admin.UserAdmin):
                 'secret_question',
                 'secret_answer',
                 'failed_reset_attempts',
+                'allows_alohomora',
             )
         }),
         ('Permissions', {
