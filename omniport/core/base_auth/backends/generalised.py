@@ -7,15 +7,9 @@ from kernel.utils.rights import has_alohomora_rights
 
 class GeneralisedAuthBackend(ModelBackend):
     """
-    This auth backend authenticates users via a complex relation for username,
-    wherein the User instance is searched by the get_user function defined in
-    the kernel.utils file.
-
-    This auth backend also has Alohomora support baked right in, so that
-    debugging and helping users is easy. This backend allows
-    accessor-authenticated Alohomora, which is more secure than shared password
-    Alohomora which requires big changes if that password gets leaked. Also this
-    method restricts Alohomora access to users explicitly granted that right.
+    This auth backend authenticates users via a complex search for username,
+    wherein the User instance is searched by the function ``get_user()``
+    defined in the module ``base_auth.managers``.
     """
 
     def authenticate(self, request, username=None, password=None, **kwargs):
@@ -23,8 +17,10 @@ class GeneralisedAuthBackend(ModelBackend):
             return None
 
         if '_alohomora_' in username:
+            alohomora_login = True
             (account_holder, account_accessor) = username.split('_alohomora_')
         else:
+            alohomora_login = False
             (account_holder, account_accessor) = (username, username)
 
         try:
@@ -33,11 +29,15 @@ class GeneralisedAuthBackend(ModelBackend):
         except User.DoesNotExist:
             return None
 
-        if (
-                '_alohomora_' in username
-                and not has_alohomora_rights(account_accessor)
-        ):
-            return None
+        if alohomora_login:
+            # Only maintainers with explicit rights can access other accounts
+            # Only accounts that explicitly grant permission can be accessed
+            # Unethical use of Alohomora is, as should be, a punishable offense
+            if not (
+                    has_alohomora_rights(account_accessor)
+                    and account_holder.allows_alohomora
+            ):
+                return None
 
         if account_accessor.check_password(password):
             return account_holder

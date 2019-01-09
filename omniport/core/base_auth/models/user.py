@@ -22,6 +22,7 @@ class User(
     # This field is completely optional and makes for a fun easter egg
     # Set it to anything you like from the administrative interface
     # For example, you may have 'me_me_big_boy' as your username
+    # Actually you may not, because I call dibs on it!
     username = models.CharField(
         max_length=15,
         blank=True,
@@ -47,6 +48,13 @@ class User(
     )
 
     objects = user.UserManager()
+
+    # This field decides whether or not the maintainers can impersonate them
+    # Setting it to true grants one-time access of this account to a maintainer
+    # After one use it reverts back to false
+    allows_alohomora = models.BooleanField(
+        default=False,
+    )
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []

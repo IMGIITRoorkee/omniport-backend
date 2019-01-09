@@ -73,7 +73,13 @@ class ResetPasswordSerializer(UserRetrievalSerializer):
         :raise ValidationError: if the secret answer is wrong
         """
 
+        if self.user.failed_reset_attempts >= 3:
+            raise serializers.ValidationError('Reset attempts exceeded limit')
+
         if not self.user.check_secret_answer(secret_answer):
+            user = self.user
+            user.failed_reset_attempts = user.failed_reset_attempts + 1
+            user.save()
             raise serializers.ValidationError('Incorrect credentials')
 
         return secret_answer
@@ -87,6 +93,7 @@ class ResetPasswordSerializer(UserRetrievalSerializer):
         """
 
         if self.user.failed_reset_attempts >= 3:
+            print(self.user.failed_reset_attempts)
             raise serializers.ValidationError('Reset attempts exceeded limit')
 
         return data

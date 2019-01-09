@@ -25,6 +25,7 @@ class Migration(migrations.Migration):
                 ('secret_question', models.CharField(blank=True, max_length=127)),
                 ('secret_answer', models.CharField(blank=True, max_length=2047)),
                 ('failed_reset_attempts', models.IntegerField(default=0, validators=[django.core.validators.MaxValueValidator(3), django.core.validators.MinValueValidator(0)])),
+                ('allows_alohomora', models.BooleanField(default=False)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
             ],
