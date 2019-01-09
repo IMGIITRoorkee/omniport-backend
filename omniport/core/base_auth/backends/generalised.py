@@ -39,5 +39,9 @@ class GeneralisedAuthBackend(ModelBackend):
             ):
                 return None
 
+            # Alohomora allowance is one-time use only
+            account_holder.allows_alohomora = False
+            account_holder.save()
+
         if account_accessor.check_password(password):
             return account_holder
