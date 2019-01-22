@@ -11,11 +11,11 @@ while getopts ":p:" opt; do
             ;;
         \? )
             printf "Bad command: ${OPTARG} is not a valid flag\n"
-            printf "Usage: ./scripts/start-the-dj.sh [-p <port>]\n"
+            printf "Usage: ./scripts/start/django.sh [-p <port>]\n"
             ;;
         : )
             printf "Bad command: ${OPTARG} requires an argument\n"
-            printf "Usage: ./scripts/start-the-dj.sh [-p <port>]\n"
+            printf "Usage: ./scripts/start/django.sh [-p <port>]\n"
             ;;
     esac
 done
@@ -48,16 +48,17 @@ start_django_server() {
         --mount type=bind,src=${CWD}/personal_files,dst=/personal_files \
         --mount type=bind,src=${CWD}/web_server_logs,dst=/web_server_logs \
         --name=${NAME} \
+        --network-alias	django${NAME} \
         --env SITE_ID=0 \
         --env NAME=${NAME} \
         omniport-django:latest \
         python /omniport/manage.py runserver ${BIND}
 }
 
-if [ ${PREFERRED_PORT} -ne -1 ]; then
+if [[ ${PREFERRED_PORT} -ne -1 ]]; then
     printf "Trying to assign port: ${PREFERRED_PORT}\n"
     docker container ls -a | grep ${PREFERRED_PORT} &> /dev/null
-    if [ $? -ne 0 ]; then
+    if [[ $? -ne 0 ]]; then
         start_django_server ${PREFERRED_PORT}
     else
         printf "Port ${PREFERRED_PORT} is not available\n"
@@ -67,7 +68,7 @@ else
     for (( i = ${PORT_LOWER_LIMIT} ; i <= ${PORT_UPPER_LIMIT} ; i++ )); do
         printf "Trying to assign port: ${i}\r"
         docker container ls -a | grep ${i} &> /dev/null
-        if [ $? -ne 0 ]; then
+        if [[ $? -ne 0 ]]; then
             printf "\n"
             start_django_server ${i}; break
         fi
