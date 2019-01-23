@@ -4,6 +4,9 @@ from django.db.models import Q
 from base_auth.models import User
 from kernel.models import ContactInformation
 
+Person = swapper.load_model('kernel', 'Person')
+Student = swapper.load_model('kernel', 'Student')
+
 
 def get_user(username):
     """
@@ -29,9 +32,6 @@ def get_user(username):
     :return: the user, if a user with the given username is found
     :raise: User.DoesNotExist, if no user with the given username is found
     """
-
-    Person = swapper.load_model('kernel', 'Person')
-    Student = swapper.load_model('kernel', 'Student')
 
     try:
         user = User.objects.get(username=username)
