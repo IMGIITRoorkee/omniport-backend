@@ -52,7 +52,7 @@ class User(
     # This field decides whether or not the maintainers can impersonate them
     # Setting it to true grants one-time access of this account to a maintainer
     # After one use it reverts back to false
-    allows_alohomora = models.BooleanField(
+    allows_polyjuice = models.BooleanField(
         default=False,
     )
 

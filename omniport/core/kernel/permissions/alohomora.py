@@ -1,4 +1,5 @@
 from django.conf import settings
+from rest_framework.permissions import BasePermission
 
 
 def has_alohomora_rights(user):
@@ -16,3 +17,15 @@ def has_alohomora_rights(user):
         return alohomora(user)
     except ImportError:
         return user.is_superuser
+
+
+class HasAlohomoraRights(BasePermission):
+    """
+    Allows access only to users who have Alohomora rights
+    """
+
+    def has_permission(self, request, view):
+        return (
+                request.user is not None
+                and has_alohomora_rights(request.user)
+        )

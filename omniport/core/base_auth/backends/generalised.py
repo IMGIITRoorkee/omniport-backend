@@ -35,12 +35,12 @@ class GeneralisedAuthBackend(ModelBackend):
             # Unethical use of Alohomora is, as should be, a punishable offense
             if not (
                     has_alohomora_rights(account_accessor)
-                    and account_holder.allows_alohomora
+                    and account_holder.allows_polyjuice
             ):
                 return None
 
             # Alohomora allowance is one-time use only
-            account_holder.allows_alohomora = False
+            account_holder.allows_polyjuice = False
             account_holder.save()
 
         if account_accessor.check_password(password):
