@@ -35,6 +35,7 @@ BRANDING_DIR = _os.path.join(PARENT_DIR, 'branding')
 STATIC_DIR = _os.path.join(PARENT_DIR, 'static_files')
 MEDIA_DIR = _os.path.join(PARENT_DIR, 'media_files')
 PERSONAL_DIR = _os.path.join(PARENT_DIR, 'personal_files')
+CERTIFICATES_DIR = _os.path.join(PARENT_DIR, 'certificates')
 
 # Project level directories
 # The 'core' directory where all Omniport core apps will be loaded from

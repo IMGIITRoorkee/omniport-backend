@@ -1,3 +1,4 @@
+from omniport.settings.third_party.celery import *
 from omniport.settings.third_party.cors import *
 from omniport.settings.third_party.drf import *
 from omniport.settings.third_party.guardian import *
