@@ -50,6 +50,10 @@ CACHES = {
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
+            'REDIS_CLIENT_KWARGS': {
+                'encoding': 'utf-8',
+                'decode_responses': True,
+            },
         },
     },
     'session': {
