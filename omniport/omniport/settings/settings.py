@@ -19,3 +19,9 @@ if SHELL_PRESENT:
 
 # Roles
 ROLES = list()
+
+# Serializers
+from kernel.serializers.registration import *
+
+if SHELL_PRESENT:
+    from shell.serializers.registration import *
