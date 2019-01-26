@@ -1,15 +1,19 @@
 from django.urls import path
 
-from base_auth.views.auth import (
-    ChangePassword,
-    ResetPassword,
-    Lockpick,
-)
+from base_auth.views.reset_password import ResetPassword
+from base_auth.views.verify_secret_answer import VerifySecretAnswer
 
 app_name = 'base_auth'
 
 urlpatterns = [
-    path('change_password/', ChangePassword.as_view(), name='change_password'),
-    path('reset_password/', ResetPassword.as_view(), name='reset_password'),
-    path('lockpick/', Lockpick.as_view(), name='lockpick'),
+    path(
+        'verify_secret_answer/',
+        VerifySecretAnswer.as_view(),
+        name='verify_secret_answer'
+    ),
+    path(
+        'reset_password/',
+        ResetPassword.as_view(),
+        name='reset_password'
+    ),
 ]

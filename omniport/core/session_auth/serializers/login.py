@@ -30,6 +30,6 @@ class LoginSerializer(serializers.Serializer):
         if user is not None:
             self.user = user
         else:
-            raise serializers.ValidationError('Invalid credentials provided')
+            raise serializers.ValidationError('Invalid credentials provided.')
 
         return data

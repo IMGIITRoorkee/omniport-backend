@@ -1,9 +1,7 @@
 from django.urls import path
 
-from session_auth.views import (
-    Login,
-    Logout
-)
+from session_auth.views.login import Login
+from session_auth.views.logout import Logout
 
 app_name = 'session_auth'
 
