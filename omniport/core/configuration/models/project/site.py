@@ -22,6 +22,7 @@ class Site:
             dictionary=dictionary.get('nomenclature')
         )
         self.debug = dictionary.get('debug') or False
+        self.description = dictionary.get('description')
 
         # Processed variables
         self.imagery = None

@@ -52,6 +52,13 @@ Ensure that you brand all your served sites or provide a non-indexed version as
 fallback. You may use the provided default Omniport branding for your portal or 
 _for reference_ when designing your own, if designing your own.
 
+**Additional images for Progressive Web Apps:**
+
+File name      | Aspect ratio     | Height in use     | Formats
+---------------|------------------|------------------:|-----------------------:
+`logo_512.png` | square           | 512px             | `.png` only
+`logo_192.png` | square           | 192px             | `.png` only
+
 ### Batteries-not-included
 
 The following files are required to brand Omniport with your custom branding. 

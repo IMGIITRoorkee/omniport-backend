@@ -1,4 +1,5 @@
 import os
+import mimetypes
 
 from configuration.utils.file_search import file_search
 
@@ -20,9 +21,39 @@ class Imagery:
         self.url = kwargs.get('url')
         contents = os.listdir(self.directory)
 
-        self.favicon = file_search(contents,
-                                   'favicon', ['.ico'])
-        self.logo = file_search(contents,
-                                'logo', ['.svg', '.png', '.jpg'])
-        self.wordmark = file_search(contents,
-                                    'wordmark', ['.svg', '.png', '.jpg'])
+        self.logo = file_search(
+            files=contents,
+            name='logo',
+            extensions=['.svg', '.png', '.jpg']
+        )
+        self.logo_mime, _ = mimetypes.guess_type(self.logo)
+
+        self.wordmark = file_search(
+            files=contents,
+            name='wordmark',
+            extensions=['.svg', '.png', '.jpg']
+        )
+        self.wordmark_mime, _ = mimetypes.guess_type(self.wordmark)
+
+        self.favicon = file_search(
+            files=contents,
+            name='favicon',
+            extensions=['.ico']
+        )
+
+        self.logo_192 = file_search(
+            files=contents,
+            name='logo_192',
+            extensions=['.png']
+        )
+        self.logo_512 = file_search(
+            files=contents,
+            name='logo_512',
+            extensions=['.png']
+        )
+
+        self.logo_apple = file_search(
+            files=contents,
+            name='logo_apple',
+            extensions=['.png']
+        )
