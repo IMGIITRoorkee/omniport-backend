@@ -27,10 +27,11 @@ class ContactInformationSerializer(ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-
-        :param instance:
-        :param validated_data:
-        :return:
+        Update the fields, setting the invalidating the verified status of the
+        email address if updated
+        :param instance: the instance being updated
+        :param validated_data: the new data for the instance
+        :return: the updated instance
         """
 
         original_email_address = instance.email_address
