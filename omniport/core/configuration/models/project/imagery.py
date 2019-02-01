@@ -17,6 +17,7 @@ class Imagery:
         :param kwargs: keyword arguments, includes 'directory'
         """
 
+
         self.directory = kwargs.get('directory')
         self.url = kwargs.get('url')
         contents = os.listdir(self.directory)
@@ -26,14 +27,20 @@ class Imagery:
             name='logo',
             extensions=['.svg', '.png', '.jpg']
         )
-        self.logo_mime, _ = mimetypes.guess_type(self.logo)
+        if self.logo is not None:
+            self.logo_mime, _ = mimetypes.guess_type(self.logo)
+        else:
+            self.logo_mime = None
 
         self.wordmark = file_search(
             files=contents,
             name='wordmark',
             extensions=['.svg', '.png', '.jpg']
         )
-        self.wordmark_mime, _ = mimetypes.guess_type(self.wordmark)
+        if self.wordmark is not None:
+            self.wordmark_mime, _ = mimetypes.guess_type(self.wordmark)
+        else:
+            self.wordmark_mime = None
 
         self.favicon = file_search(
             files=contents,
