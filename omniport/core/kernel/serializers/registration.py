@@ -3,6 +3,19 @@ KERNEL_RESIDENCE_SERIALIZER = (
     'residence.ResidenceSerializer'
 )
 
+KERNEL_STUDENT_SERIALIZER = (
+    'kernel.serializers.roles.'
+    'student.StudentSerializer'
+)
+KERNEL_FACULTYMEMBER_SERIALIZER = (
+    'kernel.serializers.roles.'
+    'faculty_member.FacultyMemberSerializer'
+)
+KERNEL_MAINTAINER_SERIALIZER = (
+    'kernel.serializers.roles.'
+    'maintainer.MaintainerSerializer'
+)
+
 KERNEL_BIOLOGICALINFORMATION_SERIALIZER = (
     'kernel.serializers.personal_information.'
     'biological_information.BiologicalInformationSerializer'
@@ -22,6 +35,11 @@ KERNEL_RESIDENTIALINFORMATION_SERIALIZER = (
 
 __all__ = [
     'KERNEL_RESIDENCE_SERIALIZER',
+
+    'KERNEL_STUDENT_SERIALIZER',
+    'KERNEL_FACULTYMEMBER_SERIALIZER',
+    'KERNEL_MAINTAINER_SERIALIZER',
+
     'KERNEL_BIOLOGICALINFORMATION_SERIALIZER',
     'KERNEL_FINANCIALINFORMATION_SERIALIZER',
     'KERNEL_POLITICALINFORMATION_SERIALIZER',

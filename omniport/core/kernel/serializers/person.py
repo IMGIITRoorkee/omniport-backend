@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from kernel.managers.get_role import get_all_roles
 from kernel.serializers.root import ModelSerializer
+from omniport.utils import switcher
 
 
 def process_roles(person):
@@ -16,7 +17,11 @@ def process_roles(person):
     roles = [
         {
             'role': key,
-            'activeStatus': str(roles[key]['activeStatus'])
+            'activeStatus': str(roles[key]['activeStatus']),
+            'data': switcher.load_serializer('kernel', key)(
+                roles[key]['instance'],
+                excluded_fields=['person', ]
+            ).data
         }
         for key in roles
     ]
