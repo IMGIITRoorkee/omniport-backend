@@ -17,7 +17,6 @@ class Imagery:
         :param kwargs: keyword arguments, includes 'directory'
         """
 
-
         self.directory = kwargs.get('directory')
         self.url = kwargs.get('url')
         contents = os.listdir(self.directory)
@@ -47,20 +46,47 @@ class Imagery:
             name='favicon',
             extensions=['.ico']
         )
+        if self.favicon is not None:
+            self.favicon_mime, _ = mimetypes.guess_type(self.favicon)
+        else:
+            self.favicon_mime = None
+
+
+class SiteImagery(Imagery):
+    """
+    This class stores information about a site's imagery, namely the path to
+    various image files
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Create an instance of Imagery from a directory
+        :param args: arguments
+        :param kwargs: keyword arguments, includes 'directory'
+        """
+
+        super().__init__(self, *args, **kwargs)
+
+        self.directory = kwargs.get('directory')
+        self.url = kwargs.get('url')
+        contents = os.listdir(self.directory)
 
         self.logo_192 = file_search(
             files=contents,
             name='logo_192',
             extensions=['.png']
         )
+        self.logo_192_mime, _ = mimetypes.guess_type(self.logo_192)
         self.logo_512 = file_search(
             files=contents,
             name='logo_512',
             extensions=['.png']
         )
+        self.logo_512_mime, _ = mimetypes.guess_type(self.logo_512)
 
         self.logo_apple = file_search(
             files=contents,
             name='logo_apple',
             extensions=['.png']
         )
+        self.logo_apple_mime, _ = mimetypes.guess_type(self.logo_apple)

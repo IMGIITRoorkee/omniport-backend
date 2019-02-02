@@ -54,10 +54,11 @@ _for reference_ when designing your own, if designing your own.
 
 **Additional images for Progressive Web Apps:**
 
-File name      | Aspect ratio     | Height in use     | Formats
----------------|------------------|------------------:|-----------------------:
-`logo_512.png` | square           | 512px             | `.png` only
-`logo_192.png` | square           | 192px             | `.png` only
+File name        | Aspect ratio     | Height in use   | Formats
+-----------------|------------------|----------------:|-----------------------:
+`logo_512.png`   | square           | 512px           | `.png` only
+`logo_192.png`   | square           | 192px           | `.png` only
+`logo_apple.png` | square           | 192px           | `.png` only
 
 ### Batteries-not-included
 

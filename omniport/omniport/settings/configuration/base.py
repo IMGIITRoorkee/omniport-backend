@@ -10,7 +10,7 @@ import os
 
 import yaml
 
-from configuration.models.project.imagery import Imagery
+from configuration.models.project.imagery import Imagery, SiteImagery
 from configuration.models.project.project import ProjectConfiguration
 from omniport.settings.base.directories import CONFIGURATION_DIR, BRANDING_DIR
 from omniport.settings.base.files import BRANDING_URL
@@ -40,7 +40,7 @@ site_imagery_directory = os.path.join(BRANDING_DIR, f'site_{site_id}')
 if not os.path.isdir(site_imagery_directory):
     site_imagery_directory = os.path.join(BRANDING_DIR, 'site')
 
-CONFIGURATION.site.imagery = Imagery(
+CONFIGURATION.site.imagery = SiteImagery(
     directory=os.path.join(BRANDING_DIR, site_imagery_directory),
     url=BRANDING_URL,
 )

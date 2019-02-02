@@ -10,8 +10,13 @@ class ImagerySerializer(serializers.Serializer):
     """
 
     favicon = serializers.SerializerMethodField()
+    favicon_mime = serializers.CharField()
+
     logo = serializers.SerializerMethodField()
+    logo_mime = serializers.CharField()
+
     wordmark = serializers.SerializerMethodField()
+    wordmark_mime = serializers.CharField()
 
     @staticmethod
     def get_url(directory, item):

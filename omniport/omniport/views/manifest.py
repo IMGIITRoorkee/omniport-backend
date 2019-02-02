@@ -49,7 +49,7 @@ class Manifest(GenericAPIView):
                     settings.SITE.imagery.directory,
                     settings.SITE.imagery.logo_512
                 ),
-                'type': 'image/png',
+                'type': settings.SITE.imagery.logo_512_mime,
                 'sizes': '512x512',
             })
         if settings.SITE.imagery.logo_192:
@@ -58,7 +58,7 @@ class Manifest(GenericAPIView):
                     settings.SITE.imagery.directory,
                     settings.SITE.imagery.logo_192
                 ),
-                'type': 'image/png',
+                'type': settings.SITE.imagery.logo_192_mime,
                 'sizes': '192x192',
             })
         if settings.SITE.imagery.logo:
