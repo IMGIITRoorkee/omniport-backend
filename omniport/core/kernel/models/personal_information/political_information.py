@@ -20,7 +20,7 @@ class AbstractPoliticalInformation(Model):
     )
 
     religion = models.CharField(
-        max_length=15,
+        max_length=63,
         blank=True,
     )
 
