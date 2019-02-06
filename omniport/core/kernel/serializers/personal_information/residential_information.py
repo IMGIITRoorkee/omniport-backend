@@ -1,4 +1,5 @@
 import swapper
+from django.db import ProgrammingError
 from rest_framework import serializers
 
 from kernel.serializers.root import ModelSerializer
@@ -15,13 +16,28 @@ class ResidentialInformationSerializer(ModelSerializer):
     Serializer for ResidentialInformation objects
     """
 
-    residence = serializers.ChoiceField(
-        choices=[
-            (residence.id, residence.name)
-            for residence in Residence.objects.all()
-        ],
-        write_only=True,
-    )
+    def __init__(self, *args, **kwargs):
+        """
+        Add the residence ChoiceField on the serializer based on the existence
+        of Residence models
+        :param args: arguments
+        :param kwargs: keyword arguments
+        """
+
+        super().__init__(*args, **kwargs)
+
+        try:
+            residences = Residence.objects.all()
+        except ProgrammingError:
+            residences = list()
+
+        self.fields['residence'] = serializers.ChoiceField(
+            choices=[
+                (residence.id, residence.name)
+                for residence in residences
+            ],
+            write_only=True,
+        )
 
     def to_representation(self, instance):
         """
