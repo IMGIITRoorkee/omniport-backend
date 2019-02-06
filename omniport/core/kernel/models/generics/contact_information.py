@@ -13,6 +13,8 @@ class ContactInformation(Model):
     primary_phone_number = models.CharField(
         max_length=15,
         unique=True,
+        blank=True,
+        null=True,
     )
     secondary_phone_number = models.CharField(
         max_length=15,
@@ -23,6 +25,8 @@ class ContactInformation(Model):
 
     email_address = models.EmailField(
         unique=True,
+        blank=True,
+        null=True,
     )
     email_address_verified = models.BooleanField(
         default=False,
