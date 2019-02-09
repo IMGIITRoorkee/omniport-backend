@@ -38,4 +38,4 @@ It's that simple!
 
 ## Credits
 
-<img src="readme-assets/maintainers/logo.svg" height="32px" /> <img src="readme-assets/maintainers/wordmark.svg" height="32px" />
+<img src="readme-assets/maintainers/wordmark.svg" height="64px" />
