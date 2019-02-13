@@ -5,6 +5,7 @@ from django.db import models
 
 from kernel.models.root import Model
 from kernel.utils.upload_to import UploadTo
+from kernel.validators.aspect_ratio import AspectRatioValidator
 
 
 class AbstractPerson(Model):
@@ -66,6 +67,9 @@ class AbstractPerson(Model):
     display_picture = models.ImageField(
         upload_to=UploadTo('kernel', 'display_pictures'),
         max_length=255,
+        validators=[
+            AspectRatioValidator(1),
+        ],
         blank=True,
         null=True,
     )

@@ -5,6 +5,7 @@ from oauth2_provider.models import AbstractApplication
 
 from kernel.models.root import Model
 from kernel.utils.upload_to import UploadTo
+from kernel.validators.aspect_ratio import AspectRatioValidator
 from open_auth.constants import data_points as data_point_choices
 
 
@@ -18,6 +19,9 @@ class Application(AbstractApplication, Model):
     logo = models.ImageField(
         upload_to=UploadTo('open_auth', 'application_logos'),
         max_length=255,
+        validators=[
+            AspectRatioValidator(1),
+        ],
         blank=True,
         null=True,
     )

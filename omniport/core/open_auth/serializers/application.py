@@ -203,6 +203,10 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         if 'data_points' in validated_data:
             del validated_data['data_points']
 
+        # Ensure that the creator of the app cannot leave the team
+        if 'team_members' in validated_data:
+            validated_data['team_members'].append(instance.user.person)
+
         validated_data['agrees_to_terms'] = True
         application = super().update(instance, validated_data)
 

@@ -1,5 +1,6 @@
 import swapper
 from django.db import models
+from rest_framework.compat import MinValueValidator
 
 from kernel.models.root import Model
 
@@ -25,6 +26,9 @@ class AbstractFinancialInformation(Model):
     annual_income = models.DecimalField(
         max_digits=31,
         decimal_places=2,
+        validators=[
+            MinValueValidator(0),
+        ],
         blank=True,
         null=True,
     )
