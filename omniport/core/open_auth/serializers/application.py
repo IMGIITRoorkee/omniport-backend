@@ -1,14 +1,15 @@
-from pydash import py_
+import swapper
 from django.core.validators import URLValidator
 from oauth2_provider.models import AbstractApplication
+from pydash import py_
 from rest_framework import serializers
 
-from kernel.admin import Person
 from kernel.relations.person import PersonRelatedField
 from kernel.serializers.person import AvatarSerializer
+from open_auth.constants import data_points as data_point_constants
 from open_auth.models import Application
 
-from open_auth.constants import data_points as data_point_constants
+Person = swapper.load_model('kernel', 'Person')
 
 
 class ApplicationListSerializer(serializers.ModelSerializer):
