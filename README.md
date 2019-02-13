@@ -4,26 +4,23 @@
 
 ## Backend
 
-Omniport is a portal for educational institutes, designed from the ground up to
-be extensible, customizable, performant and powerful. Omniport also comes with 
-a powerful collection of apps and is simple enough for you to be able to write
-your own.
+This is the backend of Omniport.
 
 ## Technological stack
 
-- Framework: `Django`
 - Language: `Python`
-- Reverse proxy: `NGINX`
-- WSGI server: `Gunicorn`
-- ASGI server: `Daphne`
-- Database: `PostgreSQL`
-- Cache: `Memcached`
-- In-memory store: `Redis`
+- Framework: `Django`
+- API Framework: `Django REST framework`
+- Server: `Gunicorn + Daphne`
+- WS Routing: `Channels`
+- Other noteworthy packages: `Django OAuth Toolkit`, `Swapper` 
 
 A Dockerised setup is the preferred mode of installation. One such is provided 
 by us on our GitHub account. You can however set all the components up yourself, 
 after suffering a reasonable amount of headbanging, cursing, and physical and 
 mental pain.
+
+This can be found at `https://github.com/IMGIITRoorkee/omniport-docker`.
 
 ## Contribution guidelines
 
