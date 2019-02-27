@@ -1,7 +1,6 @@
 import importlib
 import os
 
-import inflection
 import yaml
 from channels.routing import URLRouter
 from django.urls import path, include
@@ -126,7 +125,7 @@ class Discovery:
         additional_installed_apps = list()
         for (app, app_configuration) in app_set:
             additional_installed_apps.append(
-                f'{app}.apps.{inflection.camelize(app)}Config'
+                f'{app}.apps.Config'
             )
         return additional_installed_apps
 
