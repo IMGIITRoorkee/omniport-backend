@@ -1,17 +1,14 @@
-from rest_framework import status
-from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from rest_framework import status, generics, permissions, response
 
 from kernel.utils import rights
 
 
-class Rights(GenericAPIView):
+class Rights(generics.GenericAPIView):
     """
     This view shows if the current user has the given rights
     """
 
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [permissions.IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
         """
@@ -27,16 +24,22 @@ class Rights(GenericAPIView):
         try:
             rights_function = getattr(rights, f'has_{which}_rights')
             has_rights = rights_function(user)
-            response = {
+            response_data = {
                 'hasRights': has_rights,
             }
-            return Response(response, status=status.HTTP_200_OK)
+            return response.Response(
+                data=response_data,
+                status=status.HTTP_200_OK
+            )
         except AttributeError:
-            response = {
+            response_data = {
                 'errors': {
                     "which": [
                         "Non-existent right",
                     ],
                 },
             }
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return response.Response(
+                data=response_data,
+                status=status.HTTP_400_BAD_REQUEST
+            )
