@@ -277,4 +277,14 @@ class Discovery:
         :return: the AppConfiguration object of the given app
         """
 
-        return self.app_configuration_map.get(app)
+        try:
+            return self.app_configuration_map[app]
+        except KeyError:
+            pass
+
+        try:
+            return self.service_configuration_map[app]
+        except KeyError:
+            pass
+
+        return None
