@@ -2,10 +2,8 @@
 
 > A collection of services that Omniport apps rely on for various utilities
 
-Omniport ensures that code is structured in the best way possible and grouping 
-services into their own folder is the right way to organise code.
+Omniport has a set of applications that apps depend on for some functionality.
+These services must be placed in this folder, `services/`.
 
-Note that the services in the `services` folder are not drop-in like the apps 
-in the `apps` folder.
-
-`appGroup: services`
+Services are not plug-and-play like apps, and therefore all services must be 
+cloned in order to ensure that everything works as expected.

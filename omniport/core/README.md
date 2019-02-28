@@ -2,10 +2,8 @@
 
 > A collection of the core functionality that makes Omniport what it is
 
-Omniport keeps various typically disjoint functionality separated as separate 
-packages grouped under `core`. This is that `core`.
+Omniport keeps various critically essential but typically disjoint functionality 
+separated as separate packages. This is that collection, `core`.
 
-Note that the `core` is not to be altered in any way, unlike `services` which 
-are cloned separately and `apps` which are discovered automatically.
-
-`appGroup: core`
+Note that the `core` is not to be altered in any way, unlike apps which 
+and services which are discovered and configured based on your setup.
