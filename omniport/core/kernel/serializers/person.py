@@ -1,7 +1,10 @@
+import hashlib
+
 import swapper
 from rest_framework import serializers
 
 from kernel.managers.get_role import get_all_roles
+from kernel.models import ContactInformation
 from kernel.serializers.root import ModelSerializer
 from omniport.utils import switcher
 
@@ -59,6 +62,7 @@ class AvatarSerializer(ModelSerializer):
     """
 
     roles = serializers.SerializerMethodField()
+    gravatar_hash = serializers.SerializerMethodField()
 
     def get_roles(self, person):
         """
@@ -68,6 +72,23 @@ class AvatarSerializer(ModelSerializer):
         """
 
         return process_roles(person)
+
+    def get_gravatar_hash(self, person):
+        """
+        Generate the MD5 hash of the email address, if the user provides one
+        :param person: the person being serialized
+        :return: the MD5 hash of the email address of the person
+        """
+
+        try:
+            contact_information = person.contact_information.get()
+            email_address = contact_information.get_one_true_email_address(
+                check_verified=False
+            )
+
+            return hashlib.md5(email_address.encode('utf-8')).hexdigest()
+        except ContactInformation.DoesNotExist:
+            return None
 
     class Meta:
         """
@@ -81,5 +102,6 @@ class AvatarSerializer(ModelSerializer):
             'short_name',
             'full_name',
             'display_picture',
+            'gravatar_hash',
             'roles',
         ]
