@@ -32,9 +32,4 @@ clonerepo() {
     printf "Cloning ${DISPLAY_NAME}... "
     git clone https://github.com/IMGIITRoorkee/${REPO_NAME}.git ${FOLDER_NAME} &> /dev/null
     printf "done\n"
-
-    # Remove sensitive information from the remote URL
-    cd ${FOLDER_NAME}
-    git remote set-url origin https://github.com/IMGIITRoorkee/${REPO_NAME}.git
-    cd ..
 }
