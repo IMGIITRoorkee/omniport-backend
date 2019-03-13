@@ -2,8 +2,7 @@
 name: Feature request
 about: Suggest an idea for this project
 title: ''
-labels: ''
-assignees: ''
+want_to_take_up: '(yes|no)'
 
 ---
 
