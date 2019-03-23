@@ -2,8 +2,6 @@
 name: Feature request
 about: Suggest an idea for this project
 title: ''
-want_to_take_up: '(yes|no)'
-
 ---
 
 **Is your feature request related to a problem? Please describe.**
@@ -17,3 +15,6 @@ A clear and concise description of any alternative solutions or features you've 
 
 **Additional context**
 Add any other context or screenshots about the feature request here.
+
+**Want to take up?**
+Are you interested in and capable of tackling this issue? [yes|no]

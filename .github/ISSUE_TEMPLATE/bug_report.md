@@ -2,8 +2,6 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-want_to_take_up: '(yes|no)'
-
 ---
 
 **Describe the bug**
@@ -25,3 +23,6 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+**Want to take up?**
+Are you interested in and capable of tackling this issue? [yes|no]
