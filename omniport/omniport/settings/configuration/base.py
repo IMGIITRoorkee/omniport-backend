@@ -23,13 +23,13 @@ base_config_file = open(os.path.join(
     CONFIGURATION_DIR,
     'base.yml'
 ))
-base_configuration = yaml.load(base_config_file)
+base_configuration = yaml.safe_load(base_config_file)
 site_config_file = open(os.path.join(
     CONFIGURATION_DIR,
     'sites',
     f'site_{site_id}.yml'
 ))
-site_configuration = yaml.load(site_config_file)
+site_configuration = yaml.safe_load(site_config_file)
 
 # Note that site_configuration overrides base_configuration
 configuration = {**base_configuration, **site_configuration}
