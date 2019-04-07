@@ -48,3 +48,4 @@ class ProjectConfiguration:
         self.site = Site(
             dictionary=dictionary.get('site')
         )
+        self.integrations = dictionary.get('integrations')

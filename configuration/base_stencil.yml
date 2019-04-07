@@ -11,7 +11,7 @@ i18n:
   languageCode:  # The languge code of the portal, like en-gb
   timeZone:  # The time zone of the portal, like Asia/Kolkata
 secrets:
-  secretKey: ''  # 'fifty random characters'
+  secretKey: '' # 'fifty random characters'
 services:
   database:
     # Ideally copy the settings over from postgres/database.env
@@ -37,10 +37,14 @@ services:
     port:  # 5672, or your own server configuration
     user:  # Same as message_broker.env, or your own server configuration
     password:  # Same as message_broker.env, or your own server configuration
+integrations:  # Various useful applications that can connect to Django
+  # Freely drop any integration you do not use or need
+  sentry: # Error tracking software
+    dsn:  # Unique URL for establishing a connection
 ipAddressRings:
 # For as many rings as you anticipate, repeat
-- name: # The name of the network ring
+- name:  # The name of the network ring
   patterns:
   # For as many IP patterns as each ring contains, repeat
-  - ''  # 'the regex of the IP pattern'
+  - '' # 'the regex of the IP pattern'
       
