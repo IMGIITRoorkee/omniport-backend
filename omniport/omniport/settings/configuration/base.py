@@ -17,6 +17,8 @@ from omniport.settings.base.files import BRANDING_URL
 
 # Site ID helps in loading site-specific configuration
 site_id = int(os.getenv('SITE_ID', '0'))
+# Populated by Supervisord who knows which server is running this site
+server = os.getenv('SERVER', 'server')
 
 # Read the configuration files from the ``configuration`` directory
 base_config_file = open(os.path.join(
@@ -33,7 +35,7 @@ site_configuration = yaml.safe_load(site_config_file)
 
 # Note that site_configuration overrides base_configuration
 configuration = {**base_configuration, **site_configuration}
-CONFIGURATION = ProjectConfiguration(dictionary=configuration)
+CONFIGURATION = ProjectConfiguration(dictionary=configuration, server=server)
 
 # Imagery
 site_imagery_directory = os.path.join(BRANDING_DIR, f'site_{site_id}')

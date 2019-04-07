@@ -24,6 +24,8 @@ class ProjectConfiguration:
         super().__init__()
 
         dictionary = kwargs.get('dictionary') or dict()
+        server = kwargs.get('server') or 'server'
+
         self.ip_address_rings = [
             IpAddressRing(
                 dictionary=ip_address_ring
@@ -49,3 +51,4 @@ class ProjectConfiguration:
             dictionary=dictionary.get('site')
         )
         self.integrations = dictionary.get('integrations')
+        self.server = server
