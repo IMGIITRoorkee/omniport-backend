@@ -50,6 +50,14 @@ class Discovery:
         self.service_ws_urlpatterns = list()
         self.app_ws_urlpatterns = list()
 
+        # Logging loggers
+        self.app_logging_loggers = dict()
+        self.service_logging_loggers = dict()
+
+        # Logging handlers
+        self.app_logging_handlers = dict()
+        self.service_logging_handlers = dict()
+
     @staticmethod
     def _prepare_app_configuration_list(directory):
         """
@@ -267,6 +275,84 @@ class Discovery:
         )
         self.app_ws_urlpatterns = self._prepare_ws_urlpatterns(
             self.apps
+        )
+
+    @staticmethod
+    def _prepare_logging_loggers(app_set):
+        """
+        Generate loggers for the given list of tuples of apps and configuration
+        objects
+        :param app_set: the given list of tuples of apps and their configuration
+        objects
+        :return: the dictionary mapping app names to their loggers
+        """
+
+        loggers = dict()
+
+        for (_, app_configuration) in app_set:
+            app = app_configuration.nomenclature.name
+            loggers[app] = {
+                'handlers': [
+                    'console',
+                    app,
+                ],
+                'propagate': False,
+            }
+        return loggers
+
+    @staticmethod
+    def _prepare_logging_handlers(app_set, server, site_id):
+        """
+        Generate handlers for the given list of tuples of apps and configuration
+        objects
+        :param app_set: the given list of tuples of apps and their configuration
+        objects
+        :param server: information required to generate log file path
+        :param site_id: information required to generate log file path
+        :return: the dictionary mapping app names to their handlers
+        """
+
+        handlers = dict()
+
+        for (_, app_configuration) in app_set:
+            app = app_configuration.nomenclature.name
+            handlers[app] = {
+                'level': 'INFO',
+                'filters': ['require_debug_false', ],
+                'formatter': 'loquacious',
+                'class': 'logging.handlers.TimedRotatingFileHandler',
+                'filename': (
+                    '/web_server_logs/'
+                    f'{server}_logs/{site_id}-{app}.log'
+                ),
+                'when': 'midnight',
+                'backupCount': 32,
+            }
+        return handlers
+
+    def prepare_logging(self, server, site_id):
+        """
+        Populate the list of app-level loggers and handlers for both services
+        and apps
+        :param server: information required to generate log file path
+        :param site_id: information required to generate log file path
+        """
+
+        self.service_logging_loggers = self._prepare_logging_loggers(
+            self.services
+        )
+        self.app_logging_loggers = self._prepare_logging_loggers(
+            self.apps
+        )
+        self.service_logging_handlers = self._prepare_logging_handlers(
+            self.services,
+            server,
+            site_id
+        )
+        self.app_logging_handlers = self._prepare_logging_handlers(
+            self.apps,
+            server,
+            site_id
         )
 
     def get_app_configuration(self, app):

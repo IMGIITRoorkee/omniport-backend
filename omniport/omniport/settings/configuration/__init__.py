@@ -5,3 +5,4 @@ from omniport.settings.configuration.integrations import *
 from omniport.settings.configuration.secrets import *
 from omniport.settings.configuration.services import *
 from omniport.settings.configuration.site import *
+from omniport.settings.configuration.logging import *
