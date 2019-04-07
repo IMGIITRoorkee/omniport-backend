@@ -40,6 +40,7 @@ django-celery-results = "*"
 user-agents = "*"
 django-oauth-toolkit = "*"
 pydash = "*"
+sentry-sdk = "*"
 
 [requires]
 python_version = "3.7"
