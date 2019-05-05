@@ -11,5 +11,8 @@ services/*
 # ... but commit the README.md file so that the folder gets created
 !services/README.md
 
+# Ignore Formula 1
+formula_one/
+
 # Ignore shell
 shell/
