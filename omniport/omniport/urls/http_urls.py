@@ -1,19 +1,8 @@
 from django.urls import path, include
-from django.views.generic import TemplateView
 
 from omniport.admin.site import omnipotence
-from omniport.views.csrf import EnsureCsrf
-from omniport.views.manifest import Manifest
 
 http_urlpatterns = [
-    path('', TemplateView.as_view(template_name='hello.html'), name='hello'),
-
-    # Progressive Web App manifest
-    path('manifest/', Manifest.as_view(), name='manifest'),
-
-    # Ensures a CSRF cookie on the client
-    path('ensure_csrf/', EnsureCsrf.as_view(), name='ensure_csrf'),
-
     # Django admin URL dispatcher
     path('omnipotence/', omnipotence.urls),
 
@@ -31,4 +20,9 @@ http_urlpatterns = [
 
     # Bootstrapping
     path('bootstrap/', include('bootstrap.http_urls')),
+]
+
+http_urlpatterns_fallthrough = [
+    # Formula 1
+    path('', include('formula_one.http_urls')),
 ]

@@ -46,14 +46,19 @@ INSTALLED_APPS = [
     'mptt',  # Infinite nesting of objects of the same model
     'tinymce',  # Rich text editor
 
+    # Formula 1
+    'formula_one.apps.FormulaOneConfig',
+
     # Core apps
     'kernel.apps.KernelConfig',
 
+    # Authentication
     'base_auth.apps.BaseAuthConfig',
     'session_auth.apps.SessionAuthConfig',  # Session-based authentication
     'token_auth.apps.TokenAuthConfig',  # Token-based authentication
     'open_auth.apps.OpenAuthConfig',  # OAuth2-based authentication
 
+    # Bootstrapping
     'bootstrap.apps.BootstrapConfig',
 ]
 if SHELL_PRESENT:
