@@ -45,6 +45,7 @@ class UploadTo:
 
         # Extension of the file
         extension = filename.split('.')[-1]
+        extension = extension.lower()
         extension = f'.{extension}'
         if extension not in mimetypes.types_map.keys():
             extension = ''
