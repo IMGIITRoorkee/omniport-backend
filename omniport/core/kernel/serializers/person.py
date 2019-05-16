@@ -3,9 +3,9 @@ import hashlib
 import swapper
 from rest_framework import serializers
 
+from formula_one.models import ContactInformation
+from formula_one.serializers.base import ModelSerializer
 from kernel.managers.get_role import get_all_roles
-from kernel.models import ContactInformation
-from kernel.serializers.root import ModelSerializer
 from omniport.utils import switcher
 
 

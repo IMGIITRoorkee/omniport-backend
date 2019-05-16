@@ -1,6 +1,6 @@
 import swapper
 
-from kernel.serializers.root import ModelSerializer
+from formula_one.serializers.base import ModelSerializer
 
 BiologicalInformation = swapper.load_model('kernel', 'BiologicalInformation')
 

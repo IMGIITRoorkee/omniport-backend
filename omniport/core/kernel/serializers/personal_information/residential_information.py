@@ -2,7 +2,7 @@ import swapper
 from django.db import ProgrammingError
 from rest_framework import serializers
 
-from kernel.serializers.root import ModelSerializer
+from formula_one.serializers.base import ModelSerializer
 from omniport.utils import switcher
 
 ResidentialInformation = swapper.load_model('kernel', 'ResidentialInformation')

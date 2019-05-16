@@ -1,8 +1,8 @@
 import swapper
 
+from formula_one.serializers.base import ModelSerializer
 from kernel.serializers.institute.department import DepartmentSerializer
 from kernel.serializers.person import AvatarSerializer
-from kernel.serializers.root import ModelSerializer
 
 
 class FacultyMemberSerializer(ModelSerializer):

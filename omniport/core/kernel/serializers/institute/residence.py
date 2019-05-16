@@ -1,6 +1,6 @@
 import swapper
 
-from kernel.serializers.root import ModelSerializer
+from formula_one.serializers.base import ModelSerializer
 
 
 class ResidenceSerializer(ModelSerializer):
