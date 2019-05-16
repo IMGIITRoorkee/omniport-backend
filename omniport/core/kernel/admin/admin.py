@@ -1,12 +1,7 @@
 import swapper
+from django.contrib.admin.sites import AlreadyRegistered
 
 from omniport.admin.site import omnipotence
-from kernel.models import (
-    ContactInformation,
-    LocationInformation,
-    SocialInformation,
-    SocialLink,
-)
 
 # Load all swappable models
 
@@ -28,28 +23,29 @@ Student = swapper.load_model('kernel', 'Student')
 FacultyMember = swapper.load_model('kernel', 'FacultyMember')
 Maintainer = swapper.load_model('kernel', 'Maintainer')
 
+models = [
+    Person,
+    BiologicalInformation,
+    FinancialInformation,
+    PoliticalInformation,
+    ResidentialInformation,
+    Department,
+    Centre,
+    Branch,
+    Course,
+    Degree,
+    Residence,
+    Student,
+    FacultyMember,
+    Maintainer,
+]
+
 # Register all models
-# If any are being overridden, they will show up separately in the Django admin
+# If any are being swapped, they will show up separately in the Django admin
 
-omnipotence.register(ContactInformation)
-omnipotence.register(LocationInformation)
-omnipotence.register(SocialInformation)
-omnipotence.register(SocialLink)
-
-omnipotence.register(Person)
-
-omnipotence.register(BiologicalInformation)
-omnipotence.register(FinancialInformation)
-omnipotence.register(PoliticalInformation)
-omnipotence.register(ResidentialInformation)
-
-omnipotence.register(Department)
-omnipotence.register(Centre)
-omnipotence.register(Branch)
-omnipotence.register(Course)
-omnipotence.register(Degree)
-omnipotence.register(Residence)
-
-omnipotence.register(Student)
-omnipotence.register(FacultyMember)
-omnipotence.register(Maintainer)
+for model in models:
+    try:
+        omnipotence.register(model)
+    except AlreadyRegistered:
+        # A custom ModelAdmin has already registered it
+        pass

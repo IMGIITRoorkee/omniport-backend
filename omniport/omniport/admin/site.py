@@ -2,6 +2,7 @@ from django import forms as django_forms
 from django.conf import settings
 from django.contrib.admin import site, sites, forms
 
+from formula_one.admin.model_admins.base import ModelAdmin
 from kernel.utils.rights import has_omnipotence_rights
 
 
@@ -59,6 +60,18 @@ class OmniportAdminSite(sites.AdminSite):
         """
 
         return request.user.is_active and has_omnipotence_rights(request.user)
+
+    def register(self, model_or_iterable, admin_class=None, **options):
+        """
+        Override Omnipotence's registration process to replace the standard
+        ModelAdmin class with our enhanced ModelAdmin class
+        :param model_or_iterable: the model being registered
+        :param admin_class: the supplied ModelAdmin, if any
+        :param options: keyword arguments for the registration function
+        """
+
+        admin_class = admin_class or ModelAdmin
+        super().register(model_or_iterable, admin_class, **options)
 
 
 omnipotence = OmniportAdminSite(name='omnipotence')
