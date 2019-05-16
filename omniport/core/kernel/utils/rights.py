@@ -24,6 +24,7 @@ project, which are:
 These can, and most probably should, be overridden in shell.utils.rights
 """
 
+# TODO: Eliminate this file and if no other remains, the package utils
 from kernel.permissions.omnipotence import has_omnipotence_rights
 from kernel.permissions.polyjuice import has_polyjuice_rights
 from kernel.permissions.alohomora import has_alohomora_rights
