@@ -1,8 +1,8 @@
 import swapper
 from django.db import models
 
+from formula_one.models.base import Model
 from kernel.constants import graduations
-from kernel.models.root import Model
 
 
 class AbstractDegree(Model):

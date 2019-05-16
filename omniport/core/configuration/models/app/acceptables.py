@@ -1,4 +1,4 @@
-from kernel.enums.active_status import ActiveStatus
+from formula_one.enums.active_status import ActiveStatus
 
 
 class Role:

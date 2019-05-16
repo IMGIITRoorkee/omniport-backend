@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth import logout, login
 from django.db import models
 
-from kernel.models.root import Model
+from formula_one.models.base import Model
 from session_auth.constants import device_types
 from session_auth.utils.ip_address import get_location
 from session_auth.utils.user_agent import get_agent_information

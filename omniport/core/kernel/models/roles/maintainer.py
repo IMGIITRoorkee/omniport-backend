@@ -1,19 +1,13 @@
 import swapper
 from django.db import models
 
-from kernel.mixins.period_mixin import PeriodMixin
-from kernel.models.root import Model
+from kernel.models.roles.base import AbstractRole
 
 
-class AbstractMaintainer(PeriodMixin, Model):
+class AbstractMaintainer(AbstractRole):
     """
     This model holds information pertaining to a maintainer
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        on_delete=models.CASCADE,
-    )
 
     """
     Indicates the maintainer's role within the organisation.

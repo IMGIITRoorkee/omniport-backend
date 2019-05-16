@@ -2,7 +2,7 @@ import swapper
 from django.core.validators import MinValueValidator
 from django.db import models
 
-from kernel.models.root import Model
+from formula_one.models.base import Model
 
 
 class AbstractCourse(Model):

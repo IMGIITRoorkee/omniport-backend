@@ -1,7 +1,7 @@
 import swapper
 from django.db import models
 
-from kernel.models.root import Model
+from formula_one.models.base import Model
 
 
 class AbstractBranch(Model):

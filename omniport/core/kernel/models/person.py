@@ -3,9 +3,9 @@ from django.conf import settings
 from django.contrib.contenttypes import fields as contenttypes_fields
 from django.db import models
 
-from kernel.models.root import Model
-from kernel.utils.upload_to import UploadTo
-from kernel.validators.aspect_ratio import AspectRatioValidator
+from formula_one.models.base import Model
+from formula_one.utils.upload_to import UploadTo
+from formula_one.validators.aspect_ratio import AspectRatioValidator
 
 
 class AbstractPerson(Model):
@@ -46,19 +46,19 @@ class AbstractPerson(Model):
     )
 
     contact_information = contenttypes_fields.GenericRelation(
-        to='ContactInformation',
+        to='formula_one.ContactInformation',
         related_query_name='person',
         content_type_field='entity_content_type',
         object_id_field='entity_object_id',
     )
     social_information = contenttypes_fields.GenericRelation(
-        to='SocialInformation',
+        to='formula_one.SocialInformation',
         related_query_name='person',
         content_type_field='entity_content_type',
         object_id_field='entity_object_id',
     )
     location_information = contenttypes_fields.GenericRelation(
-        to='LocationInformation',
+        to='formula_one.LocationInformation',
         related_query_name='person',
         content_type_field='entity_content_type',
         object_id_field='entity_object_id',

@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 
+from formula_one.enums.active_status import ActiveStatus
 from kernel.managers.get_role import get_role
-from kernel.mixins.period_mixin import ActiveStatus
 
 
 def get_has_role(role_name, active_status=ActiveStatus.IS_ACTIVE):

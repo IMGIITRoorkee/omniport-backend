@@ -2,19 +2,13 @@ import swapper
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from kernel.mixins.period_mixin import PeriodMixin
-from kernel.models.root import Model
+from kernel.models.roles.base import AbstractRole
 
 
-class AbstractStudent(PeriodMixin, Model):
+class AbstractStudent(AbstractRole):
     """
     This model holds information pertaining to a student
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        on_delete=models.CASCADE,
-    )
 
     enrolment_number = models.CharField(
         max_length=15,

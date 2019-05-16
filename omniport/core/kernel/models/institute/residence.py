@@ -2,8 +2,7 @@ import swapper
 from django.contrib.contenttypes import fields as contenttypes_fields
 from django.db import models
 
-from kernel.models import LocationInformation
-from kernel.models.root import Model
+from formula_one.models.base import Model
 
 
 class AbstractResidence(Model):
@@ -20,7 +19,7 @@ class AbstractResidence(Model):
     )
 
     location_information = contenttypes_fields.GenericRelation(
-        to=LocationInformation,
+        to='formula_one.LocationInformation',
         related_query_name='residence',
         content_type_field='entity_content_type',
         object_id_field='entity_object_id',

@@ -4,18 +4,13 @@ import swapper
 from django.db import models
 
 from kernel.constants import biological_information
-from kernel.models.root import Model
+from kernel.models.personal_information.base import AbstractPersonalInformation
 
 
-class AbstractBiologicalInformation(Model):
+class AbstractBiologicalInformation(AbstractPersonalInformation):
     """
     This model holds biological information about a person
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        on_delete=models.CASCADE,
-    )
 
     date_of_birth = models.DateField()
 

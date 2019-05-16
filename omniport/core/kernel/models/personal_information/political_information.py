@@ -2,18 +2,13 @@ import swapper
 from django.db import models
 from django_countries import fields as django_countries_fields
 
-from kernel.models.root import Model
+from kernel.models.personal_information.base import AbstractPersonalInformation
 
 
-class AbstractPoliticalInformation(Model):
+class AbstractPoliticalInformation(AbstractPersonalInformation):
     """
     This model holds political information about a person
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        on_delete=models.CASCADE,
-    )
 
     nationality = django_countries_fields.CountryField(
         blank_label='Nationality',

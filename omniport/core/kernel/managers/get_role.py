@@ -2,7 +2,7 @@ import swapper
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 
-from kernel.mixins.period_mixin import ActiveStatus
+from formula_one.mixins.period_mixin import ActiveStatus
 
 
 def get_role(person, role_name, active_status=ActiveStatus.ANY, silent=False):

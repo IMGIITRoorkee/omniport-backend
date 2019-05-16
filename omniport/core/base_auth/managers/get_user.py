@@ -2,7 +2,7 @@ import swapper
 from django.db.models import Q
 
 from base_auth.models import User
-from kernel.models import ContactInformation
+from formula_one.models import ContactInformation
 
 Person = swapper.load_model('kernel', 'Person')
 Student = swapper.load_model('kernel', 'Student')

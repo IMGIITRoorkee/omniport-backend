@@ -3,9 +3,9 @@ from django.contrib.postgres import fields
 from django.db import models
 from oauth2_provider.models import AbstractApplication
 
-from kernel.models.root import Model
-from kernel.utils.upload_to import UploadTo
-from kernel.validators.aspect_ratio import AspectRatioValidator
+from formula_one.models.base import Model
+from formula_one.utils.upload_to import UploadTo
+from formula_one.validators.aspect_ratio import AspectRatioValidator
 from open_auth.constants import data_points as data_point_choices
 
 

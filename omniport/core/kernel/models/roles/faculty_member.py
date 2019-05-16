@@ -1,19 +1,13 @@
 import swapper
 from django.db import models
 
-from kernel.mixins.period_mixin import PeriodMixin
-from kernel.models.root import Model
+from kernel.models.roles.base import AbstractRole
 
 
-class AbstractFacultyMember(PeriodMixin, Model):
+class AbstractFacultyMember(AbstractRole):
     """
     This model holds information pertaining to a faculty member
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        on_delete=models.CASCADE,
-    )
 
     designation = models.CharField(
         max_length=63,

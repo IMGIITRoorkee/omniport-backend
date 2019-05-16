@@ -1,18 +1,13 @@
 import swapper
 from django.db import models
 
-from kernel.models.root import Model
+from kernel.models.personal_information.base import AbstractPersonalInformation
 
 
-class AbstractResidentialInformation(Model):
+class AbstractResidentialInformation(AbstractPersonalInformation):
     """
     This model holds residential information about a person
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        on_delete=models.CASCADE,
-    )
 
     residence = models.ForeignKey(
         to=swapper.get_model_name('kernel', 'Residence'),

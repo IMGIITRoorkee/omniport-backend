@@ -1,19 +1,14 @@
 import swapper
+from django.core.validators import MinValueValidator
 from django.db import models
-from rest_framework.compat import MinValueValidator
 
-from kernel.models.root import Model
+from kernel.models.personal_information.base import AbstractPersonalInformation
 
 
-class AbstractFinancialInformation(Model):
+class AbstractFinancialInformation(AbstractPersonalInformation):
     """
     This model holds financial information about a person
     """
-
-    person = models.OneToOneField(
-        to=swapper.get_model_name('kernel', 'Person'),
-        on_delete=models.CASCADE,
-    )
 
     local_bank = models.CharField(
         max_length=63,
