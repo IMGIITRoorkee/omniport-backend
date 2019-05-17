@@ -33,6 +33,16 @@ KERNEL_RESIDENTIALINFORMATION_SERIALIZER = (
     'residential_information.ResidentialInformationSerializer'
 )
 
+KERNEL_PERSON_PROFILE_SERIALIZER = (
+    'kernel.serializers.'
+    'person.ProfileSerializer'
+)
+
+KERNEL_PERSON_AVATAR_SERIALIZER = (
+    'kernel.serializers.'
+    'person.AvatarSerializer'
+)
+
 __all__ = [
     'KERNEL_RESIDENCE_SERIALIZER',
 
@@ -44,4 +54,7 @@ __all__ = [
     'KERNEL_FINANCIALINFORMATION_SERIALIZER',
     'KERNEL_POLITICALINFORMATION_SERIALIZER',
     'KERNEL_RESIDENTIALINFORMATION_SERIALIZER',
+
+    'KERNEL_PERSON_PROFILE_SERIALIZER',
+    'KERNEL_PERSON_AVATAR_SERIALIZER',
 ]
