@@ -1,7 +1,9 @@
 import swapper
 
-from kernel.serializers.institute.branch import BranchSerializer
 from kernel.serializers.roles.base import RoleSerializer
+from omniport.utils import switcher
+
+BranchSerializer = switcher.load_serializer('kernel', 'Branch')
 
 
 class StudentSerializer(RoleSerializer):

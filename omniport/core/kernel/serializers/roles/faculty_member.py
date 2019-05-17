@@ -1,7 +1,9 @@
 import swapper
 
-from kernel.serializers.institute.department import DepartmentSerializer
 from kernel.serializers.roles.base import RoleSerializer
+from omniport.utils import switcher
+
+DepartmentSerializer = switcher.load_serializer('kernel', 'Department')
 
 
 class FacultyMemberSerializer(RoleSerializer):
