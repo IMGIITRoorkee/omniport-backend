@@ -5,11 +5,13 @@ from pydash import py_
 from rest_framework import serializers
 
 from kernel.relations.person import PersonRelatedField
-from kernel.serializers.person import AvatarSerializer
+from omniport.utils import switcher
 from open_auth.constants import data_points as data_point_constants
 from open_auth.models import Application
 
 Person = swapper.load_model('kernel', 'Person')
+
+AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
 class ApplicationListSerializer(serializers.ModelSerializer):

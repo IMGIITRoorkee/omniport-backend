@@ -3,7 +3,9 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from kernel.serializers.person import AvatarSerializer
+from omniport.utils import switcher
+
+AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
 class WhoAmI(GenericAPIView):

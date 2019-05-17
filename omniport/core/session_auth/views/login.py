@@ -1,11 +1,13 @@
 import swapper
 from rest_framework import status, generics, response
 
-from kernel.serializers.person import AvatarSerializer
+from omniport.utils import switcher
 from session_auth.models import SessionMap
 from session_auth.serializers.login import LoginSerializer
 
 Person = swapper.load_model('kernel', 'Person')
+
+AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
 class Login(generics.GenericAPIView):
