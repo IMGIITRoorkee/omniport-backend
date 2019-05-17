@@ -1,18 +1,14 @@
 import swapper
 
-from formula_one.serializers.base import ModelSerializer
 from kernel.serializers.institute.department import DepartmentSerializer
-from kernel.serializers.person import AvatarSerializer
+from kernel.serializers.roles.base import RoleSerializer
 
 
-class FacultyMemberSerializer(ModelSerializer):
+class FacultyMemberSerializer(RoleSerializer):
     """
     Serializer for FacultyMember objects
     """
 
-    person = AvatarSerializer(
-        read_only=True,
-    )
     department = DepartmentSerializer(
         read_only=True,
     )

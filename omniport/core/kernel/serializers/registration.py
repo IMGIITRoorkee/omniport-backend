@@ -1,3 +1,15 @@
+KERNEL_BRANCH_SERIALIZER = (
+    'kernel.serializers.institute.'
+    'branch.BranchSerializer'
+)
+KERNEL_DEGREE_SERIALIZER = (
+    'kernel.serializers.institute.'
+    'degree.DegreeSerializer'
+)
+KERNEL_DEPARTMENT_SERIALIZER = (
+    'kernel.serializers.institute.'
+    'department.DepartmentSerializer'
+)
 KERNEL_RESIDENCE_SERIALIZER = (
     'kernel.serializers.institute.'
     'residence.ResidenceSerializer'
@@ -44,6 +56,9 @@ KERNEL_PERSON_AVATAR_SERIALIZER = (
 )
 
 __all__ = [
+    'KERNEL_BRANCH_SERIALIZER',
+    'KERNEL_DEGREE_SERIALIZER',
+    'KERNEL_DEPARTMENT_SERIALIZER',
     'KERNEL_RESIDENCE_SERIALIZER',
 
     'KERNEL_STUDENT_SERIALIZER',

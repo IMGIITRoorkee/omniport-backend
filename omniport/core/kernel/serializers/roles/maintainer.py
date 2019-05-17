@@ -1,17 +1,12 @@
 import swapper
 
-from formula_one.serializers.base import ModelSerializer
-from kernel.serializers.person import AvatarSerializer
+from kernel.serializers.roles.base import RoleSerializer
 
 
-class MaintainerSerializer(ModelSerializer):
+class MaintainerSerializer(RoleSerializer):
     """
     Serializer for Maintainer objects
     """
-
-    person = AvatarSerializer(
-        read_only=True,
-    )
 
     class Meta:
         """

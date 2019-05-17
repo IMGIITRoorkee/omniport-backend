@@ -1,8 +1,10 @@
 import swapper
 
 from formula_one.serializers.base import ModelSerializer
-from kernel.serializers.institute.degree import DegreeSerializer
-from kernel.serializers.institute.department import DepartmentSerializer
+from omniport.utils import switcher
+
+DegreeSerializer = switcher.load_serializer('kernel', 'Degree')
+DepartmentSerializer = switcher.load_serializer('kernel', 'Department')
 
 
 class BranchSerializer(ModelSerializer):
