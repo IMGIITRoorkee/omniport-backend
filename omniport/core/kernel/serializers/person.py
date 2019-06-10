@@ -86,8 +86,11 @@ class AvatarSerializer(ModelSerializer):
                 check_verified=False
             )
 
+            if email_address is None:
+                raise TypeError
+
             return hashlib.md5(email_address.encode('utf-8')).hexdigest()
-        except ContactInformation.DoesNotExist:
+        except (ContactInformation.DoesNotExist, TypeError) as error:
             return None
 
     class Meta:
