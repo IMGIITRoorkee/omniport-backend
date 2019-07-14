@@ -53,7 +53,10 @@ class ProfileSerializer(ModelSerializer):
         """
 
         model = swapper.load_model('kernel', 'Person')
-        fields = '__all__'
+        exclude = [
+            'datetime_created',
+            'datetime_modified',
+        ]
 
 
 class AvatarSerializer(ModelSerializer):
