@@ -31,12 +31,6 @@ sed -i "s/\[\[app_display_name\]\]/${APP_DISPLAY_NAME}/g" README.md
 printf "Added ${APP_DISPLAY_NAME} in README.md\n"
 
 # Text substitution
-sed -i "s/\[\[app_pascal_name\]\]/${APP_PASCAL_NAME}/g" apps.py
-sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" apps.py
-sed -i "s/\[\[app_display_name\]\]/${APP_DISPLAY_NAME}/g" apps.py
-printf "Added ${APP_PASCAL_NAME}, ${APP_NAME} & ${APP_DISPLAY_NAME} in apps.py\n"
-
-# Text substitution
 sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" http_urls.py
 printf "Added ${APP_NAME} in http_urls.py\n"
 
