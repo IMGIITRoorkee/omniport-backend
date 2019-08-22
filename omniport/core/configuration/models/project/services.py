@@ -102,7 +102,7 @@ class SessionStore(Service):
         super().__init__(*args, **kwargs)
 
 
-class NotificationStore(Service):
+class CommunicationStore(Service):
     """
     This class stores information about the notification store service
     """
@@ -156,8 +156,8 @@ class Services:
         self.session_store = SessionStore(
             dictionary=dictionary.get('sessionStore')
         )
-        self.notification_store = NotificationStore(
-            dictionary=dictionary.get('notificationStore')
+        self.communication_store = CommunicationStore(
+            dictionary=dictionary.get('communicationStore')
         )
         self.cache = Cache(
             dictionary=dictionary.get('cache')

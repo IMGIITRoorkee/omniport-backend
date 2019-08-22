@@ -39,12 +39,12 @@ CACHES = {
         'LOCATION': (f'{_CONF.services.cache.host}'
                      f':{_CONF.services.cache.port}'),
     },
-    'notification': {
+    'communication': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': (
             'redis://'
-            f'{_CONF.services.notification_store.host}'
-            f':{_CONF.services.notification_store.port}'
+            f'{_CONF.services.communication_store.host}'
+            f':{_CONF.services.communication_store.port}'
             '/0'
         ),
         'OPTIONS': {
