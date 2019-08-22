@@ -26,8 +26,8 @@ services:
   sessionStore:
     host:  # session-store, or your own server configuration
     port:  # 6379, or your own server configuration
-  notificationStore:
-    host:  # notification-store, or your own server configuration
+  communicationStore:
+    host:  # communication-store, or your own server configuration
     port:  # 6379, or your own server configuration
   cache:
     host:  # cache, or your own server configuration
