@@ -1,6 +1,7 @@
 from configuration.models.app.acceptables import Acceptables
 from configuration.models.app.base_urls import BaseUrls
 from configuration.models.app.nomenclature import Nomenclature
+from configuration.models.app.categorisation import Categorisation
 
 
 class AppConfiguration:
@@ -31,6 +32,10 @@ class AppConfiguration:
         )
         self.acceptables = Acceptables(
             dictionary=dictionary.get('acceptables')
+        )
+
+        self.categorisation = Categorisation(
+            list=dictionary.get('categorisation')
         )
 
         # Processed variables
