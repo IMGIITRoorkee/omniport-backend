@@ -1,0 +1,73 @@
+.fc-today {
+  background: #fcf8e3 !important;
+  font-weight: bold !important;
+}
+
+.fc-today-button {
+  margin: 0.5em !important;
+  border: 1px solid rgba(34, 36, 38, .15) !important;
+  border-radius: .28571429rem !important;
+  padding: .78571429em 1.5em .78571429em !important;
+  box-sizing: border-box !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  font-family: Lato !important;
+  font-weight: bold !important;
+}
+
+.fc-button-group {
+  margin: 0.5em !important;
+  border-radius: .28571429rem !important;
+}
+
+.fc-prev-button, .fc-next-button, .fc-dayGridMonth-button, .fc-timeGridWeek-button, .fc-timeGridDay-button, .fc-listWeek-button {
+  padding: .78571429em 1.5em .78571429em !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(34, 36, 38, .15) !important;
+  box-sizing: border-box !important;
+  color: #000000 !important;
+}
+
+.fc-dayGridMonth-button:focus {
+  border-end-end-radius: 0px !important;
+}
+
+.fc-timeGridWeek-button:focus, .fc-timeGridDay-button:focus {
+  border-radius: 0px !important;
+}
+
+.fc-listWeek-button:focus {
+  border-start-start-radius: 0px !important;
+}
+
+.fc-center h2 {
+  font-style: normal !important;
+  font-weight: bold !important;
+  font-family: Lato !important;
+  box-sizing: border-box !important;
+  color: #000000 !important;
+}
+
+.fc-button-active {
+  padding: .78571429em 1.5em .78571429em !important;
+  cursor: default !important;
+  background-color: #EBEBEB !important;
+  border: 1px solid rgba(34, 36, 38, .15) !important;
+}
+
+.fc-button:focus {
+  outline: 0px;
+  border: 1px solid rgba(34, 36, 38, .15) !important;
+  box-shadow: 0px 0px 0px red !important;
+  padding: .78571429em 1.5em .78571429em !important;
+  box-sizing: border-box !important;
+  color: #000000 !important;
+}
+
+.fc-button-primary:focus {
+  box-shadow: 0px 0px 0px red !important;
+}
+
+.fc-day-number {
+  color: #3a87ad !important;
+}
