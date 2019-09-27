@@ -8,7 +8,7 @@ branding:
     name:  # The name of the maintainers
     homePage:  # The URL to the home page of the maintainers
 i18n:
-  languageCode:  # The languge code of the portal, like en-gb
+  languageCode:  # The language code of the portal, like en-gb
   timeZone:  # The time zone of the portal, like Asia/Kolkata
 secrets:
   secretKey: '' # 'fifty random characters'
@@ -43,8 +43,10 @@ integrations:  # Various useful applications that can connect to Django
     dsn:  # Unique URL for establishing a connection
 ipAddressRings:
 # For as many rings as you anticipate, repeat
-- name:  # The name of the network ring
+- name: administrator # Network ring for django admin portal (mandatory)
+  patterns:
+  - '*' # 'the regex of the IP pattern'
+- name: # The name of the network ring
   patterns:
   # For as many IP patterns as each ring contains, repeat
   - '' # 'the regex of the IP pattern'
-      

@@ -1,10 +1,11 @@
 from django.urls import path, include
+from django.conf import settings
 
 from omniport.admin.site import omnipotence
 
 http_urlpatterns = [
     # Django admin URL dispatcher
-    path('omnipotence/', omnipotence.urls),
+    path(settings.ADMIN_SITE_URL, omnipotence.urls),
 
     # PyPI packages URL dispatcher
     path('tinymce/', include('tinymce.urls')),
