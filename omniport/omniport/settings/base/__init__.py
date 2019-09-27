@@ -1,3 +1,4 @@
+from omniport.settings.base.admin import *
 from omniport.settings.base.applications import *
 from omniport.settings.base.authentication import *
 from omniport.settings.base.directories import *
