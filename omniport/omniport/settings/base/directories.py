@@ -29,6 +29,8 @@ PARENT_DIR = _os.path.dirname(PROJECT_DIR)
 # The 'static' directory where all static files will be collected into
 # The 'media' directory where all uploaded media will be stored in
 # The 'personal' directory where all uploaded personal files will be stored in
+# The 'certificates' directory where third-party services' certificates will be stored in
+# The 'supervisor.d' directory where all supervisor daemon scripts will be stored in
 
 CONFIGURATION_DIR = _os.path.join(PARENT_DIR, 'configuration')
 BRANDING_DIR = _os.path.join(PARENT_DIR, 'branding')
@@ -36,6 +38,7 @@ STATIC_DIR = _os.path.join(PARENT_DIR, 'static_files')
 MEDIA_DIR = _os.path.join(PARENT_DIR, 'media_files')
 PERSONAL_DIR = _os.path.join(PARENT_DIR, 'personal_files')
 CERTIFICATES_DIR = _os.path.join(PARENT_DIR, 'certificates')
+SUPERVISORD_DIR = _os.path.join(PARENT_DIR, 'supervisor.d')
 
 # Project level directories
 # The 'core' directory where all Omniport core apps will be loaded from
@@ -45,3 +48,5 @@ CERTIFICATES_DIR = _os.path.join(PARENT_DIR, 'certificates')
 CORE_DIR = _os.path.join(PROJECT_DIR, 'core')
 SERVICES_DIR = _os.path.join(PROJECT_DIR, 'services')
 APPS_DIR = _os.path.join(PROJECT_DIR, 'apps')
+
+APP_SUPERVISORD_DIR = 'supervisor.d'
