@@ -41,6 +41,8 @@ user-agents = "*"
 django-oauth-toolkit = "*"
 pydash = "*"
 sentry-sdk = "*"
+numpy = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.7"
