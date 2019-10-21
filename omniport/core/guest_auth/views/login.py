@@ -1,5 +1,6 @@
 import swapper
 from rest_framework import status, generics, response
+from django.contrib.auth import login
 
 from omniport.utils import switcher
 from base_auth.managers.get_user import get_user
@@ -16,8 +17,7 @@ class Login(generics.GenericAPIView):
     via cookie-based session authentication
     """
 
-
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         """
         View to serve POST requests
         :param request: the request that is to be responded to
@@ -27,12 +27,15 @@ class Login(generics.GenericAPIView):
         """
 
         guest_user = get_user('GUEST_USERNAME')
-
+        request.user = guest_user
         # This is a direct replacement for django.contrib.auth.login()
-        SessionMap.create_session_map(request=request, user=guest_user)
+
+        login(request, guest_user, backend='base_auth.backends.generalised.GeneralisedAuthBackend')
+
+        SessionMap.create_session_map(request=request, user=guest_user, new=False)
 
         try:
-            user_data = AvatarSerializer(user.person).data
+            user_data = AvatarSerializer(guest_user.person).data
         except Person.DoesNotExist:
             user_data = None
         response_data = {
@@ -43,4 +46,3 @@ class Login(generics.GenericAPIView):
             data=response_data,
             status=status.HTTP_200_OK
         )
-
