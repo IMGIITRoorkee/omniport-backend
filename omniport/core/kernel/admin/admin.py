@@ -22,6 +22,7 @@ Residence = swapper.load_model('kernel', 'Residence')
 Student = swapper.load_model('kernel', 'Student')
 FacultyMember = swapper.load_model('kernel', 'FacultyMember')
 Maintainer = swapper.load_model('kernel', 'Maintainer')
+Guest = swapper.load_model('kernel', 'Guest')
 
 models = [
     Person,
@@ -38,6 +39,7 @@ models = [
     Student,
     FacultyMember,
     Maintainer,
+    Guest,
 ]
 
 # Register all models

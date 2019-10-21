@@ -43,4 +43,5 @@ from kernel.models.roles import (
     # Concrete models for default implementation
     Student,
     FacultyMember,
+    Guest,
 )
