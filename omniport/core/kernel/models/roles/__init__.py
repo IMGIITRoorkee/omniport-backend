@@ -15,10 +15,14 @@ from kernel.models.roles.student import (
 
     Student,
 )
+from kernel.models.roles.guest_role import (
+    Guest,
+)
 
 # Add the names of roles to the list maintained in settings
 settings.ROLES.extend([
     'Student',
     'FacultyMember',
     'Maintainer',
+    'Guest',
 ])
