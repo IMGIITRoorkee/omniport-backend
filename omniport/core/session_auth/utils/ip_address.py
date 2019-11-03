@@ -7,31 +7,35 @@ def get_location(ip_address):
     :param ip_address: the IP address to geo-locate
     :return: the approximate location of the IP address
     """
+    try:
 
-    fields = ','.join([
-        'status',
-        'message',
-        'city',
-        'country',
-        'countryCode',
-    ])
-    response = requests.get(
-        url=f'http://ip-api.com/json/{ip_address}',
-        params={'fields': fields},
-    )
-    response = response.json()
-    if response.pop('status') == 'success':
-        location = ', '.join([
-            response.get('city'),
-            response.get('country'),
-            response.get('countryCode'),
+        fields = ','.join([
+            'status',
+            'message',
+            'city',
+            'country',
+            'countryCode',
         ])
-    else:
-        if response.get('message') == 'private range':
-            location = 'Intranet'
-        elif response.get('message') == 'reserved range':
-            location = 'Reserved'
+        response = requests.get(
+            url=f'http://ip-api.com/json/{ip_address}',
+            params={'fields': fields},
+        )
+        response = response.json()
+        if response.pop('status') == 'success':
+            location = ', '.join([
+                response.get('city'),
+                response.get('country'),
+                response.get('countryCode'),
+            ])
         else:
-            location = 'The Void'
+            if response.get('message') == 'private range':
+                location = 'Intranet'
+            elif response.get('message') == 'reserved range':
+                location = 'Reserved'
+            else:
+                location = 'The Void'
+    except requests.ConnectionError:
+        location = 'The Void'
+
 
     return location
