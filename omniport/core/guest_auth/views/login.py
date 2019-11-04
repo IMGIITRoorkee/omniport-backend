@@ -1,6 +1,7 @@
 import swapper
 from rest_framework import status, generics, response
 from django.contrib.auth import login
+from django.conf import settings
 
 from omniport.utils import switcher
 from base_auth.managers.get_user import get_user
@@ -10,6 +11,7 @@ Person = swapper.load_model('kernel', 'Person')
 
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
+GUEST_USERNAME = settings.GUEST_USERNAME
 
 class Login(generics.GenericAPIView):
     """
@@ -26,7 +28,7 @@ class Login(generics.GenericAPIView):
         :return: the response for request
         """
 
-        guest_user = get_user('GUEST_USERNAME')
+        guest_user = get_user(GUEST_USERNAME)
         request.user = guest_user
         # This is a direct replacement for django.contrib.auth.login()
 
