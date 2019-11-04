@@ -18,6 +18,7 @@ http_urlpatterns = [
     path('session_auth/', include('session_auth.http_urls')),
     path('token_auth/', include('token_auth.http_urls')),
     path('open_auth/', include('open_auth.http_urls')),
+    path('guest_auth/', include('guest_auth.http_urls')),
 
     # Bootstrapping
     path('bootstrap/', include('bootstrap.http_urls')),
