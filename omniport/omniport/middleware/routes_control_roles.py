@@ -20,7 +20,7 @@ class RoutesControlRoles:
     def __call__(self, request):
 
         source_user = request.user
-        if source_user == get_user('GUEST_USERNAME'):
+        if source_user == get_user(settings.GUEST_USERNAME):
             """
             Perform actual processing on the request before it goes to the view
             and on response returned by the view
