@@ -27,6 +27,10 @@ KERNEL_MAINTAINER_SERIALIZER = (
     'kernel.serializers.roles.'
     'maintainer.MaintainerSerializer'
 )
+KERNEL_GUEST_SERIALIZER = (
+    'kernel.serializers.roles.'
+    'guest.GuestSerializer'
+)
 
 KERNEL_BIOLOGICALINFORMATION_SERIALIZER = (
     'kernel.serializers.personal_information.'
@@ -64,6 +68,7 @@ __all__ = [
     'KERNEL_STUDENT_SERIALIZER',
     'KERNEL_FACULTYMEMBER_SERIALIZER',
     'KERNEL_MAINTAINER_SERIALIZER',
+    'KERNEL_GUEST_SERIALIZER',
 
     'KERNEL_BIOLOGICALINFORMATION_SERIALIZER',
     'KERNEL_FINANCIALINFORMATION_SERIALIZER',
