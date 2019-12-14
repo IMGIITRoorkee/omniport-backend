@@ -49,6 +49,7 @@ start_django_server() {
         --mount type=bind,src=${CWD}/certificates,dst=/certificates \
         --mount type=bind,src=${CWD}/web_server_logs,dst=/web_server_logs \
         --mount type=bind,src=${CWD}/supervisor.d,dst=/supervisor.d \
+        --mount type=bind,src=${CWD}/ipython_default_profile_dir,dst=/.ipython/ \
         --name=${NAME} \
         --network-alias	django${NAME} \
         --env SITE_ID=0 \

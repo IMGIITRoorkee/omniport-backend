@@ -19,5 +19,8 @@ personal_files/
 # Web server logs
 web_server_logs/
 
+# IPython default profile directory
+ipython_default_profile_dir
+
 # Certificates for remote services
 certificates/
