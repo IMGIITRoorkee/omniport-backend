@@ -50,6 +50,7 @@ class ApplicationAuthoriseSerializer(serializers.ModelSerializer):
             'redirect_uris',
             'name',
             'logo',
+            'skip_authorization',
             'data_points',
         ]
 
