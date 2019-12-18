@@ -3,9 +3,9 @@ from configuration.models.project.branding import Branding
 from configuration.models.project.i18n import I18n
 from configuration.models.project.ip_address_ring import IpAddressRing
 from configuration.models.project.secrets import Secrets
+from configuration.models.project.emails import Emails
 from configuration.models.project.services import Services
 from configuration.models.project.site import Site
-
 
 class ProjectConfiguration:
     """
@@ -44,6 +44,9 @@ class ProjectConfiguration:
         self.secrets = Secrets(
             dictionary=dictionary.get('secrets')
         )
+	self.emails = Emails(
+	    dictionary=dictionary.get('emails')
+	)
         self.services = Services(
             dictionary=dictionary.get('services')
         )
