@@ -14,8 +14,8 @@ class Emails:
 
         dictionary = kwargs.get('dictionary') or dict()
         self.email_backend = dictionary.get('emailBackend')
-	self.email_host = dictionary.get('emailHost')
-	self.email_use_tls = dictionary.get('emailUseTls')
-	self.email_port = dictionary.get('emailPort')
-	self.email_host_user = dictionary.get('emailHostUser')
-	self.email_host_password = dictionary.get('emailHostPassword')
+        self.email_host = dictionary.get('emailHost')
+        self.email_use_tls = dictionary.get('emailUseTls')
+        self.email_port = dictionary.get('emailPort')
+        self.email_host_user = dictionary.get('emailHostUser')
+        self.email_host_password = dictionary.get('emailHostPassword')

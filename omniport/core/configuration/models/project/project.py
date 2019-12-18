@@ -44,9 +44,9 @@ class ProjectConfiguration:
         self.secrets = Secrets(
             dictionary=dictionary.get('secrets')
         )
-	self.emails = Emails(
-	    dictionary=dictionary.get('emails')
-	)
+        self.emails = Emails(
+            dictionary=dictionary.get('emails')
+        )
         self.services = Services(
             dictionary=dictionary.get('services')
         )
