@@ -20,7 +20,7 @@ class Application(AbstractApplication, Model):
         upload_to=UploadTo('open_auth', 'application_logos'),
         max_length=255,
         validators=[
-            AspectRatioValidator(1, 0.3),
+            AspectRatioValidator(1, 0.05),
         ],
         blank=True,
         null=True,

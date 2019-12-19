@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
                 ('short_name', models.CharField(blank=True, max_length=63)),
                 ('full_name', models.CharField(max_length=255)),
-                ('display_picture', models.ImageField(blank=True, max_length=255, null=True, upload_to=formula_one.utils.upload_to.UploadTo('kernel', 'display_pictures'), validators=[formula_one.validators.aspect_ratio.AspectRatioValidator(1, 0.1)])),
+                ('display_picture', models.ImageField(blank=True, max_length=255, null=True, upload_to=formula_one.utils.upload_to.UploadTo('kernel', 'display_pictures'), validators=[formula_one.validators.aspect_ratio.AspectRatioValidator(1, 0.05)])),
             ],
             options={
                 'verbose_name_plural': 'people',
