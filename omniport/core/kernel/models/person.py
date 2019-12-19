@@ -68,7 +68,7 @@ class AbstractPerson(Model):
         upload_to=UploadTo('kernel', 'display_pictures'),
         max_length=255,
         validators=[
-            AspectRatioValidator(1, 0.1),
+            AspectRatioValidator(1, 0.05),
         ],
         blank=True,
         null=True,

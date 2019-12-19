@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('datetime_created', models.DateTimeField(auto_now_add=True)),
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
-                ('logo', models.ImageField(blank=True, max_length=255, null=True, upload_to=formula_one.utils.upload_to.UploadTo('open_auth', 'application_logos'), validators=[formula_one.validators.aspect_ratio.AspectRatioValidator(1, 0.3)])),
+                ('logo', models.ImageField(blank=True, max_length=255, null=True, upload_to=formula_one.utils.upload_to.UploadTo('open_auth', 'application_logos'), validators=[formula_one.validators.aspect_ratio.AspectRatioValidator(1, 0.05)])),
                 ('description', models.TextField()),
                 ('agrees_to_terms', models.BooleanField(default=False)),
                 ('is_approved', models.BooleanField(default=False)),
