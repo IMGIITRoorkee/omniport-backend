@@ -8,6 +8,8 @@ This setting file exposes variables pertaining to authentication.
 
 AUTH_USER_MODEL = 'base_auth.User'
 
+GUEST_USERNAME = 'Guest User'
+
 AUTHENTICATION_BACKENDS = [
     'base_auth.backends.generalised.GeneralisedAuthBackend',  # Custom backend
     'guardian.backends.ObjectPermissionBackend',  # Django Guardian
