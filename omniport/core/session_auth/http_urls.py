@@ -9,6 +9,9 @@ app_name = 'session_auth'
 urlpatterns = [
     path('login/', Login.as_view(), name='login'),
     path('logout/', Logout.as_view(), name='logout'),
-    path('illustration_roulette/', IllustrationRoulette.as_view(),
-         name='illustration_roulette'),
+    path(
+        'illustration_roulette/',
+        IllustrationRoulette.as_view(),
+        name='illustration_roulette'
+    )
 ]
