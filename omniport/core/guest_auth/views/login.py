@@ -16,6 +16,7 @@ AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 GUEST_USERNAME = settings.GUEST_USERNAME
 
+
 class Login(generics.GenericAPIView):
     """
     This view takes the username and password and if correct, logs the user in
@@ -33,12 +34,20 @@ class Login(generics.GenericAPIView):
         try:
             guest_user = get_user(GUEST_USERNAME)
         except User.DoesNotExist:
-            request.user = create_guest()
+            guest_user = create_guest()
         # This is a direct replacement for django.contrib.auth.login()
 
-        login(request, guest_user, backend='base_auth.backends.generalised.GeneralisedAuthBackend')
+        login(
+            request=request,
+            user=guest_user,
+            backend='base_auth.backends.generalised.GeneralisedAuthBackend'
+        )
 
-        SessionMap.create_session_map(request=request, user=guest_user, new=False)
+        SessionMap.create_session_map(
+            request=request,
+            user=guest_user,
+            new=False
+        )
 
         try:
             user_data = AvatarSerializer(guest_user.person).data

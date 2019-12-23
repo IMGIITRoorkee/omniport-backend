@@ -38,7 +38,7 @@ class AppConfiguration:
             list=dictionary.get('categorisation')
         )
         self.guest_allowed = dictionary.get('guestAllowed') or False
-    
+
         self.excluded_paths = []
         excluded_paths = dictionary.get('excludedPaths')
 
