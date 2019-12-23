@@ -8,6 +8,7 @@ from oauth2_provider.views import (
 from rest_framework import routers
 
 from open_auth.views.application import ApplicationViewSet
+from open_auth.views.retrieve_data import GetUserData
 
 router = routers.SimpleRouter()
 router.register('application', ApplicationViewSet, base_name='application')
@@ -32,4 +33,5 @@ urlpatterns = [
     ),
 
     path('', include(router.urls)),
+    path('get_user_data/', GetUserData.as_view(), name='get_user_data'),
 ]
