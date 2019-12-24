@@ -37,10 +37,9 @@ services:
     port:  # 5672, or your own server configuration
     user:  # Same as message_broker.env, or your own server configuration
     password:  # Same as message_broker.env, or your own server configuration
-integrations:  # Various useful applications that can connect to Django
+integrations: {}
+  # Various useful applications that can connect to Django
   # Freely drop any integration you do not use or need
-  sentry: # Error tracking software
-    dsn:  # Unique URL for establishing a connection
 ipAddressRings:
 # For as many rings as you anticipate, repeat
 - name: administrator # Network ring for django admin portal (mandatory)
