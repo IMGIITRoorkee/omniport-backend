@@ -2,12 +2,13 @@ from rest_framework import status, generics
 from rest_framework.response import Response
 
 from oauth2_provider.models import AccessToken
+from kernel.models import Person
 
 from open_auth.models import Application
 from open_auth.utils import get_field_data, get_roles
 
-model_regex = ['person', 'student', 'faculty_member', 'biological_information', 'contact_information']
-model_strings = ['person', 'person.student', 'person.facultymember', 'person.biologicalinformation', 'person.contact_information.first()']
+MODEL_REGEX = ['person', 'student', 'faculty_member', 'biological_information', 'contact_information']
+MODEL_STRINGS = ['person', 'person.student', 'person.facultymember', 'person.biologicalinformation', 'person.contact_information.first()']
 
 class GetUserData(generics.GenericAPIView):
     """
@@ -30,20 +31,19 @@ class GetUserData(generics.GenericAPIView):
         try:
             application = Application.objects.get(client_id=client_id)
             access_token = AccessToken.objects.get(token=token)
-        except:
+        except (Application.DoesNotExist, AccessToken.DoesNotExist):
             return Response(
                 data="Invalid Client Id or access token",
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
 
         if not access_token.is_valid():
             return Response(
                 data="Token entered is invalid",
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
-        elif access_token.is_expired():
+
+        if access_token.is_expired():
             return Response(
                 data="This token has expired",
                 status=status.HTTP_401_UNAUTHORIZED
@@ -55,7 +55,7 @@ class GetUserData(generics.GenericAPIView):
 
         try:
             person = user.person
-        except:
+        except Person.DoesNotExist:
             response_data['username'] = user.username
             return Response(
                 data=response_data,
@@ -64,13 +64,17 @@ class GetUserData(generics.GenericAPIView):
 
         response_data['username'] = user.username
 
-        for i in range(len(model_regex)):
-            model_data_points = [x.split('.', 1)[1] for x in app_data_points if model_regex[i] in x and 'roles' not in x]
+        for model_name, model_string in zip(MODEL_REGEX, MODEL_STRINGS):
+            model_data_points = [x.split('.', 1)[1] for
+                                 x in app_data_points if
+                                 model_name in x and 'roles' not in x]
             try:
-                if len(model_data_points) !=0:
-                    response_data[model_regex[i]] = get_field_data(person, model_data_points, model_strings[i])
+                if model_data_points:
+                    response_data[model_name] = get_field_data(person,
+                                                               model_data_points,
+                                                               model_string)
             except:
-                response_data[model_regex[i]] = {}
+                response_data[model_name] = {}
 
         if 'person.roles' in app_data_points:
             response_data['person']['roles'] = get_roles(person)
