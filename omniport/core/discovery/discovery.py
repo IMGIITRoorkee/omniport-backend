@@ -292,6 +292,7 @@ class Discovery:
         for (_, app_configuration) in app_set:
             app = app_configuration.nomenclature.name
             loggers[app] = {
+                'level': 'INFO',
                 'handlers': [
                     'console',
                     app,

@@ -65,6 +65,7 @@ LOGGING = {
     # Loggers
     'loggers': {
         'django': {
+            'level': 'INFO',
             'handlers': [
                 'console',
                 'file',
