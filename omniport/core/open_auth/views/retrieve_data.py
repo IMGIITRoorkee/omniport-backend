@@ -1,14 +1,27 @@
 from rest_framework import status, generics
 from rest_framework.response import Response
-
 from oauth2_provider.models import AccessToken
+
 from kernel.models import Person
-
 from open_auth.models import Application
-from open_auth.utils import get_field_data, get_roles
+from open_auth.utils import get_field_data, get_roles, get_display_picture
 
-MODEL_REGEX = ['person', 'student', 'faculty_member', 'biological_information', 'contact_information']
-MODEL_STRINGS = ['person', 'person.student', 'person.facultymember', 'person.biologicalinformation', 'person.contact_information.first()']
+
+MODEL_REGEX = [
+    'person',
+    'student',
+    'faculty_member',
+    'biological_information',
+    'contact_information'
+]
+MODEL_STRINGS = [
+    'person',
+    'person.student',
+    'person.facultymember',
+    'person.biologicalinformation',
+    'person.contact_information.first()'
+]
+
 
 class GetUserData(generics.GenericAPIView):
     """
@@ -16,7 +29,7 @@ class GetUserData(generics.GenericAPIView):
     based applications.
     """
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         """
         View to serve POST requests
         :param request: the request that is to be responded to
@@ -25,15 +38,17 @@ class GetUserData(generics.GenericAPIView):
         :return: the response for request
         """
 
-        client_id = request.POST['client_id']
-        token = request.POST['token']
+        client_id = request.POST.get('client_id', None)
+        client_secret = request.POST.get('client_secret', None)
+        token = request.POST.get('token', None)
 
         try:
-            application = Application.objects.get(client_id=client_id)
+            application = Application.objects.get(client_id=client_id,
+                                                  client_secret=client_secret)
             access_token = AccessToken.objects.get(token=token)
         except (Application.DoesNotExist, AccessToken.DoesNotExist):
             return Response(
-                data="Invalid Client Id or access token",
+                data="Invalid Client Id, Secret or access token",
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -67,7 +82,8 @@ class GetUserData(generics.GenericAPIView):
         for model_name, model_string in zip(MODEL_REGEX, MODEL_STRINGS):
             model_data_points = [x.split('.', 1)[1] for
                                  x in app_data_points if
-                                 model_name in x and 'roles' not in x]
+                                 model_name in x and
+                                 'roles' or 'display_picture' not in x]
             try:
                 if model_data_points:
                     response_data[model_name] = get_field_data(person,
@@ -78,6 +94,9 @@ class GetUserData(generics.GenericAPIView):
 
         if 'person.roles' in app_data_points:
             response_data['person']['roles'] = get_roles(person)
+
+        if 'person.display_picture' in app_data_points:
+            response_data['person']['display_picture'] = get_display_picture(person)
 
         if 'social_information.links' in app_data_points:
             data = {}

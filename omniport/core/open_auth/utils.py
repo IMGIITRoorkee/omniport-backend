@@ -1,5 +1,6 @@
 from omniport.utils import switcher
 
+
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 def get_field_data(person, field_data_points, model_string):
@@ -9,6 +10,7 @@ def get_field_data(person, field_data_points, model_string):
     :param field_data_points: The specific fields of a model to be retreied.
     :param model_string: model name string to access the data
     """
+
     data = {}
     if eval(model_string) is None:
         return data
@@ -21,7 +23,16 @@ def get_roles(person):
     Utility function to return the name and active status of person's roles.
     :param person: Person object whose roles are to be retreived.
     """
+
     all_roles = (AvatarSerializer(person).data['roles'])
     for role in all_roles:
         del role['data']
     return all_roles
+
+def get_display_picture(person):
+    """
+    Utility function to return path to display picture of user.
+    :param person: Person object whose display picture path to be retreived.
+    """
+
+    return AvatarSerializer(person).data['display_picture']
