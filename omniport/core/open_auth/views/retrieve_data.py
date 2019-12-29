@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from oauth2_provider.models import AccessToken
 
 from kernel.models import Person
-from open_auth.models import Application
 from open_auth.utils import get_field_data, get_roles, get_display_picture
 
 
@@ -29,26 +28,21 @@ class GetUserData(generics.GenericAPIView):
     based applications.
     """
 
-    def post(self, request):
+    def get(self, request):
         """
-        View to serve POST requests
+        View to serve GET requests
         :param request: the request that is to be responded to
-        :param args: arguments
-        :param kwargs: keyword arguments
         :return: the response for request
         """
 
-        client_id = request.POST.get('client_id', None)
-        client_secret = request.POST.get('client_secret', None)
-        token = request.POST.get('token', None)
+        token = request.headers['Authorization'].replace('OAUTH_TOKEN ', '')
 
         try:
-            application = Application.objects.get(client_id=client_id,
-                                                  client_secret=client_secret)
             access_token = AccessToken.objects.get(token=token)
-        except (Application.DoesNotExist, AccessToken.DoesNotExist):
+            application = access_token.application
+        except AccessToken.DoesNotExist:
             return Response(
-                data="Invalid Client Id, Secret or access token",
+                data="Please provide access token in the headers",
                 status=status.HTTP_400_BAD_REQUEST
             )
 
