@@ -31,7 +31,10 @@ urlpatterns = [
         RevokeTokenView.as_view(),
         name='revoke_token'
     ),
-
+    path(
+        'get_user_data/',
+        GetUserData.as_view(),
+        name='get_user_data'
+    ),
     path('', include(router.urls)),
-    path('get_user_data/', GetUserData.as_view(), name='get_user_data'),
 ]
