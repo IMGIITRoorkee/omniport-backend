@@ -5,10 +5,11 @@ AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 def get_field_data(person, field_data_points, model_string):
     """
-    Utility function to get requested model's data.
-    :param person: Person object whose data is to be retreived.
-    :param field_data_points: The specific fields of a model to be retreied.
+    Utility function to get requested model's data
+    :param person: person object whose data is to be retrieved
+    :param field_data_points: the specific fields of a model to be retrieved
     :param model_string: model name string to access the data
+    :return: data for a model string
     """
 
     data = {}
@@ -20,8 +21,9 @@ def get_field_data(person, field_data_points, model_string):
 
 def get_roles(person):
     """
-    Utility function to return the name and active status of person's roles.
-    :param person: Person object whose roles are to be retreived.
+    Utility function to return the name and active status of person's roles
+    :param person: person object whose roles are to be retreived
+    :return: roles for a person
     """
 
     all_roles = (AvatarSerializer(person).data['roles'])
@@ -31,8 +33,9 @@ def get_roles(person):
 
 def get_display_picture(person):
     """
-    Utility function to return path to display picture of user.
-    :param person: Person object whose display picture path to be retreived.
+    Utility function to return path to display picture of user
+    :param person: person object whose display picture path to be retrieved
+    :return: path to the display picture
     """
 
     return AvatarSerializer(person).data['display_picture']

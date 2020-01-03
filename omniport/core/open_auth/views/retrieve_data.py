@@ -24,8 +24,7 @@ MODEL_STRINGS = [
 
 class GetUserData(generics.GenericAPIView):
     """
-    View to retrieve data for oauth
-    based applications.
+    View to retrieve data for OAuth based applications
     """
 
     def get(self, request):
