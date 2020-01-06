@@ -1,5 +1,7 @@
 from django.conf import settings
 
+from kernel.utils.logs import log_permission
+
 
 def has_omnipotence_rights(user):
     """
@@ -9,10 +11,15 @@ def has_omnipotence_rights(user):
     """
 
     if settings.DEBUG:
-        return user.is_superuser
+        has_permission = user.is_superuser
+        log_permission('omnipotence', user, has_permission)
+        return has_permission
 
     try:
         from shell.utils.rights import has_omnipotence_rights as omnipotence
-        return omnipotence(user)
+        has_permission = omnipotence(user)
     except ImportError:
-        return user.is_superuser
+        has_permission = user.is_superuser
+
+    log_permission('omnipotence', user, has_permission)
+    return has_permission

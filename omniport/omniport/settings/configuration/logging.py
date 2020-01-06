@@ -57,6 +57,16 @@ LOGGING = {
             'when': 'midnight',
             'backupCount': 32,
         },
+        'kernel_permissions': {
+            'level': 'INFO',
+            'filters': ['require_debug_false', ],
+            'formatter': 'loquacious',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': f'/web_server_logs/'
+                        f'{server}_logs/{site_id}-kernel_permissions.log',
+            'when': 'midnight',
+            'backupCount': 32,
+        },
         # App-level handlers
         **DISCOVERY.app_logging_handlers,
         **DISCOVERY.service_logging_handlers,
@@ -70,6 +80,11 @@ LOGGING = {
                 'console',
                 'file',
             ],
+            'propagate': False,
+        },
+        'kernel_permissions': {
+            'level': 'INFO',
+            'handlers': ['kernel_permissions'],
             'propagate': False,
         },
         # App-level loggers

@@ -1,6 +1,8 @@
 from django.conf import settings
 from rest_framework.permissions import BasePermission
 
+from kernel.utils.logs import log_permission
+
 
 def has_alohomora_rights(user):
     """
@@ -10,13 +12,18 @@ def has_alohomora_rights(user):
     """
 
     if settings.DEBUG:
-        return user.is_superuser
+        has_permission = user.is_superuser
+        log_permission('alohomora', user, has_permission)
+        return has_permission
 
     try:
         from shell.utils.rights import has_alohomora_rights as alohomora
-        return alohomora(user)
+        has_permission = alohomora(user)
     except ImportError:
-        return user.is_superuser
+        has_permission = user.is_superuser
+
+    log_permission('alohomora', user, has_permission)
+    return has_permission
 
 
 class HasAlohomoraRights(BasePermission):

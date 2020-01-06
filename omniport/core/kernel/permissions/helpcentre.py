@@ -1,5 +1,7 @@
 from django.conf import settings
 
+from kernel.utils.logs import log_permission
+
 
 def has_helpcentre_rights(user):
     """
@@ -9,10 +11,15 @@ def has_helpcentre_rights(user):
     """
 
     if settings.DEBUG:
-        return user.is_superuser
+        has_permission = user.is_superuser
+        log_permission('helpcentre', user, has_permission)
+        return has_permission
 
     try:
         from shell.utils.rights import has_helpcentre_rights as helpcentre
-        return helpcentre(user)
+        has_permission = helpcentre(user)
     except ImportError:
-        return user.is_superuser
+        has_permission = user.is_superuser
+
+    log_permission('helpcentre', user, has_permission)
+    return has_permission
