@@ -5,7 +5,7 @@ logger = logging.getLogger('kernel_permissions')
 
 def log_permission(permission_name, user, is_allowed):
     """
-    A common utility function to log requests for kernel permissions
+    Form sentences to log requests for kernel permissions
     This takes the name of the permission, the user who made the request, and
     whether the user was allowed or not, logs a relevant message with
     appropriate level.
