@@ -77,7 +77,8 @@ class Discovery:
         for sub_directory in sub_directories:
             config_path = os.path.join(directory, sub_directory, 'config.yml')
             if os.path.isfile(config_path):
-                config_dictionary = yaml.safe_load(open(config_path))
+                with open(config_path) as config_file:
+                    config_dictionary = yaml.safe_load(config_file)
                 config_object = AppConfiguration(dictionary=config_dictionary)
                 apps_and_configs.append(
                     (sub_directory, config_object,)
