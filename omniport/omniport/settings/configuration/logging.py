@@ -57,6 +57,15 @@ LOGGING = {
             'when': 'midnight',
             'backupCount': 32,
         },
+        'core': {
+            'level': 'INFO',
+            'filters': ['require_debug_false', ],
+            'formatter': 'loquacious',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': f'/web_server_logs/{server}_logs/{site_id}-core.log',
+            'when': 'midnight',
+            'backupCount': 32,
+        },
         'kernel_permissions': {
             'level': 'INFO',
             'filters': ['require_debug_false', ],
@@ -79,6 +88,14 @@ LOGGING = {
             'handlers': [
                 'console',
                 'file',
+            ],
+            'propagate': False,
+        },
+        'core': {
+            'level': 'INFO',
+            'handlers': [
+                'console',
+                'core',
             ],
             'propagate': False,
         },
