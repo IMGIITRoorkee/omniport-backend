@@ -3,6 +3,10 @@ from rest_framework import status, generics, response
 from base_auth.serializers.reset_password import (
     ResetPasswordSerializer,
 )
+from core.utils.logs import get_logging_function
+
+
+base_auth_log = get_logging_function('base_auth')
 
 
 class ResetPassword(generics.GenericAPIView):
@@ -33,6 +37,7 @@ class ResetPassword(generics.GenericAPIView):
             response_data = {
                 'status': 'Successfully reset password.',
             }
+            base_auth_log('Successfully reset password', 'info', user)
             return response.Response(
                 data=response_data,
                 status=status.HTTP_200_OK

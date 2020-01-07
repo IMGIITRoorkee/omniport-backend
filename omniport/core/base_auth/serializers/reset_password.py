@@ -1,6 +1,11 @@
+
 from rest_framework import serializers
 
 from base_auth.serializers.retrieve_user import RetrieveUserSerializer
+from core.utils.logs import get_logging_function
+
+
+base_auth_log = get_logging_function('base_auth')
 
 
 class ResetPasswordSerializer(RetrieveUserSerializer):
@@ -20,6 +25,11 @@ class ResetPasswordSerializer(RetrieveUserSerializer):
         """
 
         if self.user.failed_reset_attempts >= 3:
+            base_auth_log(
+                'Password reset attempts exceeded limit',
+                'warning',
+                self.user
+            )
             raise serializers.ValidationError('Reset attempts exceeded limit.')
 
         if not self.user.check_secret_answer(secret_answer):
