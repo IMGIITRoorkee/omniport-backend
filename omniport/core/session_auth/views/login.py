@@ -4,6 +4,10 @@ from rest_framework import status, generics, response
 from omniport.utils import switcher
 from session_auth.models import SessionMap
 from session_auth.serializers.login import LoginSerializer
+from core.utils.logs import get_logging_function
+
+
+session_auth_log = get_logging_function('session_auth')
 
 Person = swapper.load_model('kernel', 'Person')
 
@@ -48,12 +52,19 @@ class Login(generics.GenericAPIView):
             # This is a direct replacement for django.contrib.auth.login()
             SessionMap.create_session_map(request=request, user=user)
 
+            session_key = request.session.session_key
+            session_auth_log(
+                f'Successfully started a session {session_key}',
+                'info',
+                user
+            )
+
             try:
                 user_data = AvatarSerializer(user.person).data
             except Person.DoesNotExist:
                 user_data = None
             response_data = {
-                'status': 'Successfully logged in.',
+                'status': 'Successfully logged in',
                 'user': user_data,
             }
             return response.Response(
@@ -64,6 +75,12 @@ class Login(generics.GenericAPIView):
             response_data = {
                 'errors': serializer.errors,
             }
+            username = serializer.data.get('username')
+            session_auth_log(
+                'Invalid login attempted on account: '
+                f'{username}',
+                'warning'
+            )
             return response.Response(
                 data=response_data,
                 status=status.HTTP_400_BAD_REQUEST

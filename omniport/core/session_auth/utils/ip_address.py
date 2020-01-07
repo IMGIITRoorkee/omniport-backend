@@ -1,5 +1,10 @@
 import requests
 
+from core.utils.logs import get_logging_function
+
+
+session_auth_log = get_logging_function('session_auth')
+
 
 def get_location(ip_address):
     """
@@ -35,7 +40,7 @@ def get_location(ip_address):
             else:
                 location = 'The Void'
     except requests.ConnectionError:
+        session_auth_log(f'Error finding location of {ip_address}', 'warning')
         location = 'The Void'
-
 
     return location

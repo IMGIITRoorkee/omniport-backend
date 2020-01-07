@@ -1,6 +1,10 @@
 from rest_framework import status, permissions, generics, response
 
 from session_auth.models import SessionMap
+from core.utils.logs import get_logging_function
+
+
+session_auth_log = get_logging_function('session_auth')
 
 
 class Logout(generics.GenericAPIView):
@@ -22,9 +26,15 @@ class Logout(generics.GenericAPIView):
         :return: the response for request
         """
 
+        user = request.user
+        session_key = request.session.session_key
         # This is a direct replacement for django.contrib.auth.logout()
         SessionMap.delete_session_map(request=request)
-
+        session_auth_log(
+            f'Successfully logged out of session {session_key}',
+            'info',
+            user
+        )
         response_data = {
             'status': 'Successfully logged out',
         }
