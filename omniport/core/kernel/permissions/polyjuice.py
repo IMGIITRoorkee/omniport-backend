@@ -1,6 +1,8 @@
 from django.conf import settings
 from rest_framework.permissions import BasePermission
 
+from kernel.utils.logs import log_permission
+
 
 def has_polyjuice_rights(user):
     """
@@ -10,13 +12,18 @@ def has_polyjuice_rights(user):
     """
 
     if settings.DEBUG:
-        return user.is_superuser
+        has_permission = user.is_superuser
+        log_permission('polyjuice', user, has_permission)
+        return has_permission
 
     try:
         from shell.utils.rights import has_polyjuice_rights as polyjuice
-        return polyjuice(user)
+        has_permission = polyjuice(user)
     except ImportError:
-        return user.is_superuser
+        has_permission = user.is_superuser
+
+    log_permission('polyjuice', user, has_permission)
+    return has_permission
 
 
 class HasPolyjuiceRights(BasePermission):
