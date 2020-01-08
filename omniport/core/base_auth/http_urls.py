@@ -2,7 +2,7 @@ from django.urls import path
 
 from base_auth.views.reset_password import ResetPassword
 from base_auth.views.verify_secret_answer import VerifySecretAnswer
-from base_auth.views.recover_passowrd import RecoverPassword, verify_recovery_token
+from base_auth.views.recover_passowrd import RecoverPassword, VerifyRecoveryToken
 
 app_name = 'base_auth'
 
@@ -24,7 +24,7 @@ urlpatterns = [
     ),
     path(
         'verify/',
-        verify_recovery_token,
+        VerifyRecoveryToken.as_view(),
         name='verify_recovery_token'
     ),
 ]

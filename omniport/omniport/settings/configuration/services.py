@@ -56,6 +56,24 @@ CACHES = {
             },
         },
     },
+    'verification': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': (
+            'redis://'
+            f'{_CONF.services.verification_store.host}'
+            f':{_CONF.services.verification_store.port}'
+            '/0'
+        ),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
+            'REDIS_CLIENT_KWARGS': {
+                'encoding': 'utf-8',
+                'decode_responses': True,
+            },
+        },
+    },
+
     'session': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': (
