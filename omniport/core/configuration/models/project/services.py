@@ -116,6 +116,19 @@ class CommunicationStore(Service):
 
         super().__init__(*args, **kwargs)
 
+class VerificationStore(Service):
+    """
+    This class stores information about the notification store service
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Defer to the base class to populate the data points
+        :param args: arguments
+        :param kwargs: keyword arguments
+        """
+
+        super().__init__(*args, **kwargs)
 
 class Cache(Service):
     """
@@ -158,6 +171,9 @@ class Services:
         )
         self.communication_store = CommunicationStore(
             dictionary=dictionary.get('communicationStore')
+        )
+        self.verification_store = VerificationStore(
+            dictionary=dictionary.get('verificationStore')
         )
         self.cache = Cache(
             dictionary=dictionary.get('cache')
