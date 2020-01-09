@@ -76,12 +76,14 @@ class GetUserData(generics.GenericAPIView):
             model_data_points = [x.split('.', 1)[1] for
                                  x in app_data_points if
                                  model_name in x and
-                                 'roles' or 'display_picture' not in x]
+                                 'roles' not in x and
+                                 'display_picture' not in x]
             try:
                 if model_data_points:
                     response_data[model_name] = get_field_data(person,
                                                                model_data_points,
                                                                model_string)
+                    response_data[model_name]
             except:
                 response_data[model_name] = {}
 
