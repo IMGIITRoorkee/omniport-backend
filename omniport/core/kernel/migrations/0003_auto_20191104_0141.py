@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='branch',
             name='entity_object_id',
-            field=models.BigIntegerField(default=0),
+            field=models.BigIntegerField(),
             preserve_default=False,
         ),
     ]
