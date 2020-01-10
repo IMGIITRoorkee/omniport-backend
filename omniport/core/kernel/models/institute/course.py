@@ -24,7 +24,7 @@ class AbstractCourse(Model):
     )
     credits = models.IntegerField(
         validators=[
-            MinValueValidator(limit_value=1),
+            MinValueValidator(limit_value=0),
         ],
     )
 

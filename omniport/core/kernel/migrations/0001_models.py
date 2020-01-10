@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
                 ('datetime_modified', models.DateTimeField(auto_now=True)),
                 ('code', models.CharField(max_length=7, unique=True)),
                 ('name', models.CharField(max_length=127)),
-                ('credits', models.IntegerField(validators=[django.core.validators.MinValueValidator(limit_value=1)])),
+                ('credits', models.IntegerField(validators=[django.core.validators.MinValueValidator(limit_value=0)])),
             ],
             options={
                 'swappable': swapper.swappable_setting('kernel', 'Course'),
