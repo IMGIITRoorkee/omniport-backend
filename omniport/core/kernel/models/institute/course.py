@@ -32,7 +32,7 @@ class AbstractCourse(Model):
     )
 
     code = models.CharField(
-        max_length=7,
+        max_length=15,
         unique=True,
     )
     name = models.CharField(
