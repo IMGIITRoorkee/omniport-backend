@@ -72,7 +72,7 @@ class GetUserData(generics.GenericAPIView):
 
         response_data['username'] = user.username
 
-        for model_name, model_string in zip(MODEL_REGEX, MODEL_STRINGS):
+        for model_name, object_string in zip(MODEL_REGEX, MODEL_STRINGS):
             model_data_points = [
                 data_point.split('.', 1)[1] for data_point in app_data_points
                 if (
@@ -83,10 +83,11 @@ class GetUserData(generics.GenericAPIView):
             ]
             try:
                 if model_data_points:
-                    response_data[model_name] = get_field_data(
+                    response_data[model_name] = \
+                        get_field_data(
                         person,
                         model_data_points,
-                        model_string
+                        object_string
                     )
             except (ObjectDoesNotExist, AttributeError):
                 response_data[model_name] = dict()

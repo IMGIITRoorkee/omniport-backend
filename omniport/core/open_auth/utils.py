@@ -4,21 +4,21 @@ from omniport.utils import switcher
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
-def get_field_data(person, field_data_points, model_string):
+def get_field_data(person, field_data_points, object_string):
     """
     Utility function to get requested model's data
     :param person: person object whose data is to be retrieved
     :param field_data_points: the specific fields of a model to be retrieved
-    :param model_string: model name string to access the data
+    :param object_string: object variable name to access the data
     :return: data for a model string
     """
 
     data = dict()
-    if eval(model_string) is None:
+    if eval(object_string) is None:
         return data
     for field_data_point in field_data_points:
         data[f'{field_data_point.replace(".", " ")}'] = \
-            eval(f'{model_string}.{field_data_point}')
+            eval(f'{object_string}.{field_data_point}')
     return data
 
 
