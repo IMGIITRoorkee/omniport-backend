@@ -1,3 +1,4 @@
+import swapper
 from rest_framework import generics, response, status
 
 from base_auth.models import User
@@ -42,7 +43,8 @@ class RecoverPassword(generics.GenericAPIView):
         site_name = CONFIGURATION.site.nomenclature.verbose_name
         site_url = CONFIGURATION.allowances.hosts[0]
 
-        url = f'https://{site_url}/auth/reset_password/?token=recovery_token'
+        token_type = 'RECOVERY_TOKEN'
+        url = f'https://{site_url}/auth/reset_password/?token={token_type}'
         subject = f'{site_name} account password reset'
         body = f'To reset your {site_name} account password, please visit url'
         category, _ = Category.objects.get_or_create(name="Auth", slug="auth")
@@ -50,7 +52,7 @@ class RecoverPassword(generics.GenericAPIView):
         send_token(
             user_id=user.id,
             person_id=person.id,
-            token_type="RECOVERY_TOKEN",
+            token_type=token_type,
             email_body=body,
             email_subject=subject,
             url=url,
@@ -100,19 +102,21 @@ class VerifyRecoveryToken(generics.GenericAPIView):
         """
 
         token_data, recovery_token = args[:2]
-        username = request.data.get('username', None)
+        person_id = request.data.get('person_id', None)
         new_password = request.data.get('new_password', None)
         remove_all_sessions = request.data.get('remove_all_sessions', False)
 
+        Person = swapper.load_model('kernel', 'Person')
         try:
+            person = Person.objects.get(id=person_id)
             user = User.objects.get(id=token_data['user_id'])
-        except User.DoesNotExist:
+        except (User.DoesNotExist, Person.DoesNotExist):
             return response.Response(
                 data='User corresponding to this token does not exist',
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if username != user.username:
+        if person.user.id != user.id:
             return response.Response(
                 data='The username provided is incorrect',
                 status=status.HTTP_403_FORBIDDEN,
