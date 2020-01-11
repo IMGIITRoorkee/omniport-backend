@@ -2,7 +2,8 @@ from rest_framework import generics, response, status
 
 from base_auth.models import User
 from omniport.utils import switcher
-from formula_one.utils.create_token import create_token_send_mail, verify_access_token
+from omniport.settings.configuration.base import CONFIGURATION
+from formula_one.utils.verification_token import send_token, verify_access_token, delete
 from session_auth.models import SessionMap
 from categories.models import Category
 
@@ -12,8 +13,7 @@ AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 class RecoverPassword(generics.GenericAPIView):
     """
     This view when responding to a GET request, generates password recovery token
-    and sends mail to the concerned user. and when responding to a POST request
-    changes the password of the user.
+    and sends mail to the concerned user.
     """
 
     def get(self, request):
@@ -30,23 +30,32 @@ class RecoverPassword(generics.GenericAPIView):
                 data="Please provide the username",
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        user = User.objects.get(username=username)
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return response.Response(
+                data="The username provided is incorrect",
+                status=status.HTTP_400_BAD_REQUEST
+            )
         person = user.person
 
-        url = f"http://localhost.com/"
-        subject = "Channel-i account password reset"
-        body = f'For changing your account password please visit: '
-        category = Category.objects.get(name="testCat")
+        site_name = CONFIGURATION.site.nomenclature.verbose_name
+        site_url = CONFIGURATION.allowances.hosts[0]
 
-        create_token_send_mail(user_id=user.id,
-                               person_id=person.id,
-                               token_type="RECOVERY_TOKEN",
-                               email_body=body,
-                               email_subject=subject,
-                               url=url,
-                               category=category
-                            )
+        url = f'https://{site_url}/auth/reset_password/?token=recovery_token'
+        subject = f'{site_name} account password reset'
+        body = f'To reset your {site_name} account password, please visit url'
+        category, _ = Category.objects.get_or_create(name="Auth", slug="auth")
+
+        send_token(
+            user_id=user.id,
+            person_id=person.id,
+            token_type="RECOVERY_TOKEN",
+            email_body=body,
+            email_subject=subject,
+            url=url,
+            category=category
+        )
 
         return response.Response(
             data="Email sent successfully",
@@ -68,10 +77,9 @@ class VerifyRecoveryToken(generics.GenericAPIView):
         token_data = args[0]
         user = User.objects.get(id=token_data['user_id'])
 
-        if not user or \
-                ("RECOVERY_TOKEN" != token_data['token_type']):
+        if not user or ("RECOVERY_TOKEN" != token_data['token_type']):
             return response.Response(
-                data="Incorrect Token Type",
+                data="Incorrect token type",
                 status=status.HTTP_404_NOT_FOUND,
             )
 
@@ -91,34 +99,37 @@ class VerifyRecoveryToken(generics.GenericAPIView):
         :return: the response for request
         """
 
-        token_data = args[0]
+        token_data, recovery_token = args[:2]
         username = request.data.get('username', None)
         new_password = request.data.get('new_password', None)
-        checked = request.data.get('checked', True)
+        remove_all_sessions = request.data.get('remove_all_sessions', False)
 
-        user = User.objects.get(id=token_data['user_id'])
-
-        if not user or \
-                ("RECOVERY_TOKEN" != token_data['token_type']):
+        try:
+            user = User.objects.get(id=token_data['user_id'])
+        except User.DoesNotExist:
             return response.Response(
-                data="This recovery token is  wrong",
-                status=status.HTTP_404_NOT_FOUND,
+                data='User corresponding to this token does not exist',
+                status=status.HTTP_400_BAD_REQUEST,
             )
+
         if username != user.username:
             return response.Response(
-                data="The username provided is incorrect",
+                data='The username provided is incorrect',
                 status=status.HTTP_403_FORBIDDEN,
             )
         if not new_password:
             return response.Response(
-                data="Please provide new Password",
+                data='Please provide new password',
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
         user.set_password(new_password)
         user.save()
-        #        delete(recovery_token)
 
-        if checked:
+        # Delete the recovery token once it is used.
+        delete(recovery_token)
+
+        if remove_all_sessions:
             SessionMap.objects.filter(user=user).delete()
 
         return response.Response(
