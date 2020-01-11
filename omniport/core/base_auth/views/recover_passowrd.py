@@ -2,6 +2,7 @@ import swapper
 from rest_framework import generics, response, status
 
 from base_auth.models import User
+from base_auth.managers.get_user import get_user
 from omniport.utils import switcher
 from omniport.settings.configuration.base import CONFIGURATION
 from formula_one.utils.verification_token import send_token, verify_access_token, delete
@@ -32,7 +33,7 @@ class RecoverPassword(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
-            user = User.objects.get(username=username)
+            user = get_user(username)
         except User.DoesNotExist:
             return response.Response(
                 data="The username provided is incorrect",
