@@ -1,10 +1,10 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, generics
 from rest_framework.response import Response
 from oauth2_provider.models import AccessToken
 
 from kernel.models import Person
 from open_auth.utils import get_field_data, get_roles, get_display_picture
-
 
 MODEL_REGEX = [
     'person',
@@ -59,7 +59,7 @@ class GetUserData(generics.GenericAPIView):
 
         app_data_points = application.data_points
         user = access_token.user
-        response_data = {}
+        response_data = dict()
 
         try:
             person = user.person
@@ -73,28 +73,33 @@ class GetUserData(generics.GenericAPIView):
         response_data['username'] = user.username
 
         for model_name, model_string in zip(MODEL_REGEX, MODEL_STRINGS):
-            model_data_points = [x.split('.', 1)[1] for
-                                 x in app_data_points if
-                                 model_name in x and
-                                 'roles' not in x and
-                                 'display_picture' not in x]
+            model_data_points = [
+                data_point.split('.', 1)[1] for data_point in app_data_points
+                if (
+                        model_name in data_point and
+                        'roles' not in data_point and
+                        'display_picture' not in data_point
+                )
+            ]
             try:
                 if model_data_points:
-                    response_data[model_name] = get_field_data(person,
-                                                               model_data_points,
-                                                               model_string)
-                    response_data[model_name]
-            except:
-                response_data[model_name] = {}
+                    response_data[model_name] = get_field_data(
+                        person,
+                        model_data_points,
+                        model_string
+                    )
+            except (ObjectDoesNotExist, AttributeError):
+                response_data[model_name] = dict()
 
         if 'person.roles' in app_data_points:
             response_data['person']['roles'] = get_roles(person)
 
         if 'person.display_picture' in app_data_points:
-            response_data['person']['display_picture'] = get_display_picture(person)
+            response_data['person']['display_picture'] = \
+                get_display_picture(person)
 
         if 'social_information.links' in app_data_points:
-            data = {}
+            data = dict()
             social_info = person.social_information.first()
             if social_info is not None:
                 for link in social_info.links.all():
