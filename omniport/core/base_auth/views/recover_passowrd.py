@@ -60,8 +60,22 @@ class RecoverPassword(generics.GenericAPIView):
             category=category
         )
 
+        contact = person.contact_information.first()
+        if (
+                contact is None or
+                contact.institute_webmail_address is None
+        ):
+            return Response(
+                data=f'Could not fetch email address, '
+                     f'please contact the maintainers.',
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        email_id, domain = contact.institute_webmail_address.split('@')
+        hidden_email = (f'{email_id[:3]}'
+                       f'{"*"*max(len(email_id)-3,0)}'
+                       f'@{domain}')
         return response.Response(
-            data="Email sent successfully",
+            data=f'Email sent successfully to {hidden_email}',
             status=status.HTTP_200_OK,
         )
 
@@ -138,6 +152,6 @@ class VerifyRecoveryToken(generics.GenericAPIView):
             SessionMap.objects.filter(user=user).delete()
 
         return response.Response(
-            data="Successfully reset password.",
+            data='Successfully reset password.',
             status=status.HTTP_200_OK,
         )
