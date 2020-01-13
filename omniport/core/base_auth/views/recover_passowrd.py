@@ -65,7 +65,7 @@ class RecoverPassword(generics.GenericAPIView):
                 contact is None or
                 contact.institute_webmail_address is None
         ):
-            return Response(
+            return response.Response(
                 data=f'Could not fetch email address, '
                      f'please contact the maintainers.',
                 status=status.HTTP_400_BAD_REQUEST,
