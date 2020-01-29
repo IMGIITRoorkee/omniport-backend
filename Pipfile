@@ -43,6 +43,7 @@ pydash = "*"
 sentry-sdk = "*"
 numpy = "*"
 pandas = "*"
+pdf2image = "*"
 
 [requires]
 python_version = "3.7"
