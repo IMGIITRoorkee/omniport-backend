@@ -16,11 +16,9 @@ firebase-admin = "*"
 psycopg2-binary = "*"
 pillow = "*"
 gunicorn = "*"
-django = {extras = ["argon2"],version = "*"}
 channels = "*"
 channels-redis = "*"
 djangorestframework = "*"
-twisted = {extras = ["http2", "tls"],version = "*"}
 markdown = "*"
 django-crispy-forms = "*"
 django-filter = "*"
@@ -43,6 +41,15 @@ pydash = "*"
 sentry-sdk = "*"
 numpy = "*"
 pandas = "*"
+pdf2image = "*"
 
 [requires]
 python_version = "3.7"
+
+[packages.django]
+extras = [ "argon2",]
+version = "*"
+
+[packages.twisted]
+extras = [ "http2", "tls",]
+version = "*"
