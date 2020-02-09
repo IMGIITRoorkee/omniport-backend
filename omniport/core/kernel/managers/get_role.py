@@ -21,8 +21,10 @@ def get_role(person, role_name, active_status=ActiveStatus.ANY, silent=False, *a
 
     try:
         if is_custom_role:
-            Role = swapper.load_model(role_name.split('.')[0],
-                                      role_name.split('.')[1])
+            Role = swapper.load_model(
+                role_name.split('.')[0],
+                role_name.split('.')[1],
+            )
         else:
             Role = swapper.load_model('kernel', role_name)
         try:
@@ -56,7 +58,7 @@ def get_all_roles(person):
                 active_status=ActiveStatus.ANY,
                 silent=False,
                 is_custom_role='.' in role_name,
-                )
+            )
             active_status = role.active_status
             all_roles[role_name] = {
                 'instance': role,
