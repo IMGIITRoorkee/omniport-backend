@@ -11,7 +11,7 @@ from open_auth.views.application import ApplicationViewSet
 from open_auth.views.retrieve_data import GetUserData
 
 router = routers.SimpleRouter()
-router.register('application', ApplicationViewSet, base_name='application')
+router.register('application', ApplicationViewSet, basename='application')
 
 app_name = 'open_auth'
 
