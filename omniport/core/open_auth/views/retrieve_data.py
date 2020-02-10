@@ -34,7 +34,13 @@ class GetUserData(generics.GenericAPIView):
         :return: the response for request
         """
 
-        token = request.headers['Authorization'].replace('OAUTH_TOKEN ', '')
+        try:
+            token = request.headers['Authorization'].replace('OAUTH_TOKEN ', '')
+        except KeyError:
+            return Response(
+                data="Please Provide access token in the headers",
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
             access_token = AccessToken.objects.get(token=token)
@@ -64,13 +70,13 @@ class GetUserData(generics.GenericAPIView):
         try:
             person = user.person
         except Person.DoesNotExist:
-            response_data['username'] = user.username
+            response_data['user_id'] = user.id
             return Response(
                 data=response_data,
                 status=status.HTTP_200_OK
             )
 
-        response_data['username'] = user.username
+        response_data['user_id'] = user.id
 
         for model_name, object_string in zip(MODEL_REGEX, MODEL_STRINGS):
             model_data_points = [
