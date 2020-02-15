@@ -31,7 +31,7 @@ class BaseGenericRelationsInline(GenericTabularInline):
 
 class ContactInformationInline(BaseGenericRelationsInline):
     """
-    This class implements Contact Information Inline for Person in omnipotence
+    This class implements ContactInformation inline for Person in Omnipotence
     """
 
     model = ContactInformation
@@ -39,7 +39,7 @@ class ContactInformationInline(BaseGenericRelationsInline):
 
 class LocationInformationInline(BaseGenericRelationsInline):
     """
-    This class implements Location Information Inline for Person in omnipotence
+    This class implements LocationInformation inline for Person in Omnipotence
     """
 
     model = LocationInformation
@@ -47,7 +47,7 @@ class LocationInformationInline(BaseGenericRelationsInline):
 
 class SocialInformationInline(BaseGenericRelationsInline):
     """
-    This class implements Social Information Inline for Person in omnipotence
+    This class implements SocialInformation inline for Person in Omnipotence
     """
 
     model = SocialInformation
@@ -55,8 +55,8 @@ class SocialInformationInline(BaseGenericRelationsInline):
 
 class BiologicalInformationInline(admin.TabularInline):
     """
-    This class implements Biological Information Inline for Person in
-    omnipotence
+    This class implements BiologicalInformation inline for Person in
+    Omnipotence
     """
 
     model = BiologicalInformation
@@ -64,7 +64,7 @@ class BiologicalInformationInline(admin.TabularInline):
 
 class FinancialInformationInline(admin.TabularInline):
     """
-    This class implements Financial Information Inline for Person in omnipotence
+    This class implements FinancialInformation inline for Person in Omnipotence
     """
 
     model = FinancialInformation
@@ -72,7 +72,7 @@ class FinancialInformationInline(admin.TabularInline):
 
 class PoliticalInformationInline(admin.TabularInline):
     """
-    This class implements Political Information Inline for Person in omnipotence
+    This class implements PoliticalInformation inline for Person in Omnipotence
     """
 
     model = PoliticalInformation
@@ -80,8 +80,8 @@ class PoliticalInformationInline(admin.TabularInline):
 
 class ResidentialInformationInline(admin.TabularInline):
     """
-    This class implements Residential Information Inline for Person in
-    omnipotence
+    This class implements ResidentialInformation inline for Person in
+    Omnipotence
     """
 
     model = ResidentialInformation
