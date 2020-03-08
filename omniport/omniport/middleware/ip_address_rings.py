@@ -52,7 +52,6 @@ class IpAddressRings:
             patterns = ip_address_rings[ring]
             if re.search('|'.join(patterns), ip_address):
                 request.ip_address_rings.append(ring)
-                break
         if not len(request.ip_address_rings):
             return HttpResponseForbidden()
 
