@@ -1,6 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from oauth2_provider.models import AccessToken
 
 from kernel.models import Person
@@ -27,6 +29,9 @@ class GetUserData(generics.GenericAPIView):
     View to retrieve data for OAuth based applications
     """
 
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         """
         View to serve GET requests
@@ -34,37 +39,19 @@ class GetUserData(generics.GenericAPIView):
         :return: the response for request
         """
 
-        try:
-            token = request.headers['Authorization'].replace('OAUTH_TOKEN ', '')
-        except KeyError:
-            return Response(
-                data="Please Provide access token in the headers",
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        token = request.headers['Authorization'].replace('Bearer ', '')
 
-        try:
-            access_token = AccessToken.objects.get(token=token)
-            application = access_token.application
-        except AccessToken.DoesNotExist:
-            return Response(
-                data="Please provide access token in the headers",
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        access_token = AccessToken.objects.get(token=token)
+        application = access_token.application
 
-        if not access_token.is_valid():
+        if application is None:
             return Response(
-                data="Token entered is invalid",
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        if access_token.is_expired():
-            return Response(
-                data="This token has expired",
-                status=status.HTTP_401_UNAUTHORIZED
+                data="Associated application not found",
+                status=status.HTTP_404_NOT_FOUND
             )
 
         app_data_points = application.data_points
-        user = access_token.user
+        user = request.user
         response_data = dict()
 
         try:
