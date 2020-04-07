@@ -69,9 +69,9 @@ class GetUserData(generics.GenericAPIView):
             model_data_points = [
                 data_point.split('.', 1)[1] for data_point in app_data_points
                 if (
-                    model_name in data_point and
-                    'roles' not in data_point and
-                    'display_picture' not in data_point
+                        model_name in data_point and
+                        'roles' not in data_point and
+                        'display_picture' not in data_point
                 )
             ]
             try:
