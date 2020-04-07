@@ -26,7 +26,7 @@ def process_roles(person):
                 excluded_fields=['person', ]
             ).data
         }
-        for key in roles
+        for key in roles if '.' not in key
     ]
     return roles
 

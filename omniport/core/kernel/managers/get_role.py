@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from formula_one.mixins.period_mixin import ActiveStatus
 
 
-def get_role(person, role_name, active_status=ActiveStatus.ANY, silent=False):
+def get_role(person, role_name, active_status=ActiveStatus.ANY, silent=False, *args, **kwargs):
     """
     Get a role corresponding to a person
     :param person: an instance of the Person model whose roles are sought
@@ -17,8 +17,16 @@ def get_role(person, role_name, active_status=ActiveStatus.ANY, silent=False):
     :raise: ImproperlyConfigured, if the name of the role class is incorrect
     """
 
+    is_custom_role = kwargs.get('is_custom_role', False)
+
     try:
-        Role = swapper.load_model('kernel', role_name)
+        if is_custom_role:
+            Role = swapper.load_model(
+                role_name.split('.')[0],
+                role_name.split('.')[1],
+            )
+        else:
+            Role = swapper.load_model('kernel', role_name)
         try:
             query_set = Role.objects_filter(active_status)
             role = query_set.get(person=person)
@@ -48,7 +56,8 @@ def get_all_roles(person):
                 person=person,
                 role_name=role_name,
                 active_status=ActiveStatus.ANY,
-                silent=False
+                silent=False,
+                is_custom_role='.' in role_name,
             )
             active_status = role.active_status
             all_roles[role_name] = {
