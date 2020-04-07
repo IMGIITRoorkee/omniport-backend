@@ -43,17 +43,15 @@ class RoutesControl:
                     not re.search('|'.join(ip_patterns), source_address):
                 raise Http404
 
-        response = self.get_response(request)
-
-
         for app, app_configuration in DISCOVERY.apps:
-            base_url  = app_configuration.base_urls.http.strip('/')
-            if not re.math(f'^/{base_url}/', request.path):
+            base_url = app_configuration.base_urls.http.strip('/')
+            if not re.match(f'^/{base_url}/', request.path):
                 continue
             if not from_acceptable_ring(
-                    source_address,
-                    app_configuration.acceptables.ip_address_rings
-                ):
+                        source_address,
+                        app_configuration.acceptables.ip_address_rings
+                    ):
                 return HttpResponseForbidden()
 
+        response = self.get_response(request)
         return response
