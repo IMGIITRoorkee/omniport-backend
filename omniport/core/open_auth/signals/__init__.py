@@ -1,0 +1,1 @@
+from open_auth.signals.app_authorisation import send_authorisation_notification

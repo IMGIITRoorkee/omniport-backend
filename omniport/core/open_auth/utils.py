@@ -1,4 +1,9 @@
+import datetime
+
 from omniport.utils import switcher
+
+from notifications.actions import push_notification
+from categories.models import Category
 
 
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
@@ -43,3 +48,42 @@ def get_display_picture(person):
     """
 
     return AvatarSerializer(person).data['display_picture']
+
+
+def get_category():
+    """
+    Get or create Category instance with slug
+    :return: the found or newly created Category object
+    """
+
+    service_name = 'open_auth'
+    service_verbose = 'OAuth 2.0'
+    category, _ = Category.objects.get_or_create(
+        slug=service_name,
+        name=service_verbose,
+    )
+    return category
+
+
+def send_authorisation_notification(application_name, person_id):
+    """
+    Send notification to the user whenever logged in with the OAuth
+    :param application_name: name of the application
+    :param person_id: id of the person logged in
+    :return: notification
+    """
+
+    print(f'You logged in into {application_name} on {datetime.datetime.now().strftime(" %b %d, %Y, %I: %M %p")}.', person_id)
+
+    push_notification(
+        template=f'You logged in into {application_name} on '
+        f'{datetime.datetime.now().strftime("%b %d, %Y, %I: %M %p")}.',
+        category=get_category(),
+        web_onclick_url='',
+        android_onclick_activity='',
+        ios_onclick_action='',
+        is_personalised=True,
+        person=person_id,
+        has_custom_users_target=False,
+        persons=None,
+    )
