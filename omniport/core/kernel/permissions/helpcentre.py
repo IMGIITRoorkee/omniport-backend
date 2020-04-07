@@ -1,4 +1,5 @@
 from django.conf import settings
+from rest_framework.permissions import BasePermission
 
 from kernel.utils.logs import log_permission
 
@@ -23,3 +24,15 @@ def has_helpcentre_rights(user):
 
     log_permission('helpcentre', user, has_permission)
     return has_permission
+
+
+class HasHelpcentreRights(BasePermission):
+    """
+    Allows access only to users who have Helpcentre rights
+    """
+
+    def has_permission(self, request, view):
+        return (
+                request.user is not None
+                and has_helpcentre_rights(request.user)
+        )
