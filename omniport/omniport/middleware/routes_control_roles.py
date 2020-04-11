@@ -10,8 +10,8 @@ from discovery.available import from_acceptable_person
 
 class RoutesControlRoles:
     """
-    Handles the routing of apps for the guest role and restricts
-    the guest user to the allowed urls of an app only
+    Handles the routing of apps for the roles and restricts
+    the users only to the allowed apps
     """
 
     def __init__(self, get_response):
@@ -29,17 +29,12 @@ class RoutesControlRoles:
         :return: the processed response
         """
 
-        source_user = request.user
         try:
             guest_user = get_user(settings.GUEST_USERNAME)
         except User.DoesNotExist:
             guest_user = None
 
-        if source_user != guest_user:
-            response = self.get_response(request)
-            return response
-
-        if request.method != 'GET':
+        if request.user == guest_user and request.method != 'GET':
             raise Http404
 
         DISCOVERY = settings.DISCOVERY
@@ -47,6 +42,9 @@ class RoutesControlRoles:
 
         for app, app_configuration in all_apps:
             base_url = app_configuration.base_urls.http.strip('/')
+            if not re.match(f'^/{base_url}/', request.path):
+                continue
+
             if (
                 app_configuration.guest_allowed
                 or from_acceptable_person(
@@ -54,13 +52,15 @@ class RoutesControlRoles:
                         app_configuration.acceptables.roles
                     )
             ):
-                excluded_paths = app_configuration.excluded_paths
-                for excluded_path in excluded_paths:
-                    if re.match(f'^/{base_url}/{excluded_path}/', request.path):
-                        raise Http404
+                if request.user == guest_user:
+                    excluded_paths = app_configuration.excluded_paths
+                    for excluded_path in excluded_paths:
+                        if re.match(
+                                f'^/{base_url}/{excluded_path}/', request.path
+                        ):
+                            raise Http404
             else:
-                if re.match(f'^/{base_url}/', request.path):
-                    raise Http404
+                raise Http404
 
         response = self.get_response(request)
         return response
