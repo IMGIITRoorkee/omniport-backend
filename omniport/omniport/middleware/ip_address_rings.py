@@ -1,6 +1,7 @@
 import re
 
 from django.conf import settings
+from django.http import HttpResponseForbidden
 
 
 class IpAddressRings:
@@ -46,13 +47,13 @@ class IpAddressRings:
         ip_address_rings = settings.IP_ADDRESS_RINGS
         allowed_ip_address_rings = settings.ALLOWED_IP_ADDRESS_RINGS
 
+        request.ip_address_rings = list()
         for ring in allowed_ip_address_rings:
             patterns = ip_address_rings[ring]
             if re.search('|'.join(patterns), ip_address):
-                request.ip_address_ring = ring
-                break
-        else:
-            request.ip_address_ring = ip_address_rings[-1]
+                request.ip_address_rings.append(ring)
+        if not len(request.ip_address_rings):
+            return HttpResponseForbidden()
 
         response = self.get_response(request)
 

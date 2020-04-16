@@ -1,7 +1,9 @@
 import re
 
 from django.conf import settings
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
+
+from discovery.available import from_acceptable_ring
 
 
 class RoutesControl:
@@ -32,6 +34,7 @@ class RoutesControl:
         """
 
         source_address = request.source_ip_address
+        DISCOVERY = settings.DISCOVERY
 
         for site_path, ip_address_ring_name in self.restrictions:
             ip_patterns = settings.IP_ADDRESS_RINGS.get(ip_address_ring_name)
@@ -40,6 +43,15 @@ class RoutesControl:
                     not re.search('|'.join(ip_patterns), source_address):
                 raise Http404
 
-        response = self.get_response(request)
+        for app, app_configuration in DISCOVERY.apps:
+            base_url = app_configuration.base_urls.http.strip('/')
+            if not re.match(f'^/{base_url}/', request.path):
+                continue
+            if not from_acceptable_ring(
+                        source_address,
+                        app_configuration.acceptables.ip_address_rings
+                    ):
+                return HttpResponseForbidden()
 
+        response = self.get_response(request)
         return response

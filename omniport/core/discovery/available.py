@@ -39,7 +39,7 @@ def from_acceptable_ring(current, acceptable):
     if acceptable is None or len(acceptable) == 0:
         return True
 
-    return current in acceptable
+    return len(set(current) & set(acceptable)) > 0
 
 
 def contains_search_term(current, acceptable):
@@ -71,7 +71,7 @@ def available_apps(request, search_term=None):
         if all([
             app_configuration.is_allowed,
             from_acceptable_ring(
-                request.ip_address_ring,
+                request.ip_address_rings,
                 app_configuration.acceptables.ip_address_rings
             ),
             from_acceptable_person(
