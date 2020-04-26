@@ -29,12 +29,9 @@ class RoutesControlRoles:
         :return: the processed response
         """
 
-        try:
-            guest_user = get_user(settings.GUEST_USERNAME)
-        except User.DoesNotExist:
-            guest_user = None
+        is_guest = 'Guest' in request.roles
 
-        if request.user == guest_user and request.method != 'GET':
+        if is_guest and request.method != 'GET':
             raise Http404
 
         DISCOVERY = settings.DISCOVERY
@@ -52,7 +49,7 @@ class RoutesControlRoles:
                         app_configuration.acceptables.roles
                     )
             ):
-                if request.user == guest_user:
+                if is_guest:
                     excluded_paths = app_configuration.excluded_paths
                     for excluded_path in excluded_paths:
                         if re.match(
