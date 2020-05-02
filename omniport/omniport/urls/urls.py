@@ -25,3 +25,7 @@ if settings.DEBUG:
         settings.BRANDING_URL,
         document_root=settings.BRANDING_ROOT
     )
+    http_urlpatterns += static(
+        settings.PERSONAL_URL,
+        document_root=settings.PERSONAL_ROOT
+    )    
