@@ -24,6 +24,7 @@ class StudentSerializer(RoleSerializer):
 
         fields = [
             'id',
+            'enrolment_number',
             'person',
             'branch',
             'current_year',
