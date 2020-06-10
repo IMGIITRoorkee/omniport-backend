@@ -6,6 +6,7 @@ from formula_one.models import ContactInformation
 
 Person = swapper.load_model('kernel', 'Person')
 Student = swapper.load_model('kernel', 'Student')
+FacultyMember = swapper.load_model('kernel', 'FacultyMember')
 
 
 def get_user(username):
@@ -47,6 +48,16 @@ def get_user(username):
             if user is not None:
                 return user
     except Student.DoesNotExist:
+        pass
+
+    try:
+        faculty = FacultyMember.objects.get(employee_id=username)
+        person = faculty.person
+        if person is not None:
+            user = person.user
+            if user is not None:
+                return user
+    except FacultyMember.DoesNotExist:
         pass
 
     try:
