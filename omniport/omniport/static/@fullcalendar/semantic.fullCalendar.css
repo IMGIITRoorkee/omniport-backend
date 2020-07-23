@@ -1,0 +1,39 @@
+.fc-day-number {
+  color: #3a87ad;
+  color: #3a87ad;
+}
+
+.fc-widget-content {
+  background-color: #ffffff;
+}
+
+.fc-day-header {
+  background-color: #f2f4f7;
+}
+
+.fc-toolbar-chunk {
+  height: 40px;
+}
+
+.fc-button-group {
+  box-shadow: none;
+  border-radius: 0.28571429rem !important;
+}
+
+.fc-today-button {
+  border-radius: 0.28571429rem !important;
+}
+
+.fc-button {
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
+  border: 1px solid rgba(34,36,38,.15) !important;
+  box-shadow: none !important;
+  background: #fff !important;
+  color: rgba(0,0,0,.8) !important;
+  height: 40px;
+  padding: 0px 21px 0px 21px !important;
+}
+
+.fc-button:active {
+  background-color: rgba(74, 75, 77, 0.35) !important;
+}
