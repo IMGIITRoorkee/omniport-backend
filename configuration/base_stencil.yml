@@ -29,6 +29,9 @@ services:
   communicationStore:
     host:  # communication-store, or your own server configuration
     port:  # 6379, or your own server configuration
+  verificationStore:
+    host:  # verification-store, or your own server configuration
+    port:  # 6379, or your own server configuration
   cache:
     host:  # cache, or your own server configuration
     port:  # 11211, or your own server configuration
