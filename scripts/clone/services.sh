@@ -7,17 +7,21 @@ source ./scripts/clone/utils.sh
 cd omniport/services/
 
 # Clone services except GIF
-clonerepo   "Apps"          "omniport-service-apps"             "apps"
-clonerepo   "Categories"    "omniport-service-categories"       "categories"
-clonerepo   "Comments"      "omniport-service-comments"         "comments"
-clonerepo   "Developer"     "omniport-service-developer"        "developer"
-clonerepo   "Feed"          "omniport-service-feed"             "feed"
-clonerepo   "Groups"        "omniport-service-groups"           "groups"
-clonerepo   "Helpcentre"    "omniport-service-helpcentre"       "helpcentre"
-clonerepo   "Links"         "omniport-service-links"            "links"
-clonerepo   "Notifications" "omniport-service-notifications"    "notifications"
-clonerepo   "Settings"      "omniport-service-settings"         "settings"
-clonerepo   "Yellow pages"  "omniport-service-yellow-pages"     "yellow_pages"
+clonerepo   "Apps"               "omniport-service-apps"             "apps"
+clonerepo   "Categories"         "omniport-service-categories"       "categories"
+clonerepo   "Comments"           "omniport-service-comments"         "comments"
+clonerepo   "Developer"          "omniport-service-developer"        "developer"
+clonerepo   "Feed"               "omniport-service-feed"             "feed"
+clonerepo   "Groups"             "omniport-service-groups"           "groups"
+clonerepo   "Helpcentre"         "omniport-service-helpcentre"       "helpcentre"
+clonerepo   "Links"              "omniport-service-links"            "links"
+clonerepo   "Notifications"      "omniport-service-notifications"    "notifications"
+clonerepo   "Settings"           "omniport-service-settings"         "settings"
+clonerepo   "Yellow pages"       "omniport-service-yellow-pages"     "yellow_pages"
+clonerepo   "Emails"             "omniport-service-emails"           "emails"
+clonerepo   "Maintainer Site"    "omniport-service-maintainer-site"  "maintainer_site"
+clonerepo   "Django Filemanager" "omniport-django-filemanager"       "django_filemanager"
+
 
 # Warn the user about the size of the GIF repository
 printf "About to clone GIF, which has a huge size due to its assets\n"
