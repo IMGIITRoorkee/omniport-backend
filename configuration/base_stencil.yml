@@ -29,6 +29,9 @@ services:
   communicationStore:
     host:  # communication-store, or your own server configuration
     port:  # 6379, or your own server configuration
+  verificationStore:
+    host:  # verification-store, or your own server configuration
+    port:  # 6379, or your own server configuration
   cache:
     host:  # cache, or your own server configuration
     port:  # 11211, or your own server configuration
@@ -40,6 +43,13 @@ services:
 integrations: {}
   # Various useful applications that can connect to Django
   # Freely drop any integration you do not use or need
+emails:
+  emailBackend: # The backend used for sending emails
+  emailHost: # The email service provider used
+  emailUseTls: # Whether an email should be encrypted via TLS or not
+  emailPort: # The port used by SMTP server
+  emailHostUser: # The email address from which all emails will be sent
+  emailHostPassword: # The password of the host's email account
 ipAddressRings:
 # For as many rings as you anticipate, repeat
 - name: administrator # Network ring for django admin portal (mandatory)
