@@ -46,8 +46,8 @@ integrations: {}
 emails:
   emailBackend: # The backend used for sending emails
   emailHost: # The email service provider used
-  emailUseTls: # Whether an email uses a TLS connection or not
-  emailPort: # The port used by smtp server
+  emailUseTls: # Whether an email should be encrypted via TLS or not
+  emailPort: # The port used by SMTP server
   emailHostUser: # The email address from which all emails will be sent
   emailHostPassword: # The password of the host's email account
 ipAddressRings:
