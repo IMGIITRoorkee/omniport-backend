@@ -7,51 +7,76 @@ APP_NAME="${NAME// /_}"
 APP_DISPLAY_NAME="$(tr '[:lower:]' '[:upper:]' <<< ${NAME:0:1})${NAME:1}"
 APP_PASCAL_NAME="$(echo ${APP_NAME} | sed -r 's/(^|_)([a-z])/\U\2/g')"
 
-# Enter the apps/ directory
-cd omniport/apps/
+# Create a django app inside django-container
+#
+# Syntax: create_djang_app <app_name> 
+create_django_app() {
 
-# Clone the template
-git clone "https://github.com/IMGIITRoorkee/omniport-app-template.git" ${APP_NAME}
-printf "Cloned template successfully\n"
+    CWD=$(pwd)
+    CONTAINER_NAME="create_app"
+    APP_NAME=$1
 
-# Enter the app directory
-cd ${APP_NAME}
+    docker run \
+        --tty \
+        --interactive \
+        --rm \
+        --userns host \
+        --user $(id -u $(whoami)) \
+        --mount type=bind,src=${CWD}/omniport,dst=/omniport \
+        --name=${CONTAINER_NAME} \
+        --env NAME=${CONTAINER_NAME} \
+        omniport-django:latest \
+        /bin/bash -c "cd apps && django-admin startapp \
+        --template=https://github.com/IMGIITRoorkee/omniport-app-template/archive/master.zip \
+        ${APP_NAME}"
 
-# Restart Git history
-rm -rf .git
-git init
+}
 
-# Text substitution
-sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" config.yml
-sed -i "s/\[\[app_display_name\]\]/${APP_DISPLAY_NAME}/g" config.yml
-printf "Added ${APP_NAME} & ${APP_DISPLAY_NAME} in config.yml\n"
+create_django_app ${APP_NAME}
+APP_STATUS=$?
 
-# Text substitution
-sed -i "s/\[\[app_display_name\]\]/${APP_DISPLAY_NAME}/g" README.md
-printf "Added ${APP_DISPLAY_NAME} in README.md\n"
+# If django app is created successfully, add app name in the template and add the app to VCS
+if [[ $APP_STATUS -eq 0 ]];then
 
-# Text substitution
-sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" http_urls.py
-printf "Added ${APP_NAME} in http_urls.py\n"
+    # Enter the apps directory
+    cd omniport/apps/${APP_NAME}
 
-# Add non-code files to VCS
-git add config.yml README.md LICENSE .gitignore static/
+    # Restart Git history
+    rm -rf .git
+    git init
 
-# Enter the views/ directory
-cd views/
+    # Text substitution
+    sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" config.yml
+    sed -i "s/\[\[app_display_name\]\]/${APP_DISPLAY_NAME}/g" config.yml
+    printf "Added ${APP_NAME} & ${APP_DISPLAY_NAME} in config.yml\n"
 
-# Text substitution
-sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" hello_world.py
-printf "Added ${APP_NAME} in response_data\n"
+    # Text substitution
+    sed -i "s/\[\[app_display_name\]\]/${APP_DISPLAY_NAME}/g" README.md
+    printf "Added ${APP_DISPLAY_NAME} in README.md\n"
 
-# Add all code to VCS
-git add ..
+    # Text substitution
+    sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" http_urls.py
+    printf "Added ${APP_NAME} in http_urls.py\n"
 
-# Commit as IMG
-git \
-    -c user.email=img@iitr.ac.in \
-    -c user.name='Information Management Group' \
-    commit -m "Initial commit"
+    # Add non-code files to VCS
+    git add config.yml README.md LICENSE .gitignore static/
 
-# Done!
-printf "App created successfully! Happy scrAPIng!\n"
+    # Enter the views/ directory
+    cd views/
+
+    # Text substitution
+    sed -i "s/\[\[app_name\]\]/${APP_NAME}/g" hello_world.py
+    printf "Added ${APP_NAME} in response_data\n"
+
+    # Add all code to VCS
+    git add ..
+
+    # Commit as IMG
+    git \
+        -c user.email=img@iitr.ac.in \
+        -c user.name='Information Management Group' \
+        commit -m "Initial commit"
+
+    # Done!
+    printf "App created successfully! Happy scrAPIng!\n"
+fi
