@@ -43,6 +43,13 @@ services:
 integrations: {}
   # Various useful applications that can connect to Django
   # Freely drop any integration you do not use or need
+emails:
+  emailBackend: # The backend used for sending emails
+  emailHost: # The email service provider used
+  emailUseTls: # Whether an email uses a TLS connection or not
+  emailPort: # The port used by smtp server
+  emailHostUser: # The email address from which all emails will be sent
+  emailHostPassword: # The password of the host's email account
 ipAddressRings:
 # For as many rings as you anticipate, repeat
 - name: administrator # Network ring for django admin portal (mandatory)
