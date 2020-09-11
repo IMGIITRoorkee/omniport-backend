@@ -99,9 +99,9 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
             'client_id',
             'client_secret',
             'authorization_grant_type',
+            'datetime_created',
         ]
         exclude = [
-            'datetime_created',
             'created',
             'datetime_modified',
             'updated',
