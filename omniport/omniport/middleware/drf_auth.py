@@ -5,6 +5,9 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.request import Request
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from sentry_sdk import configure_scope
+
+from omniport.settings.configuration.base import CONFIGURATION as _CONF
 
 
 def get_user_jwt(request):
@@ -52,6 +55,12 @@ class DrfAuth:
         """
 
         request.user = SimpleLazyObject(lambda: get_user_jwt(request))
+
+        # Provide the user context to any exception raised by sentry
+        if 'sentry' in _CONF.integrations:
+            with configure_scope() as scope:
+                if request.user:
+                    scope.user = {"username": request.user.username}
 
         response = self.get_response(request)
 
