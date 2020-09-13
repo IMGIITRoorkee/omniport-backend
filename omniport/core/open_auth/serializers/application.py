@@ -97,7 +97,6 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'is_approved',
             'client_id',
-            'client_secret',
             'authorization_grant_type',
             'datetime_created',
         ]
@@ -107,6 +106,7 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
             'updated',
             'skip_authorization',
             'user',
+            'client_secret',
         ]
 
     def validate_description(self, value):
@@ -215,3 +215,18 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         application = super().update(instance, validated_data)
 
         return application
+
+
+class ApplicationHiddenDetailSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Application objects that exposes all information
+    """
+
+    class Meta:
+        """
+        Meta class for ApplicationDetailSerializer
+        """
+
+        model = Application
+        fields = ['client_secret']
+        read_only_fields = ['client_secret']
