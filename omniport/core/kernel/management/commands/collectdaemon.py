@@ -41,20 +41,27 @@ class Command(BaseCommand):
                 try:
                     os.symlink(
                         file,
-                        os.path.join(destination_root, os.path.basename(file))
+                        os.path.join(destination_root, f'{app.name}_{os.path.basename(file)}') # Namespace the scripts by the app name
                     )
-                except OSError:
+                    successful_apps.add(app.name)
+                except OSError as exception:
                     self.stdout.write(
                         self.style.WARNING(
                             f'Failed to fetch file {os.path.basename(file)} '
-                            f'for app {app.name}'
+                            f'for app {app.name}\n'
+                            f'Error: {str(exception)}'
                         )
                     )
-                successful_apps.add(app.name)
-
-        self.stdout.write(
-            self.style.SUCCESS(
-                f'Successfully collected daemon scripts for '
-                f'{", ".join(successful_apps)}'
+        if len(successful_apps):        
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f'Successfully collected daemon scripts for '
+                    f'{", ".join(successful_apps)}'
+                )
             )
-        )
+        else:
+            self.stdout.write(
+                self.style.WARNING(
+                    'No daemon scripts collected'
+                )
+            )
