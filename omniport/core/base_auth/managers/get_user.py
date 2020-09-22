@@ -3,6 +3,8 @@ from django.db.models import Q
 
 from base_auth.models import User
 from formula_one.models import ContactInformation
+from django.contrib.contenttypes.models import ContentType
+#from kernel.models import Person
 
 Person = swapper.load_model('kernel', 'Person')
 Student = swapper.load_model('kernel', 'Student')
@@ -24,7 +26,6 @@ def get_user(username):
 
     ContactInformation
     - primary_phone_number
-    - secondary_phone_number
     - email_address
     - institute_webmail_address
 
@@ -56,11 +57,14 @@ def get_user(username):
         q_institute_webmail_address = Q(institute_webmail_address=username)
         q = (
                 q_primary_phone_number
-                | q_secondary_phone_number
                 | q_email_address
                 | q_institute_webmail_address
         )
-        contact_information = ContactInformation.objects.get(q)
+        entity_supported = ContentType.objects.get_for_model(Person)
+        try:
+            contact_information = ContactInformation.objects.filter(entity_content_type=entity_supported).get(q)
+        except ContactInformation.MultipleObjectsReturned:
+            contact_information = ContactInformation.objects.filter(entity_content_type=entity_supported).get(institute_webmail_address=username)
         entity = contact_information.entity
         if type(entity) is Person:
             user = entity.user
@@ -71,5 +75,5 @@ def get_user(username):
             User.DoesNotExist
     ):
         pass
-
+    
     raise User.DoesNotExist
