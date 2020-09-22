@@ -66,10 +66,7 @@ def get_user(username):
         except ContactInformation.MultipleObjectsReturned:
             contact_information = ContactInformation.objects.filter(entity_content_type=entity_supported).get(institute_webmail_address=username)
         entity = contact_information.entity
-        if type(entity) is Person:
-            user = entity.user
-            if user is not None:
-                return user
+        return entity.user
     except (
             ContactInformation.DoesNotExist,
             User.DoesNotExist
