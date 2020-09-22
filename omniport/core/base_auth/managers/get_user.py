@@ -4,7 +4,6 @@ from django.db.models import Q
 from base_auth.models import User
 from formula_one.models import ContactInformation
 from django.contrib.contenttypes.models import ContentType
-#from kernel.models import Person
 
 Person = swapper.load_model('kernel', 'Person')
 Student = swapper.load_model('kernel', 'Student')
