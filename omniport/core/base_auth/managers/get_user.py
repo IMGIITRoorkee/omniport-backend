@@ -60,14 +60,14 @@ def get_user(username):
                 | q_institute_webmail_address
         )
         entity_supported = ContentType.objects.get_for_model(Person)
-        try:
-            contact_information = ContactInformation.objects.filter(entity_content_type=entity_supported).get(q)
-        except ContactInformation.MultipleObjectsReturned:
-            contact_information = ContactInformation.objects.filter(entity_content_type=entity_supported).get(institute_webmail_address=username)
-        entity = contact_information.entity
-        return entity.user
+        contact_information = ContactInformation.objects.filter(entity_content_type=entity_supported).get(q)
+        entity=contact_information.entity
+        user = entity.user
+        if user is not None:
+            return user
     except (
             ContactInformation.DoesNotExist,
+            ContactInformation.MultipleObjectsReturned,
             User.DoesNotExist
     ):
         pass
