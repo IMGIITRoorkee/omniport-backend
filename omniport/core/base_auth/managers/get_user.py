@@ -1,9 +1,9 @@
 import swapper
 from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
 
 from base_auth.models import User
 from formula_one.models import ContactInformation
-from django.contrib.contenttypes.models import ContentType
 
 Person = swapper.load_model('kernel', 'Person')
 Student = swapper.load_model('kernel', 'Student')
@@ -55,13 +55,15 @@ def get_user(username):
         q_email_address = Q(email_address=username)
         q_institute_webmail_address = Q(institute_webmail_address=username)
         q = (
-                q_primary_phone_number
-                | q_email_address
-                | q_institute_webmail_address
+            q_primary_phone_number
+            | q_secondary_phone_number
+            | q_email_address
+            | q_institute_webmail_address
         )
-        entity_supported = ContentType.objects.get_for_model(Person)
-        contact_information = ContactInformation.objects.filter(entity_content_type=entity_supported).get(q)
-        entity=contact_information.entity
+        person_type = ContentType.objects.get_for_model(Person)
+        contact_information = ContactInformation.objects.filter(
+            entity_content_type=person_type).get(q)
+        entity = contact_information.entity
         user = entity.user
         if user is not None:
             return user
@@ -71,5 +73,5 @@ def get_user(username):
             User.DoesNotExist
     ):
         pass
-    
+
     raise User.DoesNotExist
