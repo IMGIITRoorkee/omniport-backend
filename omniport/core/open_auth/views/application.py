@@ -18,6 +18,21 @@ class ApplicationViewSet(
     lookup_field = 'client_id'
     pagination_class = None
 
+    """
+    Action view for getting the availabilty of token 
+    for a particular view in order to skip authorization
+    after first consent
+    """
+    @action(methods=['get'], detail=False, url_name="get_token", url_path="get_token")
+    def get_token(self, request):
+        
+        token=get_access_token_model().objects.filter(
+            user=request.user,
+            application=request.GET.get('id')   
+        ).exists()
+
+        
+        return HttpResponse(token)
 
 
 
