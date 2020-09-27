@@ -46,6 +46,7 @@ class ApplicationAuthoriseSerializer(serializers.ModelSerializer):
 
         model = Application
         fields = [
+            'id',
             'client_id',
             'redirect_uris',
             'name',
