@@ -135,10 +135,18 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         """
 
         validator = URLValidator()
+        schemes = ['http', 'https', 'ftp', 'ftps']
 
         redirect_urls = value.split(' ')
         for url in redirect_urls:
-            validator(url)
+            if '://' not in url:
+                url = 'http://' + url
+            url_scheme = url.split('://')[0].lower()
+            if url_scheme in schemes:
+                validator(url)
+            else:
+                custom_url_validator = URLValidator(schemes=url_scheme)
+                custom_url_validator(url)
 
         return value
 
