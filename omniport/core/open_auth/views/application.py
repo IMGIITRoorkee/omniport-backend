@@ -1,8 +1,14 @@
 from rest_framework import viewsets, mixins, permissions
+from rest_framework.decorators import action
 
+from django.http import HttpResponse
 from open_auth.models import Application
 from open_auth.serializers.application import ApplicationAuthoriseSerializer
-
+from oauth2_provider.exceptions import OAuthToolkitError
+from oauth2_provider.models import get_application_model,get_access_token_model
+from oauth2_provider.scopes import get_scopes_backend
+from oauth2_provider.settings import oauth2_settings
+from oauth2_provider.views import AuthorizationView
 
 class ApplicationViewSet(
     mixins.RetrieveModelMixin,
