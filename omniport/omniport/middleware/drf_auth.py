@@ -60,7 +60,7 @@ class DrfAuth:
         if 'sentry' in _CONF.integrations:
             with configure_scope() as scope:
                 if request.user:
-                    scope.user = {"username": request.user.username}
+                    scope.user = {'username': request.user.username}
 
         response = self.get_response(request)
 
