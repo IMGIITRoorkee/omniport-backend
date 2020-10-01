@@ -1,5 +1,6 @@
 import swapper
 from django.db.models import Q
+from django.contrib.contenttypes.models import ContentType
 
 from base_auth.models import User
 from formula_one.models import ContactInformation
@@ -24,7 +25,6 @@ def get_user(username):
 
     ContactInformation
     - primary_phone_number
-    - secondary_phone_number
     - email_address
     - institute_webmail_address
 
@@ -55,19 +55,21 @@ def get_user(username):
         q_email_address = Q(email_address=username)
         q_institute_webmail_address = Q(institute_webmail_address=username)
         q = (
-                q_primary_phone_number
-                | q_secondary_phone_number
-                | q_email_address
-                | q_institute_webmail_address
+            q_primary_phone_number
+            | q_secondary_phone_number
+            | q_email_address
+            | q_institute_webmail_address
         )
-        contact_information = ContactInformation.objects.get(q)
+        person_type = ContentType.objects.get_for_model(Person)
+        contact_information = ContactInformation.objects.filter(
+            entity_content_type=person_type).get(q)
         entity = contact_information.entity
-        if type(entity) is Person:
-            user = entity.user
-            if user is not None:
-                return user
+        user = entity.user
+        if user is not None:
+            return user
     except (
             ContactInformation.DoesNotExist,
+            ContactInformation.MultipleObjectsReturned,
             User.DoesNotExist
     ):
         pass
