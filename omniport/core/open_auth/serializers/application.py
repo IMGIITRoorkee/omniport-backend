@@ -3,11 +3,13 @@ from django.core.validators import URLValidator
 from oauth2_provider.models import AbstractApplication
 from pydash import py_
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
 
 from kernel.relations.person import PersonRelatedField
 from omniport.utils import switcher
 from open_auth.constants import data_points as data_point_constants
 from open_auth.models import Application
+import re
 
 Person = swapper.load_model('kernel', 'Person')
 
@@ -136,17 +138,25 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
 
         validator = URLValidator()
         schemes = ['http', 'https', 'ftp', 'ftps']
+        regex = re.compile(
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+            r'localhost|'  # localhost...
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+            r'(?::\d+)?'  # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
         redirect_urls = value.split(' ')
         for url in redirect_urls:
             if '://' not in url:
-                url = 'http://' + url
-            url_scheme = url.split('://')[0].lower()
-            if url_scheme in schemes:
-                validator(url)
+                if re.match(regex, url) is None:
+                    raise ValidationError('Enter a valid URL.')
             else:
-                custom_url_validator = URLValidator(schemes=url_scheme)
-                custom_url_validator(url)
+                url_scheme = url.split('://')[0].lower()
+                if url_scheme in schemes:
+                    validator(url)
+                else:
+                    custom_url_validator = URLValidator(schemes=url_scheme)
+                    custom_url_validator(url)
 
         return value
 
