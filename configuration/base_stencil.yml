@@ -59,10 +59,3 @@ ipAddressRings:
   patterns:
   # For as many IP patterns as each ring contains, repeat
   - '' # 'the regex of the IP pattern'
-emails:
-  emailBackend: # 'django.core.mail.backends.smtp.EmailBackend'
-  emailHost: # 'smtp.gmail.com'
-  emailUseTls: # True
-  emailPort: # 587
-  emailHostUser: # 'host_account@gmail.com'
-  emailHostPassword: # 'account's password'
