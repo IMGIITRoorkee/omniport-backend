@@ -13,6 +13,9 @@ static_files/
 # User loaded media files
 media_files/
 
+# External storage files
+external_storage/
+
 # Personal files of users
 personal_files/
 
