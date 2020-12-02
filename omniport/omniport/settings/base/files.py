@@ -11,7 +11,7 @@ from omniport.settings.base.directories import (
     PERSONAL_DIR,
 )
 
-# External storage files
+# Network storage files
 NETWORK_STORAGE_URL = '/external/'
 NETWORK_STORAGE_ROOT = NETWORK_STORAGE_DIR
 
