@@ -26,7 +26,7 @@ PARENT_DIR = _os.path.dirname(PROJECT_DIR)
 # Parent level directories
 # The 'configuration' directory where all settings will be loaded from
 # The 'branding' directory where all branding imagery will be loaded from
-# The 'external' directory where external storage is mounted
+# The 'network' directory where network storage is mounted
 # The 'static' directory where all static files will be collected into
 # The 'media' directory where all uploaded media will be stored in
 # The 'personal' directory where all uploaded personal files will be stored in
@@ -35,7 +35,7 @@ PARENT_DIR = _os.path.dirname(PROJECT_DIR)
 
 CONFIGURATION_DIR = _os.path.join(PARENT_DIR, 'configuration')
 BRANDING_DIR = _os.path.join(PARENT_DIR, 'branding')
-EXTERNAL_STORAGE_DIR = _os.path.join(PARENT_DIR, 'external_storage')
+NETWORK_STORAGE_DIR = _os.path.join(PARENT_DIR, 'network_storage')
 STATIC_DIR = _os.path.join(PARENT_DIR, 'static_files')
 MEDIA_DIR = _os.path.join(PARENT_DIR, 'media_files')
 PERSONAL_DIR = _os.path.join(PARENT_DIR, 'personal_files')

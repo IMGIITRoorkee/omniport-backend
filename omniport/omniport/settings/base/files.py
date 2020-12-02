@@ -4,7 +4,7 @@ to various directories defined in the 'directories' setting file.
 """
 
 from omniport.settings.base.directories import (
-    EXTERNAL_STORAGE_DIR,
+    NETWORK_STORAGE_DIR,
     STATIC_DIR,
     BRANDING_DIR,
     MEDIA_DIR,
@@ -12,8 +12,8 @@ from omniport.settings.base.directories import (
 )
 
 # External storage files
-EXTERNAL_STORAGE_URL = '/external/'
-EXTERNAL_STORAGE_ROOT = EXTERNAL_STORAGE_DIR
+NETWORK_STORAGE_URL = '/external/'
+NETWORK_STORAGE_ROOT = NETWORK_STORAGE_DIR
 
 # Static files
 STATIC_URL = '/static/'
@@ -32,8 +32,8 @@ PERSONAL_URL = '/personal/'
 PERSONAL_ROOT = PERSONAL_DIR
 
 __all__ = [
-    'EXTERNAL_STORAGE_URL',
-    'EXTERNAL_STORAGE_ROOT',
+    'NETWORK_STORAGE_URL',
+    'NETWORK_STORAGE_ROOT',
     'STATIC_URL',
     'STATIC_ROOT',
     'BRANDING_URL',
