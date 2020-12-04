@@ -43,6 +43,7 @@ start_django_server() {
         --mount type=bind,src=${CWD}/omniport,dst=/omniport \
         --mount type=bind,src=${CWD}/configuration,dst=/configuration \
         --mount type=bind,src=${CWD}/branding,dst=/branding \
+        --mount type=bind,src=${CWD}/network_storage,dst=/network_storage \
         --mount type=bind,src=${CWD}/static_files,dst=/static_files \
         --mount type=bind,src=${CWD}/media_files,dst=/media_files \
         --mount type=bind,src=${CWD}/personal_files,dst=/personal_files \

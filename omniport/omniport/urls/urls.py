@@ -18,6 +18,10 @@ ws_urlpatterns += settings.DISCOVERY.app_ws_urlpatterns
 
 if settings.DEBUG:
     http_urlpatterns += static(
+        settings.NETWORK_STORAGE_URL,
+        document_root=settings.NETWORK_STORAGE_ROOT
+    )
+    http_urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
