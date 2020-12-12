@@ -3,3 +3,10 @@
 .ui.form textarea {
     font-family: inherit;
 }
+
+/* Unhide images in mobile view of Semantic UI cards */
+@media only screen and (max-width: 767px) {
+    .ui.stackable.cards > .card {
+        display: flex !important;
+    }
+}
