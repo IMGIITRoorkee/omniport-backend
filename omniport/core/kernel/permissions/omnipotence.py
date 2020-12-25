@@ -1,4 +1,5 @@
 from django.conf import settings
+from rest_framework.permissions import BasePermission
 
 from kernel.utils.logs import log_permission
 
@@ -23,3 +24,14 @@ def has_omnipotence_rights(user):
 
     log_permission('omnipotence', user, has_permission)
     return has_permission
+
+class HasOmnipotenceRights(BasePermission):
+    """
+    Check if the given user has enough privileges for Omnipotence
+    """
+
+    def has_permission(self, request, view):
+        return (
+                request.user is not None
+                and has_omnipotence_rights(request.user)
+        )
