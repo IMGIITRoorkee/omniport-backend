@@ -35,6 +35,9 @@ services:
   notificationStore:
     host: # notification-store or your own server configuration
     port: # 6379, or your own server configuration
+  applicationStore:
+    host: # application-store or your own server configuration
+    port: # 6379, or your own server configuration
   cache:
     host:  # cache, or your own server configuration
     port:  # 11211, or your own server configuration
