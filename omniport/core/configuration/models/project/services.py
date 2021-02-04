@@ -130,6 +130,20 @@ class VerificationStore(Service):
 
         super().__init__(*args, **kwargs)
 
+class ApplicationStore(Service):
+    """
+    This class stores information about the application store service
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Defer to the base class to populate the data points
+        :param args: arguments
+        :param kwargs: keyword arguments
+        """
+
+        super().__init__(*args, **kwargs)
+
 class Cache(Service):
     """
     This class stores information about the cache service
@@ -174,6 +188,9 @@ class Services:
         )
         self.verification_store = VerificationStore(
             dictionary=dictionary.get('verificationStore')
+        )
+        self.application_store = ApplicationStore(
+            dictionary=dictionary.get('applicationStore')
         )
         self.cache = Cache(
             dictionary=dictionary.get('cache')

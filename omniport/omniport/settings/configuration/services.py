@@ -86,5 +86,19 @@ CACHES = {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
         },
+    },
+
+    'application': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': (
+            'redis://'
+            f'{_CONF.services.application_store.host}'
+            f':{_CONF.services.application_store.port}'
+            f'/0'
+        ),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SERIALIZER': 'django_redis.serializers.json.JSONSerializer',
+        },
     }
 }
