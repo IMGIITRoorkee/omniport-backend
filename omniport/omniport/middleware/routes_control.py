@@ -45,10 +45,10 @@ class RoutesControl:
 
         for app, app_configuration in DISCOVERY.apps:
             base_url = app_configuration.base_urls.http.strip('/')
-            if not re.match(f'^/{base_url}/', request.path):
+            if not re.match(f'^/api/{base_url}/', request.path):
                 continue
             if not from_acceptable_ring(
-                        source_address,
+                        request.ip_address_rings,
                         app_configuration.acceptables.ip_address_rings
                     ):
                 return HttpResponseForbidden()
