@@ -1,0 +1,1 @@
+from token_auth.authentication.app_access_token_authentication import AppAccessTokenAuthentication

@@ -49,8 +49,8 @@ class User(
         default=0,
     )
 
-    institute_security_key = models.UUIDField(
-        max_length=31,
+    institute_security_key = models.CharField(
+        max_length=255,
         blank=False,
         null=False,
         default=uuid.uuid4,
