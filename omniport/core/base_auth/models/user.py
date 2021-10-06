@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import models as auth_models
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ObjectDoesNotExist
@@ -45,6 +47,14 @@ class User(
             MinValueValidator(0),
         ],
         default=0,
+    )
+
+    institute_security_key = models.UUIDField(
+        max_length=31,
+        blank=False,
+        null=False,
+        default=uuid.uuid4,
+        unique=True,
     )
 
     objects = user.UserManager()
@@ -126,6 +136,13 @@ class User(
             return self.person.get_full_name()
         except ObjectDoesNotExist:
             return str(self.id)
+
+    def update_institute_security_key(self):
+        """
+        Update the institute security key to replace the old one to a new
+        """
+        self.institute_security_key = uuid.uuid4()
+        self.save()
 
     def __str__(self):
         """
