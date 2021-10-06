@@ -62,7 +62,8 @@ class UserAdmin(auth_admin.UserAdmin):
             'fields': (
                 'username',
                 'password',
-            )
+                'institute_security_key',
+            ),
         }),
         ('Important dates', {
             'fields': (
@@ -104,3 +105,5 @@ class UserAdmin(auth_admin.UserAdmin):
     list_filter = tuple()
 
     search_fields = ['id', 'username', 'person__full_name', ]
+
+    readonly_fields = ('institute_security_key', )
