@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='institute_security_key',
-            field=models.UUIDField(default=uuid.uuid4),
+            field=models.CharField(default=uuid.uuid4, blank=False, max_length=255, null=False),
             preserve_default=True
         ),
         migrations.RunPython(
@@ -34,6 +34,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='institute_security_key',
-            field=models.UUIDField(default=uuid.uuid4, unique=True),
+            field=models.CharField(default=uuid.uuid4, blank=False, max_length=255, null=False, unique=True),
         ),
     ]
