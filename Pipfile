@@ -42,8 +42,6 @@ sentry-sdk = "*"
 numpy = "*"
 pandas = "*"
 pdf2image = "*"
-rstr = "*"
-qrcode = "*"
 
 [requires]
 python_version = "3.7"
