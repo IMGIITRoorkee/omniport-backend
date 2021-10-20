@@ -46,11 +46,11 @@ class VerifyInstituteSecurityKey(generics.GenericAPIView):
                 else:
                     response_data['error'] = 'Invalid institute security key'
                     response_status = status.HTTP_401_UNAUTHORIZED
-                    logger.error(f'{app_name}: Invalid security key for username: {username}')
+                    logger.info(f'{app_name}: Invalid security key for username: {username}')
             except Exception:
                 response_data['error'] = 'Invalid username'
                 response_status = status.HTTP_404_NOT_FOUND
-                logger.error(f'{app_name}: Invalid username: {username}')
+                logger.info(f'{app_name}: Invalid username: {username}')
         else:
             response_data['error'] = 'username and institute_security_key not provided'
             response_status = status.HTTP_400_BAD_REQUEST
