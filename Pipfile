@@ -46,7 +46,7 @@ rstr = "*"
 qrcode = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
 
 [packages.django]
 extras = [ "argon2",]
