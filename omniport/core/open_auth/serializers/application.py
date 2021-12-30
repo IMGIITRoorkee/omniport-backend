@@ -204,9 +204,6 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         :return: whatever super().update() returns
         """
 
-        if 'data_points' in validated_data:
-            del validated_data['data_points']
-
         # Ensure that the creator of the app cannot leave the team
         if 'team_members' in validated_data:
             validated_data['team_members'].append(instance.user.person)
