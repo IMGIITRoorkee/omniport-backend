@@ -59,6 +59,11 @@ KERNEL_PERSON_AVATAR_SERIALIZER = (
     'person.AvatarSerializer'
 )
 
+KERNEL_COURSE_SERIALIZER = (
+    'kernel.serializers.institute.'
+    'course.CourseSerializer'
+)
+
 __all__ = [
     'KERNEL_BRANCH_SERIALIZER',
     'KERNEL_DEGREE_SERIALIZER',
@@ -77,4 +82,5 @@ __all__ = [
 
     'KERNEL_PERSON_PROFILE_SERIALIZER',
     'KERNEL_PERSON_AVATAR_SERIALIZER',
+    'KERNEL_COURSE_SERIALIZER'
 ]
