@@ -1,5 +1,6 @@
 import swapper
 from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from oauth2_provider.models import AbstractApplication
 from pydash import py_
 from rest_framework import serializers
@@ -134,10 +135,12 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         :raise: ValidationError, if validation fails
         """
 
-        validator = URLValidator()
-
         redirect_urls = value.split(' ')
         for url in redirect_urls:
+            if '://' not in url:
+                raise ValidationError('Enter a valid URL.')
+            scheme = url.split('://')[0].lower()
+            validator = URLValidator(schemes=scheme)
             validator(url)
 
         return value
