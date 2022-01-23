@@ -3,11 +3,13 @@ SHORT_NAME = 'person.short_name'
 FULL_NAME = 'person.full_name'
 DISPLAY_PICTURE = 'person.display_picture'
 ROLES = 'person.roles'
+CUSTOM_ROLES = 'person.custom_roles'
 PERSON_DATA_POINTS = (
     (SHORT_NAME, 'Short name'),
     (FULL_NAME, 'Full name'),
     (DISPLAY_PICTURE, 'Display picture'),
     (ROLES, 'Roles'),
+    (CUSTOM_ROLES, 'Custom Roles'),
 )
 
 # Student data points

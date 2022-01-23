@@ -2,6 +2,7 @@ import datetime
 
 from omniport.utils import switcher
 
+from kernel.managers.get_role import get_all_roles
 from notifications.actions import push_notification
 from categories.models import Category
 
@@ -38,6 +39,24 @@ def get_roles(person):
     for role in all_roles:
         role.pop('data', None)
     return all_roles
+
+
+def get_custom_roles(person):
+    """
+    Get all the custom roles of a person in convenient list format
+    :param person: the person whose custom roles are being retrieved
+    :return: the custom roles of the person as a list
+    """
+
+    roles = get_all_roles(person)
+    custom_roles = [
+        {
+            'role': role,
+            'activeStatus': str(roles[role]['activeStatus']),
+        }
+        for role in roles if '.' in role
+    ]
+    return custom_roles
 
 
 def get_display_picture(person):
