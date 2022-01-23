@@ -6,7 +6,12 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from oauth2_provider.models import AccessToken
 
 from kernel.models import Person
-from open_auth.utils import get_field_data, get_roles, get_display_picture
+from open_auth.utils import (
+    get_field_data,
+    get_roles,
+    get_custom_roles,
+    get_display_picture,
+)
 
 MODEL_REGEX = [
     'person',
@@ -87,6 +92,9 @@ class GetUserData(generics.GenericAPIView):
 
         if 'person.roles' in app_data_points:
             response_data['person']['roles'] = get_roles(person)
+
+        if 'person.custom_roles' in app_data_points:
+            response_data['person']['custom_roles'] = get_custom_roles(person)
 
         if 'person.display_picture' in app_data_points:
             response_data['person']['display_picture'] = \
