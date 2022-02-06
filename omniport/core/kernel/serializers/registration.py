@@ -31,6 +31,14 @@ KERNEL_GUEST_SERIALIZER = (
     'kernel.serializers.roles.'
     'guest.GuestSerializer'
 )
+KERNEL_JOINTFACULTYMEMBERSHIP_SERIALIZER = (
+    'kernel.serializers.roles.'
+    'joint_faculty.JointFacultyMembershipSerializer'
+)
+KERNEL_JOINTFACULTY_SERIALIZER = (
+    'kernel.serializers.roles.'
+    'joint_faculty.JointFacultySerializer'
+)
 
 KERNEL_BIOLOGICALINFORMATION_SERIALIZER = (
     'kernel.serializers.personal_information.'
@@ -69,6 +77,9 @@ __all__ = [
     'KERNEL_FACULTYMEMBER_SERIALIZER',
     'KERNEL_MAINTAINER_SERIALIZER',
     'KERNEL_GUEST_SERIALIZER',
+    'KERNEL_JOINTFACULTYMEMBERSHIP_SERIALIZER',
+    'KERNEL_JOINTFACULTY_SERIALIZER',
+
 
     'KERNEL_BIOLOGICALINFORMATION_SERIALIZER',
     'KERNEL_FINANCIALINFORMATION_SERIALIZER',
