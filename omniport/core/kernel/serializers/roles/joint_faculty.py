@@ -1,13 +1,13 @@
 import swapper
-from rest_framework import serializers
 
+from formula_one.serializers.base import ModelSerializer
 from kernel.serializers.roles.base import RoleSerializer
 from omniport.utils import switcher
 
 DepartmentSerializer = switcher.load_serializer('kernel', 'Department')
 
 
-class JointFacultyMembershipSerializer(serializers.Serializer):
+class JointFacultyMembershipSerializer(ModelSerializer):
     """
     Serializer for JointFacultyMembership objects
     """
