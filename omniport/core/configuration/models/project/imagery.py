@@ -41,6 +41,16 @@ class Imagery:
         else:
             self.wordmark_mime = None
 
+        self.giftbox = file_search(
+            files=contents,
+            name='giftbox',
+            extensions=['.svg', '.png', '.jpg']
+        )
+        if self.giftbox is not None:
+            self.giftbox_mime, _ = mimetypes.guess_type(self.giftbox)
+        else:
+            self.giftbox_mime = None
+
         self.favicon = file_search(
             files=contents,
             name='favicon',

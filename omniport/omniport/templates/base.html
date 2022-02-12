@@ -32,6 +32,18 @@
                 {% endif %}
             </a>
         </div>
+
+        <div id="gift-logo">
+            <a href="/">
+                {% if site.imagery.giftbox %}
+                    <img src="{{ site.imagery.giftbox }}"
+                         class="title-bar-logo">
+                {% else %}
+                    <h1>{{ site.nomenclature.verbose_name }}</h1>
+                {% endif %}
+            </a>
+        </div>
+
         <div id="institute-logo">
             <a href="{{ institute.text.home_page }}">
                 {% if institute.imagery.wordmark %}

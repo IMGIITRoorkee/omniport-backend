@@ -11,6 +11,7 @@ MIDDLEWARE = [
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -23,5 +24,7 @@ MIDDLEWARE = [
     'omniport.middleware.routes_control.RoutesControl',
     'omniport.middleware.person_roles.PersonRoles',
     'omniport.middleware.last_seen.LastSeen',
-    'omniport.middleware.routes_control_roles.RoutesControlRoles'
+    'omniport.middleware.routes_control_roles.RoutesControlRoles',
+    
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]

@@ -18,6 +18,9 @@ class ImagerySerializer(serializers.Serializer):
     wordmark = serializers.SerializerMethodField()
     wordmark_mime = serializers.CharField()
 
+    giftbox = serializers.SerializerMethodField()
+    giftbox_mime = serializers.CharField()
+
     @staticmethod
     def get_url(directory, item):
         """
@@ -64,3 +67,13 @@ class ImagerySerializer(serializers.Serializer):
 
         if instance.wordmark is not None:
             return self.get_url(instance.directory, instance.wordmark)
+
+    def get_giftbox(self, instance):
+        """
+        Get the URL to the giftbox of the imagery instance
+        :param instance: the instance whose giftbox is requested
+        :return: the URL to the giftbox
+        """
+
+        if instance.giftbox is not None:
+            return self.get_url(instance.directory, instance.giftbox)
