@@ -1,3 +1,4 @@
+import re
 import swapper
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -136,11 +137,28 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         """
 
         redirect_urls = value.split(' ')
+        instance = self.instance
+
+        # Use initial_data as validated_data might not be available here
+        data = self.initial_data
+
+        application_name = data.get('name', None)
+        if application_name is None:
+            application_name = instance.name if instance else None
+
+        # Regex for valid characters in application_slug for custom scheme
+        schema_re = '[^A-Za-z0-9]+'
+
+        # Default schemes
+        schemes = ['http', 'https', 'ftp', 'ftps']
+
+        # Substitute all special characters in application name
+        # and add it valid schemes list
+        application_slug = re.sub(schema_re, '', application_name)
+        schemes.append(application_slug.lower())
+
         for url in redirect_urls:
-            if '://' not in url:
-                raise ValidationError('Enter a valid URL.')
-            scheme = url.split('://')[0].lower()
-            validator = URLValidator(schemes=scheme)
+            validator = URLValidator(schemes=schemes)
             validator(url)
 
         return value
