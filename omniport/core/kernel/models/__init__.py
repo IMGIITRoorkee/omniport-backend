@@ -39,9 +39,13 @@ from kernel.models.roles import (
     # Abstract models for customised implementations
     AbstractStudent,
     AbstractFacultyMember,
+    AbstractJointFaculty,
+    AbstractJointFacultyMembership,
 
     # Concrete models for default implementation
     Student,
     FacultyMember,
     Guest,
+    JointFaculty,
+    JointFacultyMembership
 )
