@@ -1,5 +1,7 @@
+import re
 import swapper
 from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from oauth2_provider.models import AbstractApplication
 from pydash import py_
 from rest_framework import serializers
@@ -134,10 +136,29 @@ class ApplicationDetailSerializer(serializers.ModelSerializer):
         :raise: ValidationError, if validation fails
         """
 
-        validator = URLValidator()
-
         redirect_urls = value.split(' ')
+        instance = self.instance
+
+        # Use initial_data as validated_data might not be available here
+        data = self.initial_data
+
+        application_name = data.get('name', None)
+        if application_name is None:
+            application_name = instance.name if instance else None
+
+        # Regex for valid characters in application_slug for custom scheme
+        schema_re = '[^A-Za-z0-9]+'
+
+        # Default schemes
+        schemes = ['http', 'https', 'ftp', 'ftps']
+
+        # Substitute all special characters in application name
+        # and add it valid schemes list
+        application_slug = re.sub(schema_re, '', application_name)
+        schemes.append(application_slug.lower())
+
         for url in redirect_urls:
+            validator = URLValidator(schemes=schemes)
             validator(url)
 
         return value
