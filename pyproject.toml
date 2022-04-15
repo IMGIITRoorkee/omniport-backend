@@ -43,7 +43,7 @@ pandas = "^1.4.1"
 pdf2image = "^1.16.0"
 rstr = "^3.0.0"
 qrcode = "^7.3.1"
-Twisted = {extras = ["http2", "tls"], version = "^22.1.0"}
+Twisted = {extras = ["http2", "tls"], version = "^22.4.0"}
 python-sat = {extras = ["aiger", "pblib"], version = "^0.1.7-alpha.15"}
 
 [tool.poetry.dev-dependencies]
