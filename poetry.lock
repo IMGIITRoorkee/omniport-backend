@@ -490,7 +490,7 @@ dev = ["tox", "bump2version (<1)", "sphinx (<2)", "importlib-metadata (<3)", "im
 
 [[package]]
 name = "django"
-version = "3.2"
+version = "3.2.12"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -717,7 +717,7 @@ google-cloud-storage = ">=1.37.1"
 
 [[package]]
 name = "fonttools"
-version = "4.29.1"
+version = "4.32.0"
 description = "Tools to manipulate font files"
 category = "main"
 optional = false
@@ -2019,7 +2019,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "0ff8e208999ae84e5c85a88eb2db45a59ef1b696d2a6abbf8a01bd27ceace48d"
+content-hash = "119fb4f07afcfda4f93326bd08a59e4345563a971cb242edc90147b46fc54db5"
 
 [metadata.files]
 aioredis = [
@@ -2360,8 +2360,8 @@ deprecated = [
     {file = "Deprecated-1.2.13.tar.gz", hash = "sha256:43ac5335da90c31c24ba028af536a91d41d53f9e6901ddb021bcc572ce44e38d"},
 ]
 django = [
-    {file = "Django-3.2-py3-none-any.whl", hash = "sha256:0604e84c4fb698a5e53e5857b5aea945b2f19a18f25f10b8748dbdf935788927"},
-    {file = "Django-3.2.tar.gz", hash = "sha256:21f0f9643722675976004eb683c55d33c05486f94506672df3d6a141546f389d"},
+    {file = "Django-3.2.12-py3-none-any.whl", hash = "sha256:9b06c289f9ba3a8abea16c9c9505f25107809fb933676f6c891ded270039d965"},
+    {file = "Django-3.2.12.tar.gz", hash = "sha256:9772e6935703e59e993960832d66a614cf0233a1c5123bc6224ecc6ad69e41e2"},
 ]
 django-celery-results = [
     {file = "django_celery_results-2.2.0-py2.py3-none-any.whl", hash = "sha256:d5f83fad9091e52cd6dbb3ca80632153ad14b6cdac4d73258e040f92717237cb"},
@@ -2430,8 +2430,8 @@ firebase-admin = [
     {file = "firebase_admin-5.2.0.tar.gz", hash = "sha256:cd1a47ff43e5d83cf8d6e2c478387860c363876d9b9149b5034a13b81f8b4bda"},
 ]
 fonttools = [
-    {file = "fonttools-4.29.1-py3-none-any.whl", hash = "sha256:1933415e0fbdf068815cb1baaa1f159e17830215f7e8624e5731122761627557"},
-    {file = "fonttools-4.29.1.zip", hash = "sha256:2b18a172120e32128a80efee04cff487d5d140fe7d817deb648b2eee023a40e4"},
+    {file = "fonttools-4.32.0-py3-none-any.whl", hash = "sha256:b038d1a0dee0079de7ade57071e2e2aced6e35bd697de244ac62938b2b1628c1"},
+    {file = "fonttools-4.32.0.zip", hash = "sha256:59a90de72149893167e3d552ae2402c6874e006b9adc3feaf5f6d706fe20d392"},
 ]
 funcy = [
     {file = "funcy-1.17-py2.py3-none-any.whl", hash = "sha256:ba7af5e58bfc69321aaf860a1547f18d35e145706b95d1b3c966abc4f0b60309"},
