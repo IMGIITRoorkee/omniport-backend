@@ -31,7 +31,7 @@ class SessionMap(Model):
     )
 
     user_agent = models.CharField(
-        max_length=255,
+        max_length=511,
     )
     browser_family = models.CharField(
         max_length=31,
