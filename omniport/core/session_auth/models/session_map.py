@@ -76,7 +76,7 @@ class SessionMap(Model):
         session_map.location = location
 
         # Get the browser, operating system and device from the user-agent
-        user_agent_string = request.META['HTTP_USER_AGENT']
+        user_agent_string = request.META.get('HTTP_USER_AGENT', 'Unknown')
         (browser, os, device_type) = get_agent_information(user_agent_string)
         session_map.user_agent = user_agent_string
         session_map.browser_family = browser.family
