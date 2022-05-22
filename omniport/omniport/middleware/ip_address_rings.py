@@ -50,7 +50,7 @@ class IpAddressRings:
         request.ip_address_rings = list()
         for ring in allowed_ip_address_rings:
             patterns = ip_address_rings[ring]
-            if re.search('|'.join(patterns), ip_address):
+            if re.fullmatch('|'.join(patterns), ip_address):
                 request.ip_address_rings.append(ring)
         if not len(request.ip_address_rings):
             return HttpResponseForbidden()
