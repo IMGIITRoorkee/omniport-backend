@@ -8,3 +8,4 @@ class NomenclatureSerializer(serializers.Serializer):
 
     name = serializers.CharField()
     verbose_name = serializers.CharField()
+    tagline = serializers.CharField()

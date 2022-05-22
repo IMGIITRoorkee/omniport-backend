@@ -3,6 +3,7 @@ site:
   nomenclature:
     name:  # A code name for the site
     verboseName:  # A verbose punctuated name for the site
+    tagline: # A tagline for the site
   debug:  # Boolean that decides whether the site is in production or development
   description:  # String that describes the site
 allowances:

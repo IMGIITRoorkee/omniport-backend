@@ -16,3 +16,4 @@ class Nomenclature:
         dictionary = kwargs.get('dictionary') or dict()
         self.name = dictionary.get('name') or 'omniport'
         self.verbose_name = dictionary.get('verboseName') or 'Omniport'
+        self.tagline = dictionary.get('tagline', '')
