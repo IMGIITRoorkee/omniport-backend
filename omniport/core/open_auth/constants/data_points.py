@@ -66,6 +66,14 @@ CONTACT_INFORMATION_DATA_POINTS = (
     (SECONDARY_PHONE_NUMBER, 'Secondary phone number'),
 )
 
+# Residential information data points
+RESIDENCE = 'residential_information.residence.name'
+ROOM_NUMBER = 'residential_information.room_number'
+RESIDENTIAL_INFORMATION_DATA_POINTS = (
+    (RESIDENCE, 'Residence'),
+    (ROOM_NUMBER, 'Room Number'),
+)
+
 # Social information data points
 LINKS = 'social_information.links'
 SOCIAL_INFORMATION_DATA_POINTS = (
@@ -78,5 +86,6 @@ DATA_POINTS = (
         + FACULTY_MEMBER_DATA_POINTS
         + BIOLOGICAL_INFORMATION_DATA_POINTS
         + CONTACT_INFORMATION_DATA_POINTS
+        + RESIDENTIAL_INFORMATION_DATA_POINTS
         + SOCIAL_INFORMATION_DATA_POINTS
 )

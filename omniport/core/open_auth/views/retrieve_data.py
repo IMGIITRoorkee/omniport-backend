@@ -18,14 +18,16 @@ MODEL_REGEX = [
     'student',
     'faculty_member',
     'biological_information',
-    'contact_information'
+    'contact_information',
+    'residential_information'
 ]
 MODEL_STRINGS = [
     'person',
     'person.student',
     'person.facultymember',
     'person.biologicalinformation',
-    'person.contact_information.first()'
+    'person.contact_information.first()',
+    'person.residentialinformation'
 ]
 
 
