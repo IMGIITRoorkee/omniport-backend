@@ -7,7 +7,7 @@ license = "GPL-3.0"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-Django = {version = "3.2.13", extras = ["argon2"]}
+Django = {version = "3.2.14", extras = ["argon2"]}
 inflection = "^0.5.1"
 PyYAML = "^6.0"
 celery = "^5.2.3"
