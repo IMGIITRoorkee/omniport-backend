@@ -49,3 +49,6 @@ SESSION_CACHE_ALIAS = 'session'
 SESSION_COOKIE_NAME = 'omniport_session'
 
 OAUTH2_PROVIDER_APPLICATION_MODEL = 'open_auth.Application'
+OAUTH2_PROVIDER={
+        'REQUEST_APPROVAL_PROMPT':'auto_even_if_expired',
+        }
