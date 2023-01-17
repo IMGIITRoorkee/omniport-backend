@@ -35,7 +35,7 @@ CHANNEL_LAYERS = {
 # Cache
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
         'LOCATION': (f'{_CONF.services.cache.host}'
                      f':{_CONF.services.cache.port}'),
     },
