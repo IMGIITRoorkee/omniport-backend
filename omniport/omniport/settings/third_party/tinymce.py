@@ -18,7 +18,6 @@ TINYMCE_DEFAULT_CONFIG = {
                 '| link unlink '
                 '| table image codesample charmap '
                 '| fullscreen',
-    'theme': 'modern',
     'height': 512,
     'width': 'auto',
     'menubar': False,
