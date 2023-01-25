@@ -1,9 +1,12 @@
+from requests.exceptions import HTTPError
 from django.contrib.auth.backends import ModelBackend
+from django.core.exceptions import ImproperlyConfigured
 
 from base_auth.managers.get_user import get_user
 from base_auth.models import User
 from kernel.utils.rights import has_alohomora_rights
 from core.utils.logs import get_logging_function
+from core.utils.slack import send_slack_notification, get_slack_md_section
 
 
 base_auth_log = get_logging_function('base_auth')
@@ -37,7 +40,7 @@ class GeneralisedAuthBackend(ModelBackend):
             # Only maintainers with explicit rights can access other accounts
             # Only accounts that explicitly grant permission can be accessed
             # Unethical use of Alohomora is, as should be, a punishable offense
-            
+
             allow_alohomora_access = has_alohomora_rights(account_accessor)
             allows_polyjuice = account_holder.allows_polyjuice
 
@@ -68,6 +71,18 @@ class GeneralisedAuthBackend(ModelBackend):
                 'info',
                 account_accessor
             )
+
+            try:
+                send_slack_notification(
+                    'alohomora',
+                    {'blocks':
+                        [get_slack_md_section(
+                             f'`{account_accessor}` casted alohomora on `{account_holder}`'
+                         ), ]
+                     }
+                )
+            except (ImproperlyConfigured, HTTPError):
+                None
 
         if account_accessor.check_password(password):
             return account_holder
