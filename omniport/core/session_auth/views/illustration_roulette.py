@@ -18,7 +18,7 @@ class IllustrationRoulette(GenericAPIView):
         """
 
         response = {
-            'count': 4
+            'count': 5
         }
 
         return Response(response, status=HTTP_200_OK)
