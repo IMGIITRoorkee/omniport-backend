@@ -37,11 +37,13 @@ JOINING_DATE = 'faculty_member.start_date'
 LEAVING_DATE = 'faculty_member.end_date'
 DESIGNATION = 'faculty_member.designation'
 DEPARTMENT = 'faculty_member.department.name'
+EMPLOYEE_ID = 'faculty_member.employee_id'
 FACULTY_MEMBER_DATA_POINTS = (
     (JOINING_DATE, 'Joining date'),
     (LEAVING_DATE, 'Leaving date'),
     (DESIGNATION, 'Designation'),
     (DEPARTMENT, 'Department'),
+    (EMPLOYEE_ID, 'Employee id'),
 )
 
 # Biological information data points
