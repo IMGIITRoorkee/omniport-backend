@@ -49,9 +49,13 @@ FACULTY_MEMBER_DATA_POINTS = (
 # Biological information data points
 DATE_OF_BIRTH = 'biological_information.date_of_birth'
 BLOOD_GROUP = 'biological_information.blood_group'
+SEX = 'biological_information.sex'
+GENDER = 'biological_information.gender'
 BIOLOGICAL_INFORMATION_DATA_POINTS = (
     (DATE_OF_BIRTH, 'Date of birth'),
     (BLOOD_GROUP, 'Blood group'),
+    (SEX, 'Sex'),
+    (GENDER, 'Gender'),
 )
 
 # Contact information data points
