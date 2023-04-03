@@ -46,7 +46,14 @@ class GetUserData(generics.GenericAPIView):
         :return: the response for request
         """
 
-        token = request.headers['Authorization'].replace('Bearer ', '')
+        token = request.headers.get('Authorization', '').replace('Bearer ', '')
+
+        if token == '':
+            return Response(
+                data="Please prvide the access\
+                 token in the Authorization header",
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         access_token = AccessToken.objects.get(token=token)
         application = access_token.application
@@ -93,14 +100,22 @@ class GetUserData(generics.GenericAPIView):
                 response_data[model_name] = dict()
 
         if 'person.roles' in app_data_points:
-            response_data['person']['roles'] = get_roles(person)
+            try:
+                response_data['person']['roles'] = get_roles(person)
+            except KeyError:
+                response_data['person'] = dict()
+                response_data['person']['roles'] = get_roles(person)
 
         if 'person.custom_roles' in app_data_points:
             response_data['person']['custom_roles'] = get_custom_roles(person)
 
         if 'person.display_picture' in app_data_points:
-            response_data['person']['display_picture'] = \
-                get_display_picture(person)
+            try:
+                response_data['person']['display_picture'] = \
+                    get_display_picture(person)
+            except KeyError:
+                response_data['person'] = dict()
+                response_data['person']['display_picture'] = get_display_picture(person)
 
         if 'social_information.links' in app_data_points:
             data = dict()
