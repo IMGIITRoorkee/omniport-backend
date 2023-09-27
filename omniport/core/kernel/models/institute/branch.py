@@ -43,9 +43,14 @@ class AbstractBranch(Model):
         to=swapper.get_model_name('kernel', 'Degree'),
         on_delete=models.CASCADE,
     )
+
     semester_count = models.IntegerField(
         blank=True,
         null=True,
+    )
+    year_count = models.IntegerField(
+        blank=True,
+        null=True
     )
 
     class Meta:
