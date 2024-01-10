@@ -11,6 +11,11 @@ import datetime
 import swapper
 from django.contrib.auth import login, logout
 from rest_framework import status
+from session_auth.models import SessionMap
+from core.utils.logs import get_logging_function
+from session_auth.serializers.login import LoginSerializer
+
+session_auth_log = get_logging_function('session_auth')
 
 Person = swapper.load_model('kernel', 'Person')
 
@@ -40,14 +45,14 @@ class GoogleOAuthViewSet(ViewSet):
         state = f"{request.session[f'gauth_state_{state_timestamp}']}__timestamp__{state_timestamp}"
         if state_param != state:
             del request.session[f'gauth_state_{state_timestamp}']
-            return Response('Errored authorization grant')
+            # return Response('Errored authorization grant')
             return redirect(GOOGLE_AUTH_ENV['AUTH_FRONTEND_REDIRECT_URL'])
         
         del request.session[f'gauth_state_{state_timestamp}']
 
         error = request.query_params.get('error')
         if error is not None:
-            return Response(error)
+            # return Response(error)
             return redirect(GOOGLE_AUTH_ENV['AUTH_FRONTEND_REDIRECT_URL'])
         
         auth_code = request.query_params.get('code')
@@ -70,7 +75,7 @@ class GoogleOAuthViewSet(ViewSet):
                 headers=token_request_headers
             )
         except Exception:
-            return Response('Unable to retrieve access token')
+            # return Response('Unable to retrieve access token')
             pass
         else:
             if token_response.status_code == 200:
@@ -85,7 +90,7 @@ class GoogleOAuthViewSet(ViewSet):
                         headers=api_request_headers
                     )
                 except Exception:
-                    return Response('Unable to access user details through google')
+                    # return Response('Unable to access user details through google')
                     pass
                 else:
                     if api_response.status_code == 200:
@@ -95,25 +100,23 @@ class GoogleOAuthViewSet(ViewSet):
                             try:
                                 person = Person.objects.get(contact_information__institute_webmail_address=api_response_data['email'])
                             except ObjectDoesNotExist:
-                                return Response('Cannot identify user')
+                                # return Response('Cannot identify user')
                                 pass
                             else:
-                                # T-B-D : login user
+                                # Couldn't login user by extracting username and password from person.user 
+                                # because authenticate() function doesn't take encrypted password as password arguement
 
-                                print("AUTH")
-                                print(request.user.is_authenticated)
-                                login(request, person.user)
-                                print(request.user.is_authenticated)
-                                logout(request)
-                                print(request.user.is_authenticated)
-                                print("DONE")
-
-                                return Response("Successfully found user")
+                                # After calling login here and printing request.user.is_authenticated, it shows True
+                                # But when I request from frontend to check the user's authentication status, I am getting False as response
+                                login(request=request, user=person.user, backend='django.contrib.auth.backends.ModelBackend')
+                                # return Response("Successfully found user")
+                                # print(request.user.is_authenticated)
                                 return redirect(GOOGLE_AUTH_ENV['AUTH_FRONTEND_REDIRECT_URL'])
 
-        return Response('Unable to authenticate user')
+        # return Response('Unable to authenticate user')
         return redirect(GOOGLE_AUTH_ENV['AUTH_FRONTEND_REDIRECT_URL'])
     
     @action(detail=False, methods=['get'])
     def check_auth_status(self, request):
+        print(request.user.is_authenticated)
         return Response(request.user.is_authenticated, status=status.HTTP_200_OK)
