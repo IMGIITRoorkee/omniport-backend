@@ -14,6 +14,7 @@ from rest_framework import status
 from session_auth.models import SessionMap
 from core.utils.logs import get_logging_function
 from session_auth.serializers.login import LoginSerializer
+from session_auth.models import SessionMap
 
 session_auth_log = get_logging_function('session_auth')
 
@@ -56,7 +57,6 @@ class GoogleOAuthViewSet(ViewSet):
             return redirect(GOOGLE_AUTH_ENV['AUTH_FRONTEND_REDIRECT_URL'])
         
         auth_code = request.query_params.get('code')
-
         token_request_headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -95,22 +95,18 @@ class GoogleOAuthViewSet(ViewSet):
                 else:
                     if api_response.status_code == 200:
                         api_response_data = api_response.json()
-
+                        print(api_response_data)
                         if api_response_data['verified_email']:
                             try:
+                                print(Person.objects.get(contact_information__institute_webmail_address=api_response_data['email']))
                                 person = Person.objects.get(contact_information__institute_webmail_address=api_response_data['email'])
                             except ObjectDoesNotExist:
                                 # return Response('Cannot identify user')
                                 pass
                             else:
-                                # Couldn't login user by extracting username and password from person.user 
-                                # because authenticate() function doesn't take encrypted password as password arguement
-
-                                # After calling login here and printing request.user.is_authenticated, it shows True
-                                # But when I request from frontend to check the user's authentication status, I am getting False as response
-                                login(request=request, user=person.user, backend='django.contrib.auth.backends.ModelBackend')
-                                # return Response("Successfully found user")
-                                # print(request.user.is_authenticated)
+                                login(request=request, user=person.user, backend='base_auth.backends.generalised.GeneralisedAuthBackend')
+                                user = person.user
+                                SessionMap.create_session_map(request=request, user=user, new=False)
                                 return redirect(GOOGLE_AUTH_ENV['AUTH_FRONTEND_REDIRECT_URL'])
 
         # return Response('Unable to authenticate user')
@@ -118,5 +114,4 @@ class GoogleOAuthViewSet(ViewSet):
     
     @action(detail=False, methods=['get'])
     def check_auth_status(self, request):
-        print(request.user.is_authenticated)
         return Response(request.user.is_authenticated, status=status.HTTP_200_OK)
