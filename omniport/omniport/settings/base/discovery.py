@@ -61,6 +61,9 @@ INSTALLED_APPS = [
 
     # Bootstrapping
     'bootstrap.apps.BootstrapConfig',
+    
+    #Elasticsearch
+    "django_elasticsearch_dsl",
 ]
 if SHELL_PRESENT:
     INSTALLED_APPS.append('shell.apps.ShellConfig')
