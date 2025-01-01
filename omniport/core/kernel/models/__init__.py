@@ -41,11 +41,13 @@ from kernel.models.roles import (
     AbstractFacultyMember,
     AbstractJointFaculty,
     AbstractJointFacultyMembership,
+    AbstractNonTeachingStaff,
 
     # Concrete models for default implementation
     Student,
     FacultyMember,
     Guest,
     JointFaculty,
-    JointFacultyMembership
+    JointFacultyMembership,
+    NonTeachingStaff,
 )
