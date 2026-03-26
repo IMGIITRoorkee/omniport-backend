@@ -25,6 +25,11 @@ from kernel.models.roles.joint_faculty import (
     JointFacultyMembership,
     JointFaculty,
 )
+from kernel.models.roles.nonteaching_staff import (
+    AbstractNonTeachingStaff,
+
+    NonTeachingStaff,
+)
 
 # Add the names of roles to the list maintained in settings
 settings.ROLES.extend([
@@ -33,4 +38,5 @@ settings.ROLES.extend([
     'Maintainer',
     'Guest',
     'JointFaculty',
+    'NonTeachingStaff',
 ])
