@@ -3,6 +3,8 @@
 # Channel-i Security Fixes - Direct Testing Script
 # Usage: ./test_auth_security.sh http://localhost:8000
 # Or:    ./test_auth_security.sh https://staging.channel.iitr.ac.in
+# Or:    ./test_auth_security.sh stage  (uses SSH tunnel to staging server)
+# Or:    ./test_auth_security.sh 192.168.121.228:8000
 
 # Colors
 GREEN='\033[0;32m'
@@ -12,8 +14,35 @@ BLUE='\033[0;34m'
 BOLD='\033[1m'
 NC='\033[0m' # No Color
 
-# Get base URL from argument
-BASE_URL="${1:-http://localhost:8000}"
+# Get base URL from argument or use defaults
+SERVER_ARG="${1:-localhost}"
+
+# Handle different input formats
+case "$SERVER_ARG" in
+    stage|228|staging)
+        # SSH tunnel to staging server
+        STAGING_IP="192.168.121.228"
+        STAGING_PORT="8000"
+        echo -e "${YELLOW}Setting up SSH tunnel to staging server...${NC}"
+
+        # Check if tunnel already exists
+        if ! nc -z localhost 18000 2>/dev/null; then
+            ssh -N -L 18000:${STAGING_IP}:${STAGING_PORT} stage 2>/dev/null &
+            SSH_PID=$!
+            sleep 2
+            echo -e "${GREEN}SSH tunnel established (PID: $SSH_PID)${NC}"
+        fi
+        BASE_URL="http://localhost:18000"
+        ;;
+    http*|https*)
+        # Full URL provided
+        BASE_URL="$SERVER_ARG"
+        ;;
+    *)
+        # Assume IP:PORT or hostname:PORT
+        BASE_URL="http://$SERVER_ARG"
+        ;;
+esac
 
 # Test counters
 PASSED=0
@@ -322,6 +351,16 @@ main() {
 
     # Print summary
     print_summary
+    result=$?
+
+    # Cleanup SSH tunnel if created
+    if [ ! -z "$SSH_PID" ]; then
+        echo -e "\n${YELLOW}Closing SSH tunnel...${NC}"
+        kill $SSH_PID 2>/dev/null
+        sleep 1
+    fi
+
+    return $result
 }
 
 # Run main
