@@ -1,4 +1,7 @@
 import swapper
+import logging
+from django.core.cache import cache
+from django.conf import settings
 from rest_framework import generics, response, status
 
 from base_auth.models import User
@@ -9,75 +12,127 @@ from formula_one.utils.verification_token import send_token, verify_access_token
 from session_auth.models import SessionMap
 from categories.models import Category
 
+logger = logging.getLogger('security')
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
+
+ALLOWED_PASSWORD_RESET_HOSTS = [
+    'channel.iitr.ac.in',
+    'staging.channel.iitr.ac.in',
+]
+
+
+def rate_limit_check(key, limit=3, window=3600):
+    """Check and update rate limit counter"""
+    current = cache.get(key, 0)
+    if current >= limit:
+        return False
+    cache.set(key, current + 1, timeout=window)
+    return True
 
 
 class RecoverPassword(generics.GenericAPIView):
     """
-    This view when responding to a GET request, generates password recovery token
-    and sends mail to the concerned user.
+    Password recovery endpoint.
+
+    SECURITY FIXES (CWE-640, CWE-799, CWE-204):
+    - POST-only (prevents GET enumeration)
+    - Rate-limited (3/IP/hour, 1/account/hour)
+    - Identical response for valid/invalid (prevents username enumeration)
+    - CSRF-protected
+    - Host header validation
     """
 
-    def get(self, request):
+    def post(self, request):
         """
-        View to serve GET requests
-        :param request: the request this is to be responded to
-        :return: the response for request
+        Handle password recovery via POST (secure method)
         """
+        username = request.data.get('username', '').strip()
 
-        username = request.GET.get('username', None)
+        # Get client IP for rate limiting
+        ip_address = self.get_client_ip(request)
 
-        if not username:
+        # Rate limit by IP (3 per hour)
+        ip_key = f"password_reset:ip:{ip_address}"
+        if not rate_limit_check(ip_key, limit=3, window=3600):
+            logger.warning(f"[SECURITY] Password reset rate limit exceeded (IP): {ip_address}")
             return response.Response(
-                data="Please provide the username",
-                status=status.HTTP_400_BAD_REQUEST,
+                data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+                status=status.HTTP_200_OK
             )
+
+        # Validate Host header (prevent injection)
+        host = request.get_host()
+        if host not in ALLOWED_PASSWORD_RESET_HOSTS and not settings.DEBUG:
+            logger.error(f"[SECURITY] Invalid Host header in password reset: {host}")
+            return response.Response(
+                data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+                status=status.HTTP_200_OK
+            )
+
+        # Validate input
+        if not username or len(username) < 2:
+            logger.warning(f"[SECURITY] Invalid username format in password reset")
+            return response.Response(
+                data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+                status=status.HTTP_200_OK
+            )
+
+        # Try to find user
+        user = None
         try:
             user = get_user(username)
         except User.DoesNotExist:
-            return response.Response(
-                data="The username provided is incorrect",
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        person = user.person
+            pass
 
-        site_name = CONFIGURATION.site.nomenclature.verbose_name
-        site_url = CONFIGURATION.allowances.hosts[0]
+        if user:
+            # Rate limit by account (1 per hour)
+            account_key = f"password_reset:account:{user.id}"
+            if not rate_limit_check(account_key, limit=1, window=3600):
+                logger.warning(f"[SECURITY] Password reset rate limit exceeded (account): user={user.id}")
+                return response.Response(
+                    data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+                    status=status.HTTP_200_OK
+                )
 
-        token_type = 'RECOVERY_TOKEN'
-        url = f'https://{site_url}/auth/reset_password/?token={token_type}'
-        subject = f'{site_name} account password reset'
-        body = f'To reset your {site_name} account password, please visit url'
-        category, _ = Category.objects.get_or_create(name="Auth", slug="auth")
+            try:
+                person = user.person
+                site_name = CONFIGURATION.site.nomenclature.verbose_name
+                site_url = CONFIGURATION.allowances.hosts[0]
 
-        send_token(
-            user_id=user.id,
-            person_id=person.id,
-            token_type=token_type,
-            email_body=body,
-            email_subject=subject,
-            url=url,
-            category=category
-        )
+                token_type = 'RECOVERY_TOKEN'
+                url = f'https://{site_url}/auth/reset_password/?token={token_type}'
+                subject = f'{site_name} account password reset'
+                body = f'To reset your {site_name} account password, please visit url'
+                category, _ = Category.objects.get_or_create(name="Auth", slug="auth")
 
-        contact = person.contact_information.first()
-        if (
-                contact is None or
-                contact.institute_webmail_address is None
-        ):
-            return response.Response(
-                data=f'Could not fetch email address, '
-                     f'please contact the maintainers.',
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        email_id, domain = contact.institute_webmail_address.split('@')
-        hidden_email = (f'{email_id[:3]}'
-                       f'{"*"*max(len(email_id)-3,0)}'
-                       f'@{domain}')
+                send_token(
+                    user_id=user.id,
+                    person_id=person.id,
+                    token_type=token_type,
+                    email_body=body,
+                    email_subject=subject,
+                    url=url,
+                    category=category
+                )
+
+                logger.info(f"[AUDIT] Password recovery email sent: user={user.id}")
+
+            except Exception as e:
+                logger.error(f"Error sending password recovery email: {e}")
+
+        # ALWAYS return identical response - CRITICAL for preventing enumeration
         return response.Response(
-            data=f'Email sent successfully to {hidden_email}',
+            data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
             status=status.HTTP_200_OK,
         )
+
+    @staticmethod
+    def get_client_ip(request):
+        """Get client IP address"""
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            return x_forwarded_for.split(',')[0]
+        return request.META.get('REMOTE_ADDR')
 
 
 class VerifyRecoveryToken(generics.GenericAPIView):

@@ -23,5 +23,10 @@ MIDDLEWARE = [
     'omniport.middleware.routes_control.RoutesControl',
     'omniport.middleware.person_roles.PersonRoles',
     'omniport.middleware.last_seen.LastSeen',
-    'omniport.middleware.routes_control_roles.RoutesControlRoles'
+    'omniport.middleware.routes_control_roles.RoutesControlRoles',
+
+    # Security middleware (CRITICAL - CWE-602, CWE-284, CWE-639)
+    'omniport.middleware.auth_security.SecurityHeadersMiddleware',  # Add HSTS/security headers
+    'omniport.middleware.auth_security.AuditLoggingMiddleware',     # Log all auth operations
+    'omniport.middleware.auth_security.GuestSessionBlockerMiddleware',  # Block guest from protected endpoints
 ]
