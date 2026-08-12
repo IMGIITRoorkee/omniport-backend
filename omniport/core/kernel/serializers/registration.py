@@ -39,6 +39,10 @@ KERNEL_JOINTFACULTY_SERIALIZER = (
     'kernel.serializers.roles.'
     'joint_faculty.JointFacultySerializer'
 )
+KERNEL_NONTEACHINGSTAFF_SERIALIZER = (
+    'kernel.serializers.roles.'
+    'nonteaching_staff.NonTeachingStaffSerializer'
+)
 
 KERNEL_BIOLOGICALINFORMATION_SERIALIZER = (
     'kernel.serializers.personal_information.'
@@ -79,6 +83,7 @@ __all__ = [
     'KERNEL_GUEST_SERIALIZER',
     'KERNEL_JOINTFACULTYMEMBERSHIP_SERIALIZER',
     'KERNEL_JOINTFACULTY_SERIALIZER',
+    'KERNEL_NONTEACHINGSTAFF_SERIALIZER',
 
 
     'KERNEL_BIOLOGICALINFORMATION_SERIALIZER',
