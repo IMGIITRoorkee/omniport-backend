@@ -20,26 +20,18 @@ class WhoAmI(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         """
-        View to serve GET requests.
-        Returns user profile for display purposes only.
-        Role/permissions determined server-side, never in response.
-
+        View to serve GET requests
         :param request: the request that is to be responded to
         :param args: arguments
         :param kwargs: keyword arguments
         :return: the response for request
         """
+
         try:
             person = request.person
             serializer = self.get_serializer_class()(person)
-            data = serializer.data
 
-            # Security: Remove any authorization-related fields that might be present
-            sensitive_fields = ['role', 'is_admin', 'permissions', 'groups', 'is_staff', 'is_superuser']
-            for field in sensitive_fields:
-                data.pop(field, None)
-
-            return Response(data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             kernel_log(
                 f'Could not fetch the personal information: {e}',

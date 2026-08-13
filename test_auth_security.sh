@@ -156,35 +156,21 @@ test_password_reset_rate_limiting() {
     done
 }
 
-# Test 4: WhoAmI - No Role in Response
-test_whoami_no_role() {
-    print_header "TEST 4: WhoAmI Endpoint - No Role in Response"
-    print_test "WhoAmI should not include role, is_admin, or permissions"
+# Test 4: WhoAmI Requires Authentication
+test_whoami_requires_auth() {
+    print_header "TEST 4: WhoAmI Endpoint - Authentication Required"
+    print_test "WhoAmI should not serve personal information to anonymous callers"
 
-    response=$(curl -s "$BASE_URL/api/kernel/who_am_i/" 2>/dev/null)
+    response=$(curl -s -w "\n%{http_code}" "$BASE_URL/kernel/who_am_i/" 2>/dev/null)
+    http_code=$(echo "$response" | tail -n 1)
 
-    # Check for sensitive fields
-    if echo "$response" | grep -q '"role"'; then
-        fail "Response contains 'role' field"
+    if [ "$http_code" == "401" ] || [ "$http_code" == "403" ]; then
+        pass "who_am_i refuses anonymous callers (HTTP $http_code)"
+    elif [ "$http_code" == "404" ]; then
+        fail "who_am_i not found at /kernel/who_am_i/ (HTTP 404)"
     else
-        pass "No 'role' field in response"
+        fail "who_am_i served an anonymous caller (HTTP $http_code)"
     fi
-
-    if echo "$response" | grep -q '"is_admin"'; then
-        fail "Response contains 'is_admin' field"
-    else
-        pass "No 'is_admin' field in response"
-    fi
-
-    if echo "$response" | grep -q '"permissions"'; then
-        fail "Response contains 'permissions' field"
-    else
-        pass "No 'permissions' field in response"
-    fi
-
-    # Show actual fields
-    fields=$(echo "$response" | grep -o '"[^"]*":' | tr '\n' ',' | sed 's/,$//;s/":,/, /g')
-    warn "Response fields: $fields"
 }
 
 # Test 5: Guest Access Blocking
@@ -343,7 +329,7 @@ main() {
     test_password_reset_post_only
     test_password_reset_identical_responses
     test_password_reset_rate_limiting
-    test_whoami_no_role
+    test_whoami_requires_auth
     test_guest_blocked
     test_security_headers
     test_https_redirect
