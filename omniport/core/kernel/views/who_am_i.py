@@ -13,11 +13,6 @@ AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 class WhoAmI(GenericAPIView):
     """
     This view shows personal information of the currently logged in user.
-
-    SECURITY FIX (CWE-602):
-    - Returns ONLY display data
-    - Never includes role, permissions, or authorization info
-    - Role is ALWAYS determined server-side per-request
     """
 
     permission_classes = [IsAuthenticated, ]
