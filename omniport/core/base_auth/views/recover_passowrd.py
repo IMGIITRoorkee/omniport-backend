@@ -150,7 +150,7 @@ class RecoverPassword(generics.GenericAPIView):
                     user
                 )
 
-        # ALWAYS return identical response - CRITICAL for preventing enumeration
+        # The same response either way, so that accounts cannot be enumerated
         return response.Response(
             data={'message': GENERIC_RECOVERY_MESSAGE},
             status=status.HTTP_200_OK,

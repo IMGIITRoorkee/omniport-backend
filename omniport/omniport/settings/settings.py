@@ -11,8 +11,7 @@ if DEBUG:
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
 else:
-    # Secure transport, which may be assumed only where NGINX terminates TLS
-    # ahead of the portal, and never under runserver over plain HTTP
+    # Secure transport, NGINX terminating TLS ahead of the portal
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

@@ -6,10 +6,7 @@ from core.utils.logs import get_logging_function
 
 auth_security_log = get_logging_function('auth_security')
 
-# The suffix shared by the URL namespaces of the authentication apps, every one
-# of which is worth an audit record. Matching on the namespace rather than on
-# the path keeps this working as apps are added and as they are mounted
-# elsewhere, which the admin site in particular is
+# The URL namespaces whose views are worth an audit record
 AUTHENTICATION_NAMESPACE_SUFFIX = '_auth'
 ADMIN_NAMESPACE = 'admin'
 

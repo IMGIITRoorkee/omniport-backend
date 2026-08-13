@@ -70,8 +70,7 @@ class RoutesControlRoles:
     @staticmethod
     def mounted_base_url(app_configuration):
         """
-        The base URL an app is actually mounted on, which discovery prefixes
-        with api for the apps declaring themselves to be one
+        Get the base URL an app is mounted on, as discovery mounts it
         :param app_configuration: the configuration of the app in question
         :return: the base URL, or None for an app served over WS alone
         """

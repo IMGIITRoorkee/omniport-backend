@@ -1,6 +1,4 @@
-# Rate limits, as the number of requests allowed per window of that many
-# seconds, kept separate per scope so that either can be tuned or, in tests,
-# tightened or relaxed on its own
+# Rate limits, as requests allowed per window of that many seconds
 IP_RATE_LIMIT = 3
 IP_RATE_LIMIT_WINDOW = 3600
 ACCOUNT_RATE_LIMIT = 1
@@ -16,8 +14,7 @@ MINIMUM_USERNAME_LENGTH = 2
 # The type of the token sent out in the password recovery email
 RECOVERY_TOKEN_TYPE = 'RECOVERY_TOKEN'
 
-# The only message the endpoint ever returns, so that the existence of an
-# account cannot be inferred from the response
+# The only message the endpoint ever returns, whatever happens
 GENERIC_RECOVERY_MESSAGE = (
     'If an account exists with that username, you will receive a password '
     'recovery email shortly.'
