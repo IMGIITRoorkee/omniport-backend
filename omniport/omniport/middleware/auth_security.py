@@ -3,12 +3,12 @@ Middleware that keeps an audit trail of the security relevant requests
 """
 
 from core.utils.logs import get_logging_function
+from omniport.constants import (
+    ADMIN_NAMESPACE,
+    AUTHENTICATION_NAMESPACE_SUFFIX,
+)
 
 auth_security_log = get_logging_function('auth_security')
-
-# The URL namespaces whose views are worth an audit record
-AUTHENTICATION_NAMESPACE_SUFFIX = '_auth'
-ADMIN_NAMESPACE = 'admin'
 
 
 class AuditLoggingMiddleware:
