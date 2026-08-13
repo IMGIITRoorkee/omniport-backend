@@ -7,6 +7,10 @@ This settings file exposes the middleware employed in the project.
 """
 
 MIDDLEWARE = [
+    # Outermost, so that the headers are set on every response, including the
+    # ones the middleware below return without ever reaching a view
+    'omniport.middleware.auth_security.SecurityHeadersMiddleware',
+
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -19,14 +23,15 @@ MIDDLEWARE = [
 
     'omniport.middleware.drf_auth.DrfAuth',
 
+    # Below DrfAuth, so that the user is known, and above the middleware that
+    # deny requests outright, so that their denials are audited
+    'omniport.middleware.auth_security.AuditLoggingMiddleware',
+
     'omniport.middleware.ip_address_rings.IpAddressRings',
     'omniport.middleware.routes_control.RoutesControl',
     'omniport.middleware.person_roles.PersonRoles',
     'omniport.middleware.last_seen.LastSeen',
     'omniport.middleware.routes_control_roles.RoutesControlRoles',
 
-    # Security middleware (CRITICAL - CWE-602, CWE-284, CWE-639)
-    'omniport.middleware.auth_security.SecurityHeadersMiddleware',  # Add HSTS/security headers
-    'omniport.middleware.auth_security.AuditLoggingMiddleware',     # Log all auth operations
-    'omniport.middleware.auth_security.GuestSessionBlockerMiddleware',  # Block guest from protected endpoints
+    'omniport.middleware.auth_security.GuestSessionBlockerMiddleware',
 ]
