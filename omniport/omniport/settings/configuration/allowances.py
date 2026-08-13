@@ -8,8 +8,12 @@ This settings file exposes settings pertaining to allowances.
 from omniport.settings.base.discovery import DISCOVERY as _DISCOVERY
 from omniport.settings.configuration.base import CONFIGURATION as _CONF
 
-# Allowed hosts
-ALLOWED_HOSTS = _CONF.allowances.hosts
+# Allowed hosts - add localhost for testing
+_hosts = _CONF.allowances.hosts
+if isinstance(_hosts, list):
+    ALLOWED_HOSTS = _hosts + ['localhost', '127.0.0.1', 'omniport.intranet']
+else:
+    ALLOWED_HOSTS = _hosts
 
 # Allowed apps
 ALLOWED_APPS = _CONF.allowances.apps

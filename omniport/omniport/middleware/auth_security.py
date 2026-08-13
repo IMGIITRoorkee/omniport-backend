@@ -94,16 +94,16 @@ class GuestSessionBlockerMiddleware:
         username_is_guest = request.user.username == 'Guest User'
         return is_guest or username_is_guest
 
-    @classmethod
-    def is_protected_endpoint(cls, path):
+    @staticmethod
+    def is_protected_endpoint(path):
         """Check if path requires authentication"""
         # Check protected list first
-        for protected in cls.PROTECTED_ENDPOINTS:
+        for protected in PROTECTED_ENDPOINTS:
             if path.startswith(protected):
                 return True
 
         # Override: some protected paths are public
-        for public in cls.PUBLIC_ENDPOINTS:
+        for public in PUBLIC_ENDPOINTS:
             if path.startswith(public):
                 return False
 
