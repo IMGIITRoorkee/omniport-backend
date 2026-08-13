@@ -75,23 +75,13 @@ warn() {
     ((WARNINGS++))
 }
 
-# Test 1: Password Reset - POST Only
-test_password_reset_post_only() {
-    print_header "TEST 1: Password Reset - POST Only"
-    print_test "Password reset should reject GET requests"
-
-    # Test GET request
-    response=$(curl -s -w "\n%{http_code}" -X GET "$BASE_URL/api/base_auth/recover_password/?username=testuser" 2>/dev/null)
-    http_code=$(echo "$response" | tail -n 1)
-
-    if [ "$http_code" != "200" ]; then
-        pass "GET request blocked (HTTP $http_code)"
-    else
-        fail "GET request not blocked (HTTP $http_code)"
-    fi
+# Test 1: Password Reset - Accepted Methods
+test_password_reset_methods() {
+    print_header "TEST 1: Password Reset - Accepted Methods"
+    print_test "Password reset should serve POST, and GET until it is retired"
 
     # Test POST request
-    response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/api/base_auth/recover_password/" \
+    response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/base_auth/recover_password/" \
         -H "Content-Type: application/json" \
         -d '{"username":"testuser"}' 2>/dev/null)
     http_code=$(echo "$response" | tail -n 1)
@@ -101,6 +91,16 @@ test_password_reset_post_only() {
     else
         fail "POST request failed (HTTP $http_code)"
     fi
+
+    # Test GET request, deprecated but retained until the frontends have moved
+    response=$(curl -s -w "\n%{http_code}" -X GET "$BASE_URL/base_auth/recover_password/?username=testuser" 2>/dev/null)
+    http_code=$(echo "$response" | tail -n 1)
+
+    if [ "$http_code" == "200" ]; then
+        pass "GET request still served while deprecated (HTTP $http_code)"
+    else
+        fail "GET request broken before the frontends moved (HTTP $http_code)"
+    fi
 }
 
 # Test 2: Password Reset - Identical Responses
@@ -109,13 +109,13 @@ test_password_reset_identical_responses() {
     print_test "Valid and invalid usernames should return identical messages"
 
     # Valid user
-    response1=$(curl -s -X POST "$BASE_URL/api/base_auth/recover_password/" \
+    response1=$(curl -s -X POST "$BASE_URL/base_auth/recover_password/" \
         -H "Content-Type: application/json" \
         -d '{"username":"testuser"}' 2>/dev/null)
     msg1=$(echo "$response1" | grep -o '"message":"[^"]*"' | head -1)
 
     # Invalid user
-    response2=$(curl -s -X POST "$BASE_URL/api/base_auth/recover_password/" \
+    response2=$(curl -s -X POST "$BASE_URL/base_auth/recover_password/" \
         -H "Content-Type: application/json" \
         -d '{"username":"nonexistent_user_xyz_invalid_12345"}' 2>/dev/null)
     msg2=$(echo "$response2" | grep -o '"message":"[^"]*"' | head -1)
@@ -137,7 +137,7 @@ test_password_reset_rate_limiting() {
 
     # Send 4 requests
     for i in {1..4}; do
-        response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/api/base_auth/recover_password/" \
+        response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/base_auth/recover_password/" \
             -H "Content-Type: application/json" \
             -d '{"username":"testuser"}' 2>/dev/null)
         http_code=$(echo "$response" | tail -n 1)
@@ -205,7 +205,7 @@ test_security_headers() {
     print_test "Response should include HSTS, X-Frame-Options, and other security headers"
 
     # Make a request and capture headers
-    response=$(curl -s -i "$BASE_URL/api/kernel/who_am_i/" 2>/dev/null)
+    response=$(curl -s -i "$BASE_URL/kernel/who_am_i/" 2>/dev/null)
 
     # Check HSTS
     if echo "$response" | grep -qi "strict-transport-security"; then
@@ -317,8 +317,8 @@ main() {
     echo -e "${BOLD}Testing against:${NC} $BASE_URL\n"
 
     # Check if server is reachable
-    if ! curl -s -f "$BASE_URL/api/kernel/who_am_i/" > /dev/null 2>&1; then
-        if ! curl -s "$BASE_URL/api/kernel/who_am_i/" > /dev/null 2>&1; then
+    if ! curl -s -f "$BASE_URL/kernel/who_am_i/" > /dev/null 2>&1; then
+        if ! curl -s "$BASE_URL/kernel/who_am_i/" > /dev/null 2>&1; then
             echo -e "${RED}ERROR: Cannot reach server at $BASE_URL${NC}"
             echo -e "${YELLOW}Make sure the server is running and URL is correct${NC}\n"
             exit 1
@@ -326,7 +326,7 @@ main() {
     fi
 
     # Run all tests
-    test_password_reset_post_only
+    test_password_reset_methods
     test_password_reset_identical_responses
     test_password_reset_rate_limiting
     test_whoami_requires_auth

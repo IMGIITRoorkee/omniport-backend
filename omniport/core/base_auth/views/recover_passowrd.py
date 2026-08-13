@@ -40,16 +40,36 @@ def rate_limit_check(key, limit=IP_RATE_LIMIT, window=IP_RATE_LIMIT_WINDOW):
 
 class RecoverPassword(generics.GenericAPIView):
     """
-    POST only password recovery endpoint, rate limited per IP and per account,
-    which responds identically whether or not the account exists
+    Password recovery endpoint, rate limited per IP and per account, which
+    responds identically whether or not the account exists
     """
+
+    def get(self, request):
+        """
+        View to serve GET requests, deprecated in favour of POST and retained
+        only until the frontends have moved off it
+        """
+
+        base_auth_log(
+            'Password recovery requested over the deprecated GET route',
+            'warning'
+        )
+
+        return self.recover(request, request.GET.get('username'))
 
     def post(self, request):
         """
         View to serve POST requests
         """
 
-        username = request.data.get('username', '').strip()
+        return self.recover(request, request.data.get('username'))
+
+    def recover(self, request, username):
+        """
+        Send a recovery token to the named account, if it exists
+        """
+
+        username = (username or '').strip()
 
         # Get client IP for rate limiting
         ip_address = request.source_ip_address
