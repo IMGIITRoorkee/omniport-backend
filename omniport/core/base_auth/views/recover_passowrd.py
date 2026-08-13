@@ -1,14 +1,12 @@
 import swapper
 import logging
 from django.core.cache import cache
-from django.conf import settings
 from rest_framework import generics, response, status
 
 from base_auth.constants.password_recovery import (
     ACCOUNT_RATE_LIMIT,
     ACCOUNT_RATE_LIMIT_KEY_PREFIX,
     ACCOUNT_RATE_LIMIT_WINDOW,
-    ALLOWED_PASSWORD_RESET_HOSTS,
     GENERIC_RECOVERY_MESSAGE,
     IP_RATE_LIMIT,
     IP_RATE_LIMIT_KEY_PREFIX,
@@ -60,15 +58,6 @@ class RecoverPassword(generics.GenericAPIView):
         ip_key = f'{IP_RATE_LIMIT_KEY_PREFIX}:{ip_address}'
         if not rate_limit_check(ip_key, IP_RATE_LIMIT, IP_RATE_LIMIT_WINDOW):
             logger.warning(f"[SECURITY] Password reset rate limit exceeded (IP): {ip_address}")
-            return response.Response(
-                data={'message': GENERIC_RECOVERY_MESSAGE},
-                status=status.HTTP_200_OK
-            )
-
-        # Validate Host header (prevent injection)
-        host = request.get_host()
-        if host not in ALLOWED_PASSWORD_RESET_HOSTS and not settings.DEBUG:
-            logger.error(f"[SECURITY] Invalid Host header in password reset: {host}")
             return response.Response(
                 data={'message': GENERIC_RECOVERY_MESSAGE},
                 status=status.HTTP_200_OK

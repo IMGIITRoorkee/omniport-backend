@@ -1,8 +1,3 @@
-# Hosts from which a password recovery request is honoured
-ALLOWED_PASSWORD_RESET_HOSTS = [
-    'channel.iitr.ac.in',
-]
-
 # Rate limits, as the number of requests allowed per window of that many
 # seconds, kept separate per scope so that either can be tuned or, in tests,
 # tightened or relaxed on its own

@@ -20,9 +20,3 @@ CSRF_COOKIE_SECURE = True  # Only send CSRF cookie over HTTPS
 SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-
-# Allowed hosts for password reset (prevent host-header injection) - CWE-640
-PASSWORD_RESET_ALLOWED_HOSTS = [
-    'channel.iitr.ac.in',
-    'staging.channel.iitr.ac.in',
-]
