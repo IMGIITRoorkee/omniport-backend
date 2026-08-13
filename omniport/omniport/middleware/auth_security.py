@@ -32,6 +32,13 @@ PUBLIC_ENDPOINTS = [
     '/api/public/',
 ]
 
+# The suffix shared by the URL namespaces of the authentication apps, every one
+# of which is worth an audit record. Matching on the namespace rather than on
+# the path keeps this working as apps are added and as they are mounted
+# elsewhere, which the admin site in particular is
+AUTHENTICATION_NAMESPACE_SUFFIX = '_auth'
+ADMIN_NAMESPACE = 'admin'
+
 
 class SecurityHeadersMiddleware:
     """Add HSTS and other security headers to all responses"""
@@ -134,7 +141,7 @@ class AuditLoggingMiddleware:
             )
 
         # Log sensitive operations
-        if any(x in request.path for x in ['/password', '/auth/', '/admin']):
+        if self.is_sensitive_operation(request):
             auth_security_log(
                 f'Sensitive operation {request.method} {request.path} '
                 f'returned status {response.status_code}',
@@ -143,3 +150,20 @@ class AuditLoggingMiddleware:
             )
 
         return response
+
+    @staticmethod
+    def is_sensitive_operation(request):
+        """
+        Whether the view that served the request came from an authentication
+        app or from the admin site
+        """
+
+        resolver_match = request.resolver_match
+        if resolver_match is None:
+            return False
+
+        app_name = resolver_match.app_name
+        return (
+            app_name.endswith(AUTHENTICATION_NAMESPACE_SUFFIX)
+            or app_name == ADMIN_NAMESPACE
+        )
