@@ -11,7 +11,9 @@ from omniport.settings.configuration.base import CONFIGURATION as _CONF
 # Allowed hosts - add localhost for testing
 _hosts = _CONF.allowances.hosts
 if isinstance(_hosts, list):
-    ALLOWED_HOSTS = _hosts + ['localhost', '127.0.0.1', 'omniport.intranet']
+ALLOWED_HOSTS = list(_CONF.allowances.hosts)
+if _CONF.environment == 'development':
+    ALLOWED_HOSTS += ['localhost', '127.0.0.1', 'omniport.intranet']
 else:
     ALLOWED_HOSTS = _hosts
 
