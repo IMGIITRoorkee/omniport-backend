@@ -46,7 +46,7 @@ class RecoverPassword(generics.GenericAPIView):
         """
         Handle password recovery via POST (secure method)
         """
-        username = request.data.get('username', '').strip()
+        username = str(request.data.get('username') or '').strip()
 
         # Get client IP for rate limiting
         ip_address = self.get_client_ip(request)
