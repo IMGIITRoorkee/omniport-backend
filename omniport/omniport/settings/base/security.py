@@ -15,7 +15,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
 SESSION_COOKIE_SECURE = True  # Only send session cookie over HTTPS
 CSRF_COOKIE_SECURE = True  # Only send CSRF cookie over HTTPS
-CSRF_COOKIE_HTTPONLY = True  # Prevent JS access to CSRF token
 
 # HSTS (Fix ATO via network interception) - CWE-640
 SECURE_HSTS_SECONDS = 31536000  # 1 year
