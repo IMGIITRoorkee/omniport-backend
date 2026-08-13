@@ -7,10 +7,11 @@ Fixes:
 - CWE-639: Missing authorization checks
 """
 
-import logging
 from django.http import JsonResponse
 
-logger = logging.getLogger('security')
+from core.utils.logs import get_logging_function
+
+auth_security_log = get_logging_function('auth_security')
 
 # Endpoints that require authentication (not accessible to Guest)
 PROTECTED_ENDPOINTS = [
@@ -73,8 +74,10 @@ class GuestSessionBlockerMiddleware:
         if self.is_guest_user(request):
             # Check if trying to access protected endpoint
             if self.is_protected_endpoint(request.path):
-                logger.warning(
-                    f"[SECURITY] Guest access blocked: path={request.path} ip={request.source_ip_address}"
+                auth_security_log(
+                    f'Guest access blocked on {request.path} '
+                    f'from {request.source_ip_address}',
+                    'warning'
                 )
                 return JsonResponse(
                     {'error': 'Authentication required'},
@@ -119,20 +122,24 @@ class AuditLoggingMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
 
+        user = None if request.user.is_anonymous else request.user
+
         # Log auth failures
         if response.status_code in [401, 403]:
-            user_id = request.user.id if not request.user.is_anonymous else 'anonymous'
-            logger.warning(
-                f"[AUDIT] Authorization failed: "
-                f"user={user_id} path={request.path} method={request.method} status={response.status_code}"
+            auth_security_log(
+                f'Authorisation failed on {request.method} {request.path} '
+                f'with status {response.status_code}',
+                'warning',
+                user
             )
 
         # Log sensitive operations
         if any(x in request.path for x in ['/password', '/auth/', '/admin']):
-            user_id = request.user.id if not request.user.is_anonymous else 'anonymous'
-            logger.info(
-                f"[AUDIT] Sensitive operation: "
-                f"user={user_id} path={request.path} method={request.method} status={response.status_code}"
+            auth_security_log(
+                f'Sensitive operation {request.method} {request.path} '
+                f'returned status {response.status_code}',
+                'info',
+                user
             )
 
         return response

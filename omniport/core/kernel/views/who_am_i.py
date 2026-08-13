@@ -1,12 +1,12 @@
-import logging
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from core.utils.logs import get_logging_function
 from omniport.utils import switcher
 
-logger = logging.getLogger('security')
+kernel_log = get_logging_function('kernel')
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
@@ -41,7 +41,11 @@ class WhoAmI(GenericAPIView):
 
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
-            logger.error(f"Error in WhoAmI endpoint: {e}")
+            kernel_log(
+                f'Could not fetch the personal information: {e}',
+                'error',
+                request.user
+            )
             return Response(
                 {'error': 'Could not fetch user information'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

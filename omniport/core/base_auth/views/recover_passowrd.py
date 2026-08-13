@@ -1,5 +1,4 @@
 import swapper
-import logging
 from django.core.cache import cache
 from rest_framework import generics, response, status
 
@@ -16,13 +15,14 @@ from base_auth.constants.password_recovery import (
 )
 from base_auth.models import User
 from base_auth.managers.get_user import get_user
+from core.utils.logs import get_logging_function
 from omniport.utils import switcher
 from omniport.settings.configuration.base import CONFIGURATION
 from formula_one.utils.verification_token import send_token, verify_access_token, delete
 from session_auth.models import SessionMap
 from categories.models import Category
 
-logger = logging.getLogger('security')
+base_auth_log = get_logging_function('base_auth')
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
@@ -57,7 +57,10 @@ class RecoverPassword(generics.GenericAPIView):
         # Rate limit by IP
         ip_key = f'{IP_RATE_LIMIT_KEY_PREFIX}:{ip_address}'
         if not rate_limit_check(ip_key, IP_RATE_LIMIT, IP_RATE_LIMIT_WINDOW):
-            logger.warning(f"[SECURITY] Password reset rate limit exceeded (IP): {ip_address}")
+            base_auth_log(
+                f'Password recovery rate limit exceeded by IP {ip_address}',
+                'warning'
+            )
             return response.Response(
                 data={'message': GENERIC_RECOVERY_MESSAGE},
                 status=status.HTTP_200_OK
@@ -65,7 +68,10 @@ class RecoverPassword(generics.GenericAPIView):
 
         # Validate input
         if not username or len(username) < MINIMUM_USERNAME_LENGTH:
-            logger.warning(f"[SECURITY] Invalid username format in password reset")
+            base_auth_log(
+                'Password recovery attempted with a malformed username',
+                'warning'
+            )
             return response.Response(
                 data={'message': GENERIC_RECOVERY_MESSAGE},
                 status=status.HTTP_200_OK
@@ -84,7 +90,11 @@ class RecoverPassword(generics.GenericAPIView):
             if not rate_limit_check(
                 account_key, ACCOUNT_RATE_LIMIT, ACCOUNT_RATE_LIMIT_WINDOW
             ):
-                logger.warning(f"[SECURITY] Password reset rate limit exceeded (account): user={user.id}")
+                base_auth_log(
+                    'Password recovery rate limit exceeded on the account',
+                    'warning',
+                    user
+                )
                 return response.Response(
                     data={'message': GENERIC_RECOVERY_MESSAGE},
                     status=status.HTTP_200_OK
@@ -111,10 +121,14 @@ class RecoverPassword(generics.GenericAPIView):
                     category=category
                 )
 
-                logger.info(f"[AUDIT] Password recovery email sent: user={user.id}")
+                base_auth_log('Password recovery email sent', 'info', user)
 
             except Exception as e:
-                logger.error(f"Error sending password recovery email: {e}")
+                base_auth_log(
+                    f'Could not send the password recovery email: {e}',
+                    'error',
+                    user
+                )
 
         # ALWAYS return identical response - CRITICAL for preventing enumeration
         return response.Response(
