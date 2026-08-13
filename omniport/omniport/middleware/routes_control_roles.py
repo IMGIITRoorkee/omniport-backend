@@ -43,10 +43,17 @@ class RoutesControlRoles:
             raise Http404
 
         DISCOVERY = settings.DISCOVERY
-        all_apps = DISCOVERY.apps
+        all_apps = DISCOVERY.services + DISCOVERY.apps
 
         for app, app_configuration in all_apps:
-            base_url = app_configuration.base_urls.http.strip('/')
+            base_url = app_configuration.base_urls.http
+            if base_url is None:
+                continue
+            base_url = base_url.strip('/')
+            # The URL dispatcher mounts API apps under api/, so the guard has
+            # to match the same prefix or it never fires
+            if app_configuration.is_api:
+                base_url = f'api/{base_url}'
             if (
                 app_configuration.guest_allowed
                 or from_acceptable_person(
