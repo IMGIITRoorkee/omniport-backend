@@ -3,10 +3,13 @@ ALLOWED_PASSWORD_RESET_HOSTS = [
     'channel.iitr.ac.in',
 ]
 
-# Rate limits, expressed as the number of requests allowed in the window
+# Rate limits, as the number of requests allowed per window of that many
+# seconds, kept separate per scope so that either can be tuned or, in tests,
+# tightened or relaxed on its own
 IP_RATE_LIMIT = 3
+IP_RATE_LIMIT_WINDOW = 3600
 ACCOUNT_RATE_LIMIT = 1
-RATE_LIMIT_WINDOW = 3600
+ACCOUNT_RATE_LIMIT_WINDOW = 3600
 
 # Prefixes of the cache keys holding the rate limit counters
 IP_RATE_LIMIT_KEY_PREFIX = 'password_reset:ip'

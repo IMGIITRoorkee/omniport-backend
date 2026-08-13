@@ -7,12 +7,13 @@ from rest_framework import generics, response, status
 from base_auth.constants.password_recovery import (
     ACCOUNT_RATE_LIMIT,
     ACCOUNT_RATE_LIMIT_KEY_PREFIX,
+    ACCOUNT_RATE_LIMIT_WINDOW,
     ALLOWED_PASSWORD_RESET_HOSTS,
     GENERIC_RECOVERY_MESSAGE,
     IP_RATE_LIMIT,
     IP_RATE_LIMIT_KEY_PREFIX,
+    IP_RATE_LIMIT_WINDOW,
     MINIMUM_USERNAME_LENGTH,
-    RATE_LIMIT_WINDOW,
     RECOVERY_TOKEN_TYPE,
 )
 from base_auth.models import User
@@ -27,8 +28,14 @@ logger = logging.getLogger('security')
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
-def rate_limit_check(key, limit, window):
-    """Check and update rate limit counter"""
+def rate_limit_check(key, limit=IP_RATE_LIMIT, window=IP_RATE_LIMIT_WINDOW):
+    """
+    Fixed window counter: allow at most `limit` hits on `key` per `window`
+    seconds, the window starting at the first hit and expiring with the cache
+    entry. Defaults to the per IP limit; callers pass their own scope's
+    constants.
+    """
+
     current = cache.get(key, 0)
     if current >= limit:
         return False
@@ -59,7 +66,7 @@ class RecoverPassword(generics.GenericAPIView):
 
         # Rate limit by IP
         ip_key = f'{IP_RATE_LIMIT_KEY_PREFIX}:{ip_address}'
-        if not rate_limit_check(ip_key, IP_RATE_LIMIT, RATE_LIMIT_WINDOW):
+        if not rate_limit_check(ip_key, IP_RATE_LIMIT, IP_RATE_LIMIT_WINDOW):
             logger.warning(f"[SECURITY] Password reset rate limit exceeded (IP): {ip_address}")
             return response.Response(
                 data={'message': GENERIC_RECOVERY_MESSAGE},
@@ -94,7 +101,7 @@ class RecoverPassword(generics.GenericAPIView):
             # Rate limit by account
             account_key = f'{ACCOUNT_RATE_LIMIT_KEY_PREFIX}:{user.id}'
             if not rate_limit_check(
-                account_key, ACCOUNT_RATE_LIMIT, RATE_LIMIT_WINDOW
+                account_key, ACCOUNT_RATE_LIMIT, ACCOUNT_RATE_LIMIT_WINDOW
             ):
                 logger.warning(f"[SECURITY] Password reset rate limit exceeded (account): user={user.id}")
                 return response.Response(
