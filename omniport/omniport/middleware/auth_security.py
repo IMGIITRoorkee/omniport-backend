@@ -74,7 +74,7 @@ class GuestSessionBlockerMiddleware:
             # Check if trying to access protected endpoint
             if self.is_protected_endpoint(request.path):
                 logger.warning(
-                    f"[SECURITY] Guest access blocked: path={request.path} ip={self.get_client_ip(request)}"
+                    f"[SECURITY] Guest access blocked: path={request.path} ip={request.source_ip_address}"
                 )
                 return JsonResponse(
                     {'error': 'Authentication required'},
@@ -108,14 +108,6 @@ class GuestSessionBlockerMiddleware:
                 return False
 
         return path.startswith('/api/') and '/auth/' not in path and '/public/' not in path
-
-    @staticmethod
-    def get_client_ip(request):
-        """Get client IP address"""
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            return x_forwarded_for.split(',')[0]
-        return request.META.get('REMOTE_ADDR')
 
 
 class AuditLoggingMiddleware:

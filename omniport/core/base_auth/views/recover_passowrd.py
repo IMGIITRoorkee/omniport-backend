@@ -54,7 +54,7 @@ class RecoverPassword(generics.GenericAPIView):
         username = request.data.get('username', '').strip()
 
         # Get client IP for rate limiting
-        ip_address = self.get_client_ip(request)
+        ip_address = request.source_ip_address
 
         # Rate limit by IP
         ip_key = f'{IP_RATE_LIMIT_KEY_PREFIX}:{ip_address}'
@@ -132,14 +132,6 @@ class RecoverPassword(generics.GenericAPIView):
             data={'message': GENERIC_RECOVERY_MESSAGE},
             status=status.HTTP_200_OK,
         )
-
-    @staticmethod
-    def get_client_ip(request):
-        """Get client IP address"""
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            return x_forwarded_for.split(',')[0]
-        return request.META.get('REMOTE_ADDR')
 
 
 class VerifyRecoveryToken(generics.GenericAPIView):
