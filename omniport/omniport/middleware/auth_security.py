@@ -1,35 +1,15 @@
 """
-Security middleware for authentication and authorization.
+Security hardening middleware.
 
-Fixes:
-- CWE-602: Client-side role enforcement
-- CWE-284: Improper access control (Guest sessions)
-- CWE-639: Missing authorization checks
+Provides response security headers (HSTS, anti-sniff, anti-clickjacking) and
+audit logging of authentication/authorization events. Access control itself is
+enforced by DRF's default IsAuthenticated permission and per-view permission
+classes, not by URL-prefix matching in middleware.
 """
 
 import logging
-from django.http import JsonResponse
 
 logger = logging.getLogger('security')
-
-# Endpoints that require authentication (not accessible to Guest)
-PROTECTED_ENDPOINTS = [
-    '/api/people/',
-    '/api/stats/',
-    '/api/filemanager/',
-    '/api/marketplace/',
-    '/api/noticeboard/new/',
-    '/api/lectures/',
-    '/api/groups/',
-    '/api/lost_and_found/',
-]
-
-# Endpoints accessible to unauthenticated users
-PUBLIC_ENDPOINTS = [
-    '/api/auth/',
-    '/api/base_auth/',
-    '/api/public/',
-]
 
 
 class SecurityHeadersMiddleware:
@@ -57,65 +37,6 @@ class SecurityHeadersMiddleware:
         response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
 
         return response
-
-
-class GuestSessionBlockerMiddleware:
-    """
-    Block Guest sessions from accessing protected endpoints.
-    Fixes CWE-284: Improper Access Control
-    """
-
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        # Check if user is Guest
-        if self.is_guest_user(request):
-            # Check if trying to access protected endpoint
-            if self.is_protected_endpoint(request.path):
-                logger.warning(
-                    f"[SECURITY] Guest access blocked: path={request.path} ip={self.get_client_ip(request)}"
-                )
-                return JsonResponse(
-                    {'error': 'Authentication required'},
-                    status=401
-                )
-
-        response = self.get_response(request)
-        return response
-
-    @staticmethod
-    def is_guest_user(request):
-        """Check if user is Guest"""
-        if request.user.is_anonymous:
-            return True
-        # Check if this is a guest session
-        is_guest = getattr(request.user, 'is_guest', False)
-        username_is_guest = request.user.username == 'Guest User'
-        return is_guest or username_is_guest
-
-    @staticmethod
-    def is_protected_endpoint(path):
-        """Check if path requires authentication"""
-        # Check protected list first
-        for protected in PROTECTED_ENDPOINTS:
-            if path.startswith(protected):
-                return True
-
-        # Override: some protected paths are public
-        for public in PUBLIC_ENDPOINTS:
-            if path.startswith(public):
-                return False
-
-        return path.startswith('/api/') and '/auth/' not in path and '/public/' not in path
-
-    @staticmethod
-    def get_client_ip(request):
-        """Get client IP address"""
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            return x_forwarded_for.split(',')[0]
-        return request.META.get('REMOTE_ADDR')
 
 
 class AuditLoggingMiddleware:

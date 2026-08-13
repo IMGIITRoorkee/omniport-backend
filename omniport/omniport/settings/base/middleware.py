@@ -25,8 +25,9 @@ MIDDLEWARE = [
     'omniport.middleware.last_seen.LastSeen',
     'omniport.middleware.routes_control_roles.RoutesControlRoles',
 
-    # Security middleware (CRITICAL - CWE-602, CWE-284, CWE-639)
+    # Security middleware: response hardening headers and audit logging.
+    # Authorization is enforced by DRF's default IsAuthenticated permission
+    # (see settings/third_party/drf.py), not by URL-prefix matching here.
     'omniport.middleware.auth_security.SecurityHeadersMiddleware',  # Add HSTS/security headers
     'omniport.middleware.auth_security.AuditLoggingMiddleware',     # Log all auth operations
-    'omniport.middleware.auth_security.GuestSessionBlockerMiddleware',  # Block guest from protected endpoints
 ]

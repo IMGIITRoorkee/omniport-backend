@@ -1,4 +1,5 @@
 from rest_framework import status, generics, response
+from rest_framework.permissions import AllowAny
 
 from base_auth.serializers.retrieve_user import (
     RetrieveUserSerializer,
@@ -15,6 +16,7 @@ class VerifySecretAnswer(generics.GenericAPIView):
     username, the secret_answer and the new password to reset it
     """
 
+    permission_classes = [AllowAny]
     serializer_class = VerifySecretAnswerSerializer
 
     def get(self, request, *args, **kwargs):

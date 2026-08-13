@@ -2,6 +2,7 @@ from django.conf import settings
 from rest_framework import generics
 from rest_framework import response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 
 from configuration.serializers.project.branding import BrandSerializer
 from configuration.serializers.project.site import SiteSerializer
@@ -12,6 +13,7 @@ class SiteBrandingView(generics.GenericAPIView):
     Provide the branding information of the site as JSON to the frontend
     """
 
+    permission_classes = [AllowAny]
     serializer_class = SiteSerializer
 
     def get(self, request, *args, **kwargs):
@@ -32,6 +34,7 @@ class InstituteBrandingView(generics.GenericAPIView):
     Provide the branding information of the institute as JSON to the frontend
     """
 
+    permission_classes = [AllowAny]
     serializer_class = BrandSerializer
 
     def get(self, request, *args, **kwargs):
@@ -52,6 +55,7 @@ class MaintainersBrandingView(generics.GenericAPIView):
     Provide the branding information of the maintainers as JSON to the frontend
     """
 
+    permission_classes = [AllowAny]
     serializer_class = BrandSerializer
 
     def get(self, request, *args, **kwargs):

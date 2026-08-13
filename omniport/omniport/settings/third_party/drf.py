@@ -3,6 +3,13 @@ This settings file exposes settings for Django REST framework
 """
 
 REST_FRAMEWORK = {
+    # Deny by default: every endpoint requires authentication unless it opts
+    # out with an explicit permission_classes (e.g. AllowAny). Without this,
+    # DRF falls back to AllowAny and any view lacking permission_classes is
+    # exposed to unauthenticated callers (CWE-862 / CWE-284).
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',

@@ -3,6 +3,7 @@ import logging
 from django.core.cache import cache
 from django.conf import settings
 from rest_framework import generics, response, status
+from rest_framework.permissions import AllowAny
 
 from base_auth.models import User
 from base_auth.managers.get_user import get_user
@@ -41,6 +42,8 @@ class RecoverPassword(generics.GenericAPIView):
     - CSRF-protected
     - Host header validation
     """
+
+    permission_classes = [AllowAny]
 
     def post(self, request):
         """
@@ -136,6 +139,8 @@ class RecoverPassword(generics.GenericAPIView):
 
 
 class VerifyRecoveryToken(generics.GenericAPIView):
+
+    permission_classes = [AllowAny]
 
     @verify_access_token
     def get(self, request, *args):

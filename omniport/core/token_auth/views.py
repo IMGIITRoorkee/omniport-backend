@@ -13,6 +13,7 @@ from rest_framework.renderers import (
     JSONRenderer,
     BrowsableAPIRenderer,
 )
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -28,6 +29,7 @@ class ObtainPair(TokenObtainPairView):
     Remove the effect of the addition of project-wide JSON API from the view
     """
 
+    permission_classes = [AllowAny]
     parser_classes = PARSERS_MINUS_JSON_API
     renderer_classes = RENDERERS_MINUS_JSON_API
 
@@ -37,6 +39,7 @@ class Refresh(TokenRefreshView):
     Remove the effect of the addition of project-wide JSON API from the view
     """
 
+    permission_classes = [AllowAny]
     parser_classes = PARSERS_MINUS_JSON_API
     renderer_classes = RENDERERS_MINUS_JSON_API
 
@@ -46,5 +49,6 @@ class Verify(TokenVerifyView):
     Remove the effect of the addition of project-wide JSON API from the view
     """
 
+    permission_classes = [AllowAny]
     parser_classes = PARSERS_MINUS_JSON_API
     renderer_classes = RENDERERS_MINUS_JSON_API

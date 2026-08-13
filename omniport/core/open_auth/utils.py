@@ -10,6 +10,31 @@ from categories.models import Category
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
+def _resolve_path(root, dotted_path):
+    """
+    Safely walk a dotted attribute path starting from ``root`` without using
+    eval(). A path segment ending in ``()`` is treated as a no-argument method
+    call, which is required for paths such as ``contact_information.first()``.
+    Returns ``None`` if any segment along the way is missing or is ``None``.
+    :param root: the object to start traversal from
+    :param dotted_path: the dotted attribute path to resolve
+    :return: the resolved value, or None if it cannot be resolved
+    """
+
+    obj = root
+    for segment in dotted_path.split('.'):
+        if obj is None:
+            return None
+        if segment.endswith('()'):
+            method = getattr(obj, segment[:-2], None)
+            if not callable(method):
+                return None
+            obj = method()
+        else:
+            obj = getattr(obj, segment, None)
+    return obj
+
+
 def get_field_data(person, field_data_points, object_string):
     """
     Utility function to get requested model's data
@@ -19,12 +44,26 @@ def get_field_data(person, field_data_points, object_string):
     :return: data for a model string
     """
 
+    # ``object_string`` is a dotted path rooted at the ``person`` object
+    # (e.g. 'person', 'person.student', 'person.contact_information.first()').
+    # ``field_data_points`` originate from OAuth application configuration and
+    # are therefore untrusted, so the value is resolved by safe attribute
+    # traversal rather than eval() to avoid remote code execution (CWE-95).
     data = dict()
-    if eval(object_string) is None:
+
+    if object_string == 'person':
+        base_object = person
+    elif object_string.startswith('person.'):
+        base_object = _resolve_path(person, object_string[len('person.'):])
+    else:
+        base_object = None
+
+    if base_object is None:
         return data
+
     for field_data_point in field_data_points:
         data[f'{field_data_point.replace(".", " ")}'] = \
-            eval(f'{object_string}.{field_data_point}')
+            _resolve_path(base_object, field_data_point)
     return data
 
 
