@@ -30,10 +30,7 @@ AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 def rate_limit_check(key, limit=IP_RATE_LIMIT, window=IP_RATE_LIMIT_WINDOW):
     """
-    Fixed window counter: allow at most `limit` hits on `key` per `window`
-    seconds, the window starting at the first hit and expiring with the cache
-    entry. Defaults to the per IP limit; callers pass their own scope's
-    constants.
+    Fixed window counter, allowing `limit` hits on `key` per `window` seconds
     """
 
     current = cache.get(key, 0)
@@ -45,20 +42,15 @@ def rate_limit_check(key, limit=IP_RATE_LIMIT, window=IP_RATE_LIMIT_WINDOW):
 
 class RecoverPassword(generics.GenericAPIView):
     """
-    Password recovery endpoint.
-
-    SECURITY FIXES (CWE-640, CWE-799, CWE-204):
-    - POST-only (prevents GET enumeration)
-    - Rate-limited (3/IP/hour, 1/account/hour)
-    - Identical response for valid/invalid (prevents username enumeration)
-    - CSRF-protected
-    - Host header validation
+    POST only password recovery endpoint, rate limited per IP and per account,
+    which responds identically whether or not the account exists
     """
 
     def post(self, request):
         """
-        Handle password recovery via POST (secure method)
+        View to serve POST requests
         """
+
         username = request.data.get('username', '').strip()
 
         # Get client IP for rate limiting
