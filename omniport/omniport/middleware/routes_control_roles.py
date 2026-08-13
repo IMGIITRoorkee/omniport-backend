@@ -46,7 +46,9 @@ class RoutesControlRoles:
         all_apps = DISCOVERY.apps
 
         for app, app_configuration in all_apps:
-            base_url = app_configuration.base_urls.http.strip('/')
+            base_url = self.mounted_base_url(app_configuration)
+            if base_url is None:
+                continue
             if (
                 app_configuration.guest_allowed
                 or from_acceptable_person(
@@ -64,3 +66,22 @@ class RoutesControlRoles:
 
         response = self.get_response(request)
         return response
+
+    @staticmethod
+    def mounted_base_url(app_configuration):
+        """
+        The base URL an app is actually mounted on, which discovery prefixes
+        with api for the apps declaring themselves to be one
+        :param app_configuration: the configuration of the app in question
+        :return: the base URL, or None for an app served over WS alone
+        """
+
+        base_url = app_configuration.base_urls.http
+        if base_url is None:
+            return None
+
+        base_url = base_url.strip('/')
+        if app_configuration.is_api:
+            base_url = f'api/{base_url}'
+
+        return base_url

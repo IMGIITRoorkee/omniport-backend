@@ -28,6 +28,4 @@ MIDDLEWARE = [
     'omniport.middleware.person_roles.PersonRoles',
     'omniport.middleware.last_seen.LastSeen',
     'omniport.middleware.routes_control_roles.RoutesControlRoles',
-
-    'omniport.middleware.auth_security.GuestSessionBlockerMiddleware',
 ]
