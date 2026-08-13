@@ -207,20 +207,35 @@ test_security_headers() {
     # Make a request and capture headers
     response=$(curl -s -i "$BASE_URL/kernel/who_am_i/" 2>/dev/null)
 
-    # Check HSTS
-    if echo "$response" | grep -qi "strict-transport-security"; then
-        hsts=$(echo "$response" | grep -i "strict-transport-security" | head -1 | cut -d: -f2- | xargs)
-        pass "HSTS header present: $hsts"
+    # Check HSTS, which belongs on secure responses alone, RFC 6797 having
+    # browsers ignore it over plain HTTP
+    hsts_count=$(echo "$response" | grep -ci "strict-transport-security")
+    if [[ "$BASE_URL" == https://* ]]; then
+        if [ "$hsts_count" -eq 1 ]; then
+            hsts=$(echo "$response" | grep -i "strict-transport-security" | head -1 | cut -d: -f2- | xargs)
+            pass "HSTS header present: $hsts"
+        elif [ "$hsts_count" -eq 0 ]; then
+            fail "HSTS header missing"
+        else
+            fail "HSTS header sent $hsts_count times (NGINX and Django both adding it)"
+        fi
     else
-        fail "HSTS header missing"
+        if [ "$hsts_count" -eq 0 ]; then
+            pass "HSTS absent over plain HTTP, as it should be"
+        else
+            fail "HSTS sent over plain HTTP ($hsts_count times)"
+        fi
     fi
 
     # Check X-Frame-Options
-    if echo "$response" | grep -qi "x-frame-options"; then
+    xframe_count=$(echo "$response" | grep -ci "x-frame-options")
+    if [ "$xframe_count" -eq 1 ]; then
         xframe=$(echo "$response" | grep -i "x-frame-options" | head -1 | cut -d: -f2- | xargs)
         pass "X-Frame-Options header present: $xframe"
-    else
+    elif [ "$xframe_count" -eq 0 ]; then
         fail "X-Frame-Options header missing"
+    else
+        fail "X-Frame-Options sent $xframe_count times, browsers may ignore it"
     fi
 
     # Check X-Content-Type-Options

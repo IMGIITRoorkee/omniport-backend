@@ -40,33 +40,6 @@ AUTHENTICATION_NAMESPACE_SUFFIX = '_auth'
 ADMIN_NAMESPACE = 'admin'
 
 
-class SecurityHeadersMiddleware:
-    """Add HSTS and other security headers to all responses"""
-
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        response = self.get_response(request)
-
-        # HSTS (fix ATO via network interception)
-        response['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
-
-        # Prevent MIME sniffing
-        response['X-Content-Type-Options'] = 'nosniff'
-
-        # Prevent clickjacking
-        response['X-Frame-Options'] = 'DENY'
-
-        # XSS Protection
-        response['X-XSS-Protection'] = '1; mode=block'
-
-        # Referrer Policy
-        response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-
-        return response
-
-
 class GuestSessionBlockerMiddleware:
     """
     Block Guest sessions from accessing protected endpoints.

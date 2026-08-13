@@ -7,10 +7,6 @@ This settings file exposes the middleware employed in the project.
 """
 
 MIDDLEWARE = [
-    # Outermost, so that the headers are set on every response, including the
-    # ones the middleware below return without ever reaching a view
-    'omniport.middleware.auth_security.SecurityHeadersMiddleware',
-
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
