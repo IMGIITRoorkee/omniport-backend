@@ -19,9 +19,7 @@ MIDDLEWARE = [
 
     'omniport.middleware.drf_auth.DrfAuth',
 
-    # Above the middleware that deny requests, so that denials are audited
     'omniport.middleware.auth_security.AuditLoggingMiddleware',
-
     'omniport.middleware.ip_address_rings.IpAddressRings',
     'omniport.middleware.routes_control.RoutesControl',
     'omniport.middleware.person_roles.PersonRoles',
