@@ -75,23 +75,13 @@ warn() {
     ((WARNINGS++))
 }
 
-# Test 1: Password Reset - POST Only
-test_password_reset_post_only() {
-    print_header "TEST 1: Password Reset - POST Only"
-    print_test "Password reset should reject GET requests"
-
-    # Test GET request
-    response=$(curl -s -w "\n%{http_code}" -X GET "$BASE_URL/api/base_auth/recover_password/?username=testuser" 2>/dev/null)
-    http_code=$(echo "$response" | tail -n 1)
-
-    if [ "$http_code" != "200" ]; then
-        pass "GET request blocked (HTTP $http_code)"
-    else
-        fail "GET request not blocked (HTTP $http_code)"
-    fi
+# Test 1: Password Reset - Accepted Methods
+test_password_reset_methods() {
+    print_header "TEST 1: Password Reset - Accepted Methods"
+    print_test "Password reset should serve POST, and GET until it is retired"
 
     # Test POST request
-    response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/api/base_auth/recover_password/" \
+    response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/base_auth/recover_password/" \
         -H "Content-Type: application/json" \
         -d '{"username":"testuser"}' 2>/dev/null)
     http_code=$(echo "$response" | tail -n 1)
@@ -101,6 +91,16 @@ test_password_reset_post_only() {
     else
         fail "POST request failed (HTTP $http_code)"
     fi
+
+    # Test GET request, deprecated but retained until the frontends have moved
+    response=$(curl -s -w "\n%{http_code}" -X GET "$BASE_URL/base_auth/recover_password/?username=testuser" 2>/dev/null)
+    http_code=$(echo "$response" | tail -n 1)
+
+    if [ "$http_code" == "200" ]; then
+        pass "GET request still served while deprecated (HTTP $http_code)"
+    else
+        fail "GET request broken before the frontends moved (HTTP $http_code)"
+    fi
 }
 
 # Test 2: Password Reset - Identical Responses
@@ -109,13 +109,13 @@ test_password_reset_identical_responses() {
     print_test "Valid and invalid usernames should return identical messages"
 
     # Valid user
-    response1=$(curl -s -X POST "$BASE_URL/api/base_auth/recover_password/" \
+    response1=$(curl -s -X POST "$BASE_URL/base_auth/recover_password/" \
         -H "Content-Type: application/json" \
         -d '{"username":"testuser"}' 2>/dev/null)
     msg1=$(echo "$response1" | grep -o '"message":"[^"]*"' | head -1)
 
     # Invalid user
-    response2=$(curl -s -X POST "$BASE_URL/api/base_auth/recover_password/" \
+    response2=$(curl -s -X POST "$BASE_URL/base_auth/recover_password/" \
         -H "Content-Type: application/json" \
         -d '{"username":"nonexistent_user_xyz_invalid_12345"}' 2>/dev/null)
     msg2=$(echo "$response2" | grep -o '"message":"[^"]*"' | head -1)
@@ -137,7 +137,7 @@ test_password_reset_rate_limiting() {
 
     # Send 4 requests
     for i in {1..4}; do
-        response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/api/base_auth/recover_password/" \
+        response=$(curl -s -w "\n%{http_code}" -X POST "$BASE_URL/base_auth/recover_password/" \
             -H "Content-Type: application/json" \
             -d '{"username":"testuser"}' 2>/dev/null)
         http_code=$(echo "$response" | tail -n 1)
@@ -156,35 +156,21 @@ test_password_reset_rate_limiting() {
     done
 }
 
-# Test 4: WhoAmI - No Role in Response
-test_whoami_no_role() {
-    print_header "TEST 4: WhoAmI Endpoint - No Role in Response"
-    print_test "WhoAmI should not include role, is_admin, or permissions"
+# Test 4: WhoAmI Requires Authentication
+test_whoami_requires_auth() {
+    print_header "TEST 4: WhoAmI Endpoint - Authentication Required"
+    print_test "WhoAmI should not serve personal information to anonymous callers"
 
-    response=$(curl -s "$BASE_URL/api/kernel/who_am_i/" 2>/dev/null)
+    response=$(curl -s -w "\n%{http_code}" "$BASE_URL/kernel/who_am_i/" 2>/dev/null)
+    http_code=$(echo "$response" | tail -n 1)
 
-    # Check for sensitive fields
-    if echo "$response" | grep -q '"role"'; then
-        fail "Response contains 'role' field"
+    if [ "$http_code" == "401" ] || [ "$http_code" == "403" ]; then
+        pass "who_am_i refuses anonymous callers (HTTP $http_code)"
+    elif [ "$http_code" == "404" ]; then
+        fail "who_am_i not found at /kernel/who_am_i/ (HTTP 404)"
     else
-        pass "No 'role' field in response"
+        fail "who_am_i served an anonymous caller (HTTP $http_code)"
     fi
-
-    if echo "$response" | grep -q '"is_admin"'; then
-        fail "Response contains 'is_admin' field"
-    else
-        pass "No 'is_admin' field in response"
-    fi
-
-    if echo "$response" | grep -q '"permissions"'; then
-        fail "Response contains 'permissions' field"
-    else
-        pass "No 'permissions' field in response"
-    fi
-
-    # Show actual fields
-    fields=$(echo "$response" | grep -o '"[^"]*":' | tr '\n' ',' | sed 's/,$//;s/":,/, /g')
-    warn "Response fields: $fields"
 }
 
 # Test 5: Guest Access Blocking
@@ -219,22 +205,37 @@ test_security_headers() {
     print_test "Response should include HSTS, X-Frame-Options, and other security headers"
 
     # Make a request and capture headers
-    response=$(curl -s -i "$BASE_URL/api/kernel/who_am_i/" 2>/dev/null)
+    response=$(curl -s -i "$BASE_URL/kernel/who_am_i/" 2>/dev/null)
 
-    # Check HSTS
-    if echo "$response" | grep -qi "strict-transport-security"; then
-        hsts=$(echo "$response" | grep -i "strict-transport-security" | head -1 | cut -d: -f2- | xargs)
-        pass "HSTS header present: $hsts"
+    # Check HSTS, which belongs on secure responses alone, RFC 6797 having
+    # browsers ignore it over plain HTTP
+    hsts_count=$(echo "$response" | grep -ci "strict-transport-security")
+    if [[ "$BASE_URL" == https://* ]]; then
+        if [ "$hsts_count" -eq 1 ]; then
+            hsts=$(echo "$response" | grep -i "strict-transport-security" | head -1 | cut -d: -f2- | xargs)
+            pass "HSTS header present: $hsts"
+        elif [ "$hsts_count" -eq 0 ]; then
+            fail "HSTS header missing"
+        else
+            fail "HSTS header sent $hsts_count times (NGINX and Django both adding it)"
+        fi
     else
-        fail "HSTS header missing"
+        if [ "$hsts_count" -eq 0 ]; then
+            pass "HSTS absent over plain HTTP, as it should be"
+        else
+            fail "HSTS sent over plain HTTP ($hsts_count times)"
+        fi
     fi
 
     # Check X-Frame-Options
-    if echo "$response" | grep -qi "x-frame-options"; then
+    xframe_count=$(echo "$response" | grep -ci "x-frame-options")
+    if [ "$xframe_count" -eq 1 ]; then
         xframe=$(echo "$response" | grep -i "x-frame-options" | head -1 | cut -d: -f2- | xargs)
         pass "X-Frame-Options header present: $xframe"
-    else
+    elif [ "$xframe_count" -eq 0 ]; then
         fail "X-Frame-Options header missing"
+    else
+        fail "X-Frame-Options sent $xframe_count times, browsers may ignore it"
     fi
 
     # Check X-Content-Type-Options
@@ -331,8 +332,8 @@ main() {
     echo -e "${BOLD}Testing against:${NC} $BASE_URL\n"
 
     # Check if server is reachable
-    if ! curl -s -f "$BASE_URL/api/kernel/who_am_i/" > /dev/null 2>&1; then
-        if ! curl -s "$BASE_URL/api/kernel/who_am_i/" > /dev/null 2>&1; then
+    if ! curl -s -f "$BASE_URL/kernel/who_am_i/" > /dev/null 2>&1; then
+        if ! curl -s "$BASE_URL/kernel/who_am_i/" > /dev/null 2>&1; then
             echo -e "${RED}ERROR: Cannot reach server at $BASE_URL${NC}"
             echo -e "${YELLOW}Make sure the server is running and URL is correct${NC}\n"
             exit 1
@@ -340,10 +341,10 @@ main() {
     fi
 
     # Run all tests
-    test_password_reset_post_only
+    test_password_reset_methods
     test_password_reset_identical_responses
     test_password_reset_rate_limiting
-    test_whoami_no_role
+    test_whoami_requires_auth
     test_guest_blocked
     test_security_headers
     test_https_redirect

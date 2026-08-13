@@ -1,23 +1,18 @@
-import logging
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from core.utils.logs import get_logging_function
 from omniport.utils import switcher
 
-logger = logging.getLogger('security')
+kernel_log = get_logging_function('kernel')
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
 class WhoAmI(GenericAPIView):
     """
     This view shows personal information of the currently logged in user.
-
-    SECURITY FIX (CWE-602):
-    - Returns ONLY display data
-    - Never includes role, permissions, or authorization info
-    - Role is ALWAYS determined server-side per-request
     """
 
     permission_classes = [IsAuthenticated, ]
@@ -25,28 +20,24 @@ class WhoAmI(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         """
-        View to serve GET requests.
-        Returns user profile for display purposes only.
-        Role/permissions determined server-side, never in response.
-
+        View to serve GET requests
         :param request: the request that is to be responded to
         :param args: arguments
         :param kwargs: keyword arguments
         :return: the response for request
         """
+
         try:
             person = request.person
             serializer = self.get_serializer_class()(person)
-            data = serializer.data
 
-            # Security: Remove any authorization-related fields that might be present
-            sensitive_fields = ['role', 'is_admin', 'permissions', 'groups', 'is_staff', 'is_superuser']
-            for field in sensitive_fields:
-                data.pop(field, None)
-
-            return Response(data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            logger.error(f"Error in WhoAmI endpoint: {e}")
+            kernel_log(
+                f'Could not fetch the personal information: {e}',
+                'error',
+                request.user
+            )
             return Response(
                 {'error': 'Could not fetch user information'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR

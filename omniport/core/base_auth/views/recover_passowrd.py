@@ -1,28 +1,36 @@
 import swapper
-import logging
 from django.core.cache import cache
-from django.conf import settings
 from rest_framework import generics, response, status
 
+from base_auth.constants.password_recovery import (
+    ACCOUNT_RATE_LIMIT,
+    ACCOUNT_RATE_LIMIT_KEY_PREFIX,
+    ACCOUNT_RATE_LIMIT_WINDOW,
+    GENERIC_RECOVERY_MESSAGE,
+    IP_RATE_LIMIT,
+    IP_RATE_LIMIT_KEY_PREFIX,
+    IP_RATE_LIMIT_WINDOW,
+    MINIMUM_USERNAME_LENGTH,
+    RECOVERY_TOKEN_TYPE,
+)
 from base_auth.models import User
 from base_auth.managers.get_user import get_user
+from core.utils.logs import get_logging_function
 from omniport.utils import switcher
 from omniport.settings.configuration.base import CONFIGURATION
 from formula_one.utils.verification_token import send_token, verify_access_token, delete
 from session_auth.models import SessionMap
 from categories.models import Category
 
-logger = logging.getLogger('security')
+base_auth_log = get_logging_function('base_auth')
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
-ALLOWED_PASSWORD_RESET_HOSTS = [
-    'channel.iitr.ac.in',
-    'staging.channel.iitr.ac.in',
-]
 
+def rate_limit_check(key, limit=IP_RATE_LIMIT, window=IP_RATE_LIMIT_WINDOW):
+    """
+    Fixed window counter, allowing `limit` hits on `key` per `window` seconds
+    """
 
-def rate_limit_check(key, limit=3, window=3600):
-    """Check and update rate limit counter"""
     current = cache.get(key, 0)
     if current >= limit:
         return False
@@ -32,48 +40,60 @@ def rate_limit_check(key, limit=3, window=3600):
 
 class RecoverPassword(generics.GenericAPIView):
     """
-    Password recovery endpoint.
-
-    SECURITY FIXES (CWE-640, CWE-799, CWE-204):
-    - POST-only (prevents GET enumeration)
-    - Rate-limited (3/IP/hour, 1/account/hour)
-    - Identical response for valid/invalid (prevents username enumeration)
-    - CSRF-protected
-    - Host header validation
+    Password recovery endpoint, rate limited per IP and per account, which
+    responds identically whether or not the account exists
     """
+
+    def get(self, request):
+        """
+        View to serve GET requests, deprecated in favour of POST and retained
+        only until the frontends have moved off it
+        """
+
+        base_auth_log(
+            'Password recovery requested over the deprecated GET route',
+            'warning'
+        )
+
+        return self.recover(request, request.GET.get('username'))
 
     def post(self, request):
         """
-        Handle password recovery via POST (secure method)
+        View to serve POST requests
         """
-        username = str(request.data.get('username') or '').strip()
+
+        return self.recover(request, request.data.get('username'))
+
+    def recover(self, request, username):
+        """
+        Send a recovery token to the named account, if it exists
+        """
+
+        username = (username or '').strip()
 
         # Get client IP for rate limiting
-        ip_address = self.get_client_ip(request)
+        ip_address = request.source_ip_address
 
-        # Rate limit by IP (3 per hour)
-        ip_key = f"password_reset:ip:{ip_address}"
-        if not rate_limit_check(ip_key, limit=3, window=3600):
-            logger.warning(f"[SECURITY] Password reset rate limit exceeded (IP): {ip_address}")
-            return response.Response(
-                data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
-                status=status.HTTP_200_OK
+        # Rate limit by IP
+        ip_key = f'{IP_RATE_LIMIT_KEY_PREFIX}:{ip_address}'
+        if not rate_limit_check(ip_key, IP_RATE_LIMIT, IP_RATE_LIMIT_WINDOW):
+            base_auth_log(
+                f'Password recovery rate limit exceeded by IP {ip_address}',
+                'warning'
             )
-
-        # Validate Host header (prevent injection)
-        host = request.get_host()
-        if host not in ALLOWED_PASSWORD_RESET_HOSTS and not settings.DEBUG:
-            logger.error(f"[SECURITY] Invalid Host header in password reset: {host}")
             return response.Response(
-                data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+                data={'message': GENERIC_RECOVERY_MESSAGE},
                 status=status.HTTP_200_OK
             )
 
         # Validate input
-        if not username or len(username) < 2:
-            logger.warning(f"[SECURITY] Invalid username format in password reset")
+        if not username or len(username) < MINIMUM_USERNAME_LENGTH:
+            base_auth_log(
+                'Password recovery attempted with a malformed username',
+                'warning'
+            )
             return response.Response(
-                data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+                data={'message': GENERIC_RECOVERY_MESSAGE},
                 status=status.HTTP_200_OK
             )
 
@@ -85,12 +105,18 @@ class RecoverPassword(generics.GenericAPIView):
             pass
 
         if user:
-            # Rate limit by account (1 per hour)
-            account_key = f"password_reset:account:{user.id}"
-            if not rate_limit_check(account_key, limit=1, window=3600):
-                logger.warning(f"[SECURITY] Password reset rate limit exceeded (account): user={user.id}")
+            # Rate limit by account
+            account_key = f'{ACCOUNT_RATE_LIMIT_KEY_PREFIX}:{user.id}'
+            if not rate_limit_check(
+                account_key, ACCOUNT_RATE_LIMIT, ACCOUNT_RATE_LIMIT_WINDOW
+            ):
+                base_auth_log(
+                    'Password recovery rate limit exceeded on the account',
+                    'warning',
+                    user
+                )
                 return response.Response(
-                    data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+                    data={'message': GENERIC_RECOVERY_MESSAGE},
                     status=status.HTTP_200_OK
                 )
 
@@ -99,7 +125,7 @@ class RecoverPassword(generics.GenericAPIView):
                 site_name = CONFIGURATION.site.nomenclature.verbose_name
                 site_url = CONFIGURATION.allowances.hosts[0]
 
-                token_type = 'RECOVERY_TOKEN'
+                token_type = RECOVERY_TOKEN_TYPE
                 url = f'https://{site_url}/auth/reset_password/?token={token_type}'
                 subject = f'{site_name} account password reset'
                 body = f'To reset your {site_name} account password, please visit url'
@@ -115,24 +141,20 @@ class RecoverPassword(generics.GenericAPIView):
                     category=category
                 )
 
-                logger.info(f"[AUDIT] Password recovery email sent: user={user.id}")
+                base_auth_log('Password recovery email sent', 'info', user)
 
             except Exception as e:
-                logger.error(f"Error sending password recovery email: {e}")
+                base_auth_log(
+                    f'Could not send the password recovery email: {e}',
+                    'error',
+                    user
+                )
 
-        # ALWAYS return identical response - CRITICAL for preventing enumeration
+        # The same response either way, so that accounts cannot be enumerated
         return response.Response(
-            data={'message': 'If an account exists with that username, you will receive a password recovery email shortly.'},
+            data={'message': GENERIC_RECOVERY_MESSAGE},
             status=status.HTTP_200_OK,
         )
-
-    @staticmethod
-    def get_client_ip(request):
-        """Get client IP address"""
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            return x_forwarded_for.split(',')[0]
-        return request.META.get('REMOTE_ADDR')
 
 
 class VerifyRecoveryToken(generics.GenericAPIView):
@@ -149,7 +171,7 @@ class VerifyRecoveryToken(generics.GenericAPIView):
         token_data = args[0]
         user = User.objects.get(id=token_data['user_id'])
 
-        if not user or ("RECOVERY_TOKEN" != token_data['token_type']):
+        if not user or (RECOVERY_TOKEN_TYPE != token_data['token_type']):
             return response.Response(
                 data="Incorrect token type",
                 status=status.HTTP_404_NOT_FOUND,
