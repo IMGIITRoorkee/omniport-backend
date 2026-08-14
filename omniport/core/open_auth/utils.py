@@ -10,21 +10,42 @@ from categories.models import Category
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
+def _resolve(obj, path):
+    """
+    Walk a dotted attribute path, calling a segment that ends in '()'
+    :param obj: the object to start the walk from
+    :param path: the dotted path, whose segments may end in '()'
+    :return: the resolved value, or None if any segment is absent
+    """
+
+    for part in path.split('.'):
+        if obj is None:
+            return None
+        if part.endswith('()'):
+            method = getattr(obj, part[:-2], None)
+            obj = method() if callable(method) else None
+        else:
+            obj = getattr(obj, part, None)
+    return obj
+
+
 def get_field_data(person, field_data_points, object_string):
     """
     Utility function to get requested model's data
     :param person: person object whose data is to be retrieved
     :param field_data_points: the specific fields of a model to be retrieved
-    :param object_string: object variable name to access the data
+    :param object_string: dotted path to the model, rooted at the person
     :return: data for a model string
     """
 
     data = dict()
-    if eval(object_string) is None:
+    # The first segment of object_string names the person itself
+    _, _, path = object_string.partition('.')
+    obj = _resolve(person, path) if path else person
+    if obj is None:
         return data
     for field_data_point in field_data_points:
-        data[f'{field_data_point.replace(".", " ")}'] = \
-            eval(f'{object_string}.{field_data_point}')
+        data[field_data_point.replace('.', ' ')] = _resolve(obj, field_data_point)
     return data
 
 

@@ -3,7 +3,6 @@ from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from oauth2_provider.models import AccessToken
 
 from kernel.models import Person
 from open_auth.utils import (
@@ -46,9 +45,7 @@ class GetUserData(generics.GenericAPIView):
         :return: the response for request
         """
 
-        token = request.headers['Authorization'].replace('Bearer ', '')
-
-        access_token = AccessToken.objects.get(token=token)
+        access_token = request.auth
         application = access_token.application
 
         if application is None:
