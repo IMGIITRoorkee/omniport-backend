@@ -3,14 +3,16 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from core.utils.logs import get_logging_function
 from omniport.utils import switcher
 
+kernel_log = get_logging_function('kernel')
 AvatarSerializer = switcher.load_serializer('kernel', 'Person', 'Avatar')
 
 
 class WhoAmI(GenericAPIView):
     """
-    This view shows some personal information of the currently logged in user
+    This view shows personal information of the currently logged in user.
     """
 
     permission_classes = [IsAuthenticated, ]
@@ -25,6 +27,18 @@ class WhoAmI(GenericAPIView):
         :return: the response for request
         """
 
-        person = request.person
-        serializer = self.get_serializer_class()(person)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            person = request.person
+            serializer = self.get_serializer_class()(person)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            kernel_log(
+                f'Could not fetch the personal information: {e}',
+                'error',
+                request.user
+            )
+            return Response(
+                {'error': 'Could not fetch user information'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
