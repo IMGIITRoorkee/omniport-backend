@@ -1,3 +1,4 @@
+import ipaddress
 import re
 
 from django.conf import settings
@@ -25,23 +26,20 @@ class IpAddressRings:
         :return: the processed response
         """
 
-        # The headers to read in order of preference
-        real_ip_header = 'HTTP_X_REAL_IP'
-        forwarded_for_header = 'HTTP_X_FORWARDED_FOR'
-        remote_addr = 'REMOTE_ADDR'
-
-        # The IP address is extracted from the right header
-        # The right header depends on whether the request was proxied by NGINX
-        ip_address = request.META.get(
-            real_ip_header,
+        # Extract IP from proxy headers (set by NGINX) or direct connection.
+        # X-Forwarded-For may be a comma-separated list; take the first entry.
+        raw_ip = request.META.get(
+            'HTTP_X_REAL_IP',
             request.META.get(
-                forwarded_for_header,
-                request.META.get(
-                    remote_addr,
-                    'Not Found'
-                )
+                'HTTP_X_FORWARDED_FOR',
+                request.META.get('REMOTE_ADDR', 'Not Found')
             )
         )
+        ip_address = raw_ip.split(',')[0].strip()
+        try:
+            ipaddress.ip_address(ip_address)
+        except ValueError:
+            ip_address = request.META.get('REMOTE_ADDR', 'Not Found')
         request.source_ip_address = ip_address
 
         ip_address_rings = settings.IP_ADDRESS_RINGS

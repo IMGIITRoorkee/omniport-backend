@@ -1,4 +1,5 @@
 from rest_framework import status, generics, response
+from rest_framework.throttling import ScopedRateThrottle
 
 from base_auth.serializers.retrieve_user import (
     RetrieveUserSerializer,
@@ -15,6 +16,8 @@ class VerifySecretAnswer(generics.GenericAPIView):
     username, the secret_answer and the new password to reset it
     """
 
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'verify_secret_answer'
     serializer_class = VerifySecretAnswerSerializer
 
     def get(self, request, *args, **kwargs):

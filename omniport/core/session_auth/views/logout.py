@@ -17,9 +17,9 @@ class Logout(generics.GenericAPIView):
 
     permission_classes = [permissions.IsAuthenticated, ]
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """
-        View to serve GET requests
+        View to serve POST requests
         :param request: the request that is to be responded to
         :param args: arguments
         :param kwargs: keyword arguments
@@ -42,3 +42,7 @@ class Logout(generics.GenericAPIView):
             data=response_data,
             status=status.HTTP_200_OK
         )
+
+    def get(self, request, *args, **kwargs):
+        """Deprecated: use POST. Kept for backward compatibility."""
+        return self.post(request, *args, **kwargs)

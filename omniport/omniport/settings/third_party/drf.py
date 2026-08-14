@@ -26,4 +26,12 @@ REST_FRAMEWORK = {
         'rest_framework.pagination.PageNumberPagination'  # No commas
     ),
     'PAGE_SIZE': 10,
+    # ScopedRateThrottle only applies to views that declare a throttle_scope
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'verify_secret_answer': '5/hour',
+        'verify_recovery_token': '10/hour',
+    },
 }
