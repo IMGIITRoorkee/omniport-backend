@@ -17,7 +17,7 @@ class AppAccessTokenAuthentication(authentication.BaseAuthentication):
                     access_token=access_token
                 )
                 allowed_ip_address_regex = app_access_token.ip_address_regex
-                if re.search(allowed_ip_address_regex, ip_address):
+                if re.fullmatch(allowed_ip_address_regex, ip_address):
                     return (app_access_token, None)
                 else:
                     raise exceptions.AuthenticationFailed('Request not allowed from' \
