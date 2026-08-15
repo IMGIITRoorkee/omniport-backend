@@ -26,6 +26,10 @@ REST_FRAMEWORK = {
         'rest_framework.pagination.PageNumberPagination'  # No commas
     ),
     'PAGE_SIZE': 10,
+    # A view that declares no permission_classes must not be public by default
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     # ScopedRateThrottle only applies to views that declare a throttle_scope
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.ScopedRateThrottle',
