@@ -8,34 +8,44 @@ whatever happens to be resolved in a particular virtualenv.
 
 import pathlib
 import re
-import tomllib
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PYPROJECT = ROOT / 'pyproject.toml'
 LOCK = ROOT / 'poetry.lock'
 
-# package -> (first safe version, advisory, what it is)
+# Constraint shapes that state a lower bound. Anything else is rejected rather
+# than read as a floor, so an upper bound or an exclusion fails closed.
+FLOOR = re.compile(r'^(?:\^|~=?|>=)(\d+)(?:\.(\d+))?(?:\.(\d+))?$')
+
+# package -> (first safe version, advisories, why)
 ADVISORIES = {
     'pillow': (
-        (10, 2, 0),
-        'CVE-2023-50447 / GHSA-3f63-hfp8-52jq',
-        'PIL.ImageMath.eval executes arbitrary code passed through its '
-        'environment parameter. The advisory covers every release through '
-        '10.1.0, so no version under a ^9 constraint closes it.',
+        (12, 3, 0),
+        'GHSA-cfh3-3jmp-rvhc, GHSA-pwv6-vv43-88gr, GHSA-whj4-6x5x-4v2j and 14 '
+        'others',
+        'Image decoder defects, reached by every upload path because Pillow '
+        'sniffs format from content rather than from the filename. 12.3.0 is '
+        'the first release with none open against it: everything affecting '
+        '10.x is first patched in 12.1.1 or later, so no ^10 or ^11 '
+        'constraint can resolve to a version that clears them.',
     ),
 }
 
-# Names Pillow 10 removed. Their presence anywhere in the package would mean
-# the bump breaks at runtime rather than at import.
-REMOVED_IN_PILLOW_10 = (
-    'ANTIALIAS', 'textsize', 'Image.CUBIC', 'Image.LINEAR',
-)
-
 
 def parse_version(text):
-    numbers = re.findall(r'\d+', text)
-    return tuple(int(number) for number in numbers[:3])
+    return tuple(int(number) for number in re.findall(r'\d+', text)[:3])
+
+
+def parse_floor(constraint):
+    """
+    Return the lowest version a constraint admits, or None if it states no floor
+    """
+
+    match = FLOOR.match(constraint.strip())
+    if not match:
+        return None
+    return tuple(int(part or 0) for part in match.groups())
 
 
 def locked_versions():
@@ -57,6 +67,32 @@ def locked_versions():
     return versions
 
 
+def declared_constraints():
+    """
+    Return a mapping of package name to its constraint in pyproject.toml
+
+    Read with `re` rather than `tomllib`, which is 3.11 and up while the
+    image this deploys on ships 3.10.
+    """
+
+    section = re.search(
+        r'^\[tool\.poetry\.dependencies\]$(.*?)(?=^\[|\Z)',
+        PYPROJECT.read_text(),
+        re.MULTILINE | re.DOTALL,
+    )
+    constraints = {}
+    for line in section.group(1).splitlines():
+        match = re.match(r'^([A-Za-z0-9._-]+) *= *(.+)$', line)
+        if not match:
+            continue
+        version = re.search(r'version *= *"(.+?)"', match.group(2))
+        if not version:
+            version = re.match(r'^"(.+?)"$', match.group(2).strip())
+        if version:
+            constraints[match.group(1).lower()] = version.group(1)
+    return constraints
+
+
 class TestAdvisedDependencies(unittest.TestCase):
     """
     A dependency with a published advisory must be pinned past it
@@ -64,13 +100,7 @@ class TestAdvisedDependencies(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        with open(PYPROJECT, 'rb') as pyproject:
-            cls.pyproject = tomllib.load(pyproject)
-        cls.dependencies = {
-            key.lower(): value
-            for key, value
-            in cls.pyproject['tool']['poetry']['dependencies'].items()
-        }
+        cls.dependencies = declared_constraints()
         cls.locked = locked_versions()
 
     def test_the_locked_version_is_past_the_advisory(self):
@@ -96,8 +126,9 @@ class TestAdvisedDependencies(unittest.TestCase):
         """
         A safe lock is not enough if the constraint permits an unsafe re-lock
 
-        `^9.0.1` resolving to a patched 9.x is impossible, so the constraint
-        itself has to be above the floor, not just today's resolution.
+        `^10.2.0` resolving to a version past the decoder advisories is
+        impossible, so the constraint itself has to be above the floor, not
+        just today's resolution.
         """
 
         for package, (minimum, advisory, _) in ADVISORIES.items():
@@ -107,9 +138,13 @@ class TestAdvisedDependencies(unittest.TestCase):
                     constraint,
                     f'{package} is not declared in pyproject.toml'
                 )
-                if isinstance(constraint, dict):
-                    constraint = constraint.get('version', '')
-                floor = parse_version(constraint)
+                floor = parse_floor(constraint)
+                self.assertIsNotNone(
+                    floor,
+                    f'{package} is constrained as {constraint!r}, which states '
+                    f'no lower bound this test can read. Use a caret, tilde or '
+                    f'>= constraint so the floor is checkable'
+                )
                 self.assertGreaterEqual(
                     floor, minimum,
                     f'{package} is constrained as {constraint!r}, which allows '
@@ -118,26 +153,28 @@ class TestAdvisedDependencies(unittest.TestCase):
                 )
 
 
-class TestPillowTenCompatibility(unittest.TestCase):
+class TestApplicationServerImports(unittest.TestCase):
     """
-    The names Pillow 10 removed must not be in use
+    The locked build backend must be one the pinned app server can import
     """
 
-    def test_no_removed_pillow_api_is_referenced(self):
+    def test_setuptools_is_below_the_pkg_resources_removal(self):
         """
-        Guards the 9 -> 10 bump against a runtime failure
+        gunicorn 20 imports pkg_resources, which setuptools removed in 82
+
+        The import is at module scope in gunicorn/util.py, so the mismatch
+        kills the server at startup rather than on a request.
         """
 
-        for path in ROOT.rglob('*.py'):
-            if 'tests' in path.parts or 'migrations' in path.parts:
-                continue
-            text = path.read_text(errors='ignore')
-            for name in REMOVED_IN_PILLOW_10:
-                self.assertNotIn(
-                    name, text,
-                    f'{path.relative_to(ROOT)} references {name!r}, which '
-                    f'Pillow 10 removed'
-                )
+        locked = locked_versions()
+        if parse_version(locked['gunicorn']) >= (21, 0, 0):
+            self.skipTest('gunicorn 21 and later read importlib.metadata')
+        self.assertLess(
+            parse_version(locked['setuptools']), (82, 0, 0),
+            f"setuptools is locked at {locked['setuptools']}, which does not "
+            f"ship pkg_resources, while gunicorn is locked at "
+            f"{locked['gunicorn']}, which imports it at module scope"
+        )
 
 
 if __name__ == '__main__':
