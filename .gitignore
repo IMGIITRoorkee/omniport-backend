@@ -27,3 +27,7 @@ history_dir/
 
 # Certificates for remote services
 certificates/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
