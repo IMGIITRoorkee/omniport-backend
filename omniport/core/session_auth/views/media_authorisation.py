@@ -17,6 +17,9 @@ class MediaAuthorisation(APIView):
     """
 
     permission_classes = [IsAuthenticated]
+    # nginx sub-requests once per protected file, so a page of media would
+    # otherwise spend the caller's whole rate budget on a view serving no data
+    throttle_classes = []
 
     def get(self, request, *args, **kwargs):
         """
