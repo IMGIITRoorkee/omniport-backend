@@ -9,6 +9,7 @@ license = "GPL-3.0"
 python = "^3.10"
 Django = {extras = ["argon2"], version = "~4.1.13"}
 urllib3 = "~1.26.20"
+setuptools = "<82"
 inflection = "^0.5.1"
 PyYAML = "^6.0"
 celery = "^5.2.3"
