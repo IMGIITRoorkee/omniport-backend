@@ -1,14 +1,15 @@
 from django.urls import path, include
-from django.views.decorators.http import require_POST
 from oauth2_provider.views import (
     AuthorizationView,
     TokenView,
     RevokeTokenView,
 )
 from rest_framework import routers
+from rest_framework.authentication import SessionAuthentication
 
 from open_auth.views.application import ApplicationViewSet
 from open_auth.views.retrieve_data import GetUserData
+from open_auth.views.throttling import ThrottledOAuthLibView
 
 router = routers.SimpleRouter()
 router.register('application', ApplicationViewSet, basename='application')
@@ -18,17 +19,26 @@ app_name = 'open_auth'
 urlpatterns = [
     path(
         'authorise/',
-        require_POST(AuthorizationView.as_view()),
+        ThrottledOAuthLibView.as_view(
+            oauthlib_view=AuthorizationView.as_view(),
+            # DRF replaces request.user with the anonymous user when no
+            # authenticator matches, and the consent screen needs the session
+            authentication_classes=[SessionAuthentication],
+        ),
         name='authorise'
     ),
     path(
         'token/',
-        TokenView.as_view(),
+        ThrottledOAuthLibView.as_view(
+            oauthlib_view=TokenView.as_view(),
+        ),
         name='token'
     ),
     path(
         'revoke_token/',
-        RevokeTokenView.as_view(),
+        ThrottledOAuthLibView.as_view(
+            oauthlib_view=RevokeTokenView.as_view(),
+        ),
         name='revoke_token'
     ),
     path(

@@ -37,6 +37,8 @@ REST_FRAMEWORK = {
         'user': '5000/hour',
         'login': '300/hour',
         'reset_password': '5/hour',
+        'open_auth': '1000/hour',
+        'media_authorisation': '20000/hour',
         'verify_secret_answer': '5/hour',
         'verify_recovery_token': '10/hour',
         'people_search': '500/hour',
