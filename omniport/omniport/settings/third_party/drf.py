@@ -37,6 +37,10 @@ REST_FRAMEWORK = {
         # Views serving bulk personal data need their own throttle_scope
         'anon': '2000/hour',
         'user': '5000/hour',
+        # Anonymous buckets key on IP, and a shared campus egress address draws
+        # the whole institute from one, so this sits well above peak real logins
+        'login': '300/hour',
+        'reset_password': '5/hour',
         'verify_secret_answer': '5/hour',
         'verify_recovery_token': '10/hour',
     },

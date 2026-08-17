@@ -16,6 +16,9 @@ class ResetPassword(generics.GenericAPIView):
     username, the secret_answer and the new password to reset it
     """
 
+    # Checks the secret answer without going through verify_secret_answer, so
+    # it needs a scope of its own or it is the unthrottled way in to that check
+    throttle_scope = 'reset_password'
     serializer_class = ResetPasswordSerializer
 
     def post(self, request, *args, **kwargs):

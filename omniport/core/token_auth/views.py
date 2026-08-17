@@ -32,6 +32,7 @@ class ObtainPair(TokenObtainPairView):
     Remove the effect of the addition of project-wide JSON API from the view
     """
 
+    throttle_scope = 'login'
     parser_classes = PARSERS_MINUS_JSON_API
     renderer_classes = RENDERERS_MINUS_JSON_API
 
