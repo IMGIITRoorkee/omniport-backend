@@ -33,5 +33,8 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'verify_secret_answer': '5/hour',
         'verify_recovery_token': '10/hour',
+        # Directory listings, capped at 30 rows a page, so this also bounds how
+        # fast the people search endpoints can be scraped
+        'people_search': '500/hour',
     },
 }
