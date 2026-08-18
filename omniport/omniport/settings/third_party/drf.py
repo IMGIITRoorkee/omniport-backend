@@ -33,14 +33,10 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        # A floor above real browsing, which costs 23 requests per page mount.
-        # Views serving bulk personal data need their own throttle_scope
         'anon': '2000/hour',
         'user': '5000/hour',
         'verify_secret_answer': '5/hour',
         'verify_recovery_token': '10/hour',
     },
-    # NGINX appends the peer address to X-Forwarded-For, making the last entry
-    # the only one a client cannot forge to mint itself a fresh throttle bucket
     'NUM_PROXIES': 1,
 }
