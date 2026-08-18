@@ -19,6 +19,7 @@ class ResetPassword(generics.GenericAPIView):
 
     permission_classes = [AllowAny]
 
+    throttle_scope = 'reset_password'
     serializer_class = ResetPasswordSerializer
 
     def post(self, request, *args, **kwargs):
