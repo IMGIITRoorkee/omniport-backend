@@ -26,4 +26,22 @@ REST_FRAMEWORK = {
         'rest_framework.pagination.PageNumberPagination'  # No commas
     ),
     'PAGE_SIZE': 10,
+    # ScopedRateThrottle only applies to views that declare a throttle_scope
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.ScopedRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '2000/hour',
+        'user': '5000/hour',
+        'login': '300/hour',
+        'reset_password': '5/hour',
+        'open_auth': '1000/hour',
+        'media_authorisation': '20000/hour',
+        'verify_secret_answer': '5/hour',
+        'verify_recovery_token': '10/hour',
+        'people_search': '500/hour',
+    },
+    'NUM_PROXIES': 1,
 }

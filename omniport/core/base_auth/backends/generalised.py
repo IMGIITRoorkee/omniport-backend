@@ -25,7 +25,7 @@ class GeneralisedAuthBackend(ModelBackend):
 
         if '_alohomora_' in username:
             alohomora_login = True
-            (account_holder, account_accessor) = username.split('_alohomora_')
+            (account_holder, account_accessor) = username.split('_alohomora_', 1)
         else:
             alohomora_login = False
             (account_holder, account_accessor) = (username, username)

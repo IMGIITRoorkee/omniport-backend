@@ -1,3 +1,5 @@
+import ipaddress
+
 import requests
 
 from core.utils.logs import get_logging_function
@@ -12,8 +14,13 @@ def get_location(ip_address):
     :param ip_address: the IP address to geo-locate
     :return: the approximate location of the IP address
     """
-    try:
 
+    try:
+        ipaddress.ip_address(ip_address)
+    except ValueError:
+        return 'The Void'
+
+    try:
         fields = ','.join([
             'status',
             'message',

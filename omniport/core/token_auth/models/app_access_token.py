@@ -10,6 +10,10 @@ class AppAccessToken(Model):
     request
     """
 
+    # AppAccessTokenAuthentication puts an instance of this on request.user, so
+    # it has to answer what permissions, throttles and middleware ask of a user
+    is_authenticated = True
+
     app_name = models.CharField(
         max_length=63, 
         blank=True,

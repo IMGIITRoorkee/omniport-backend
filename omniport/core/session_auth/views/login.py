@@ -1,5 +1,6 @@
 import swapper
 from rest_framework import status, generics, response
+from rest_framework.permissions import AllowAny
 
 from omniport.utils import switcher
 from session_auth.models import SessionMap
@@ -20,6 +21,9 @@ class Login(generics.GenericAPIView):
     via cookie-based session authentication
     """
 
+    permission_classes = [AllowAny]
+
+    throttle_scope = 'login'
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):

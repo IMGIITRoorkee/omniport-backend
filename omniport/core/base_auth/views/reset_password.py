@@ -1,4 +1,5 @@
 from rest_framework import status, generics, response
+from rest_framework.permissions import AllowAny
 
 from base_auth.serializers.reset_password import (
     ResetPasswordSerializer,
@@ -16,6 +17,9 @@ class ResetPassword(generics.GenericAPIView):
     username, the secret_answer and the new password to reset it
     """
 
+    permission_classes = [AllowAny]
+
+    throttle_scope = 'reset_password'
     serializer_class = ResetPasswordSerializer
 
     def post(self, request, *args, **kwargs):
