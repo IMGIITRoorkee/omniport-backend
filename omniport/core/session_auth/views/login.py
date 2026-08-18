@@ -23,6 +23,7 @@ class Login(generics.GenericAPIView):
 
     permission_classes = [AllowAny]
 
+    throttle_scope = 'login'
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
