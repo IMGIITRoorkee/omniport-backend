@@ -20,8 +20,6 @@ class Login(generics.GenericAPIView):
     via cookie-based session authentication
     """
 
-    # Shared with token_auth.views.ObtainPair so that alternating between the
-    # two password endpoints cannot draw twice the budget
     throttle_scope = 'login'
     serializer_class = LoginSerializer
 
