@@ -1,13 +1,12 @@
 from django.urls import path, include
 from django.views.decorators.http import require_POST
 from oauth2_provider.views import (
-    AuthorizationView,
     TokenView,
     RevokeTokenView,
 )
 from rest_framework import routers
 
-from open_auth.views.application import ApplicationViewSet
+from open_auth.views.application import ApplicationViewSet, OmniportAuthorizationView
 from open_auth.views.retrieve_data import GetUserData
 
 router = routers.SimpleRouter()
@@ -18,7 +17,7 @@ app_name = 'open_auth'
 urlpatterns = [
     path(
         'authorise/',
-        require_POST(AuthorizationView.as_view()),
+        require_POST(OmniportAuthorizationView.as_view()),
         name='authorise'
     ),
     path(
