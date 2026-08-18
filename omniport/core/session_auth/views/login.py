@@ -20,6 +20,7 @@ class Login(generics.GenericAPIView):
     via cookie-based session authentication
     """
 
+    throttle_scope = 'login'
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):

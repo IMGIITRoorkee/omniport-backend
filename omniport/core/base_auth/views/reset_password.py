@@ -16,6 +16,7 @@ class ResetPassword(generics.GenericAPIView):
     username, the secret_answer and the new password to reset it
     """
 
+    throttle_scope = 'reset_password'
     serializer_class = ResetPasswordSerializer
 
     def post(self, request, *args, **kwargs):
