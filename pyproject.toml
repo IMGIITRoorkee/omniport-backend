@@ -47,7 +47,7 @@ pymemcache = "^4.0.0"
 
 [tool.poetry.dev-dependencies]
 ipdb = "^0.13.9"
-ipython = "^8.0.1"
+ipython = "^8.10.0"
 pipdeptree = "^2.2.1"
 
 [build-system]
