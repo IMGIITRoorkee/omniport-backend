@@ -33,5 +33,6 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'verify_secret_answer': '5/hour',
         'verify_recovery_token': '10/hour',
+        'people_search': '500/hour',
     },
 }
