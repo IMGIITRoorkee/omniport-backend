@@ -29,10 +29,15 @@ REST_FRAMEWORK = {
     # ScopedRateThrottle only applies to views that declare a throttle_scope
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.ScopedRateThrottle',
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
+        'anon': '2000/hour',
+        'user': '5000/hour',
         'verify_secret_answer': '5/hour',
         'verify_recovery_token': '10/hour',
         'people_search': '500/hour',
     },
+    'NUM_PROXIES': 1,
 }

@@ -17,6 +17,7 @@ class MediaAuthorisation(APIView):
     """
 
     permission_classes = [IsAuthenticated]
+    throttle_classes = []
 
     def get(self, request, *args, **kwargs):
         """

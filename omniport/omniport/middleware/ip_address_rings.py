@@ -27,7 +27,8 @@ class IpAddressRings:
         """
 
         # Extract IP from proxy headers (set by NGINX) or direct connection.
-        # X-Forwarded-For may be a comma-separated list; take the first entry.
+        # NGINX appends the peer to X-Forwarded-For, so only the last entry of
+        # that list is one the client cannot forge
         raw_ip = request.META.get(
             'HTTP_X_REAL_IP',
             request.META.get(
@@ -35,7 +36,7 @@ class IpAddressRings:
                 request.META.get('REMOTE_ADDR', 'Not Found')
             )
         )
-        ip_address = raw_ip.split(',')[0].strip()
+        ip_address = raw_ip.split(',')[-1].strip()
         try:
             ipaddress.ip_address(ip_address)
         except ValueError:
