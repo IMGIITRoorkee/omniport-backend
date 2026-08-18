@@ -1,4 +1,5 @@
 from rest_framework import status, generics, response
+from rest_framework.permissions import AllowAny
 
 from base_auth.serializers.reset_password import (
     ResetPasswordSerializer,
@@ -15,6 +16,8 @@ class ResetPassword(generics.GenericAPIView):
     the user in question and, when responding to a POST request, takes the
     username, the secret_answer and the new password to reset it
     """
+
+    permission_classes = [AllowAny]
 
     serializer_class = ResetPasswordSerializer
 

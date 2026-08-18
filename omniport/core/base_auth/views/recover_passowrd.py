@@ -2,6 +2,7 @@ import swapper
 from django.core.cache import cache
 from rest_framework import generics, response, status
 from rest_framework.throttling import ScopedRateThrottle
+from rest_framework.permissions import AllowAny
 
 from base_auth.constants.password_recovery import (
     ACCOUNT_RATE_LIMIT,
@@ -44,6 +45,8 @@ class RecoverPassword(generics.GenericAPIView):
     Password recovery endpoint, rate limited per IP and per account, which
     responds identically whether or not the account exists
     """
+
+    permission_classes = [AllowAny]
 
     def get(self, request):
         """
@@ -159,6 +162,8 @@ class RecoverPassword(generics.GenericAPIView):
 
 
 class VerifyRecoveryToken(generics.GenericAPIView):
+
+    permission_classes = [AllowAny]
 
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = 'verify_recovery_token'
