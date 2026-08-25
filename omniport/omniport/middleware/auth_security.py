@@ -20,10 +20,13 @@ class AuditLoggingMiddleware:
 
     def __init__(self, get_response):
         self.get_response = get_response
-        self.namespaces = frozenset(
+        self.app_namespaces = frozenset(
             configuration.nomenclature.name
             for _, configuration in settings.DISCOVERY.apps
-            + settings.DISCOVERY.services
+        )
+        self.namespaces = self.app_namespaces | frozenset(
+            configuration.nomenclature.name
+            for _, configuration in settings.DISCOVERY.services
         )
 
     def __call__(self, request):
@@ -57,7 +60,7 @@ class AuditLoggingMiddleware:
                 'info',
                 user
             )
-            if user is not None:
+            if user is not None and app_name in self.app_namespaces:
                 self.log_app_entry(request, app_name, user)
 
         return response
@@ -103,7 +106,9 @@ class AuditLoggingMiddleware:
     def log_app_entry(self, request, app_name, user):
         """
         Record a session opening an app, skipping the request-per-request
-        repetition that would otherwise bury the record it is kept for
+        repetition that would otherwise bury the record it is kept for.
+        Services are excluded: the shell polls them on every page load, so
+        an entry line for them says nothing about what a person opened
         """
 
         session = getattr(request, 'session', None)
