@@ -11,9 +11,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
-# getCookie in formula_one rewrites 'csrftoken' to a deployment-specific name
-# on deployments that run more than one Omniport under one parent domain, since
-# sibling subdomains would otherwise overwrite each other's cookie. Django has
-# to write whichever name the frontend reads or every POST is rejected, so both
-# sides take it from the environment and the default stays Django's own.
+# The frontend reads its CSRF token from a cookie whose name a deployment can
+# choose, because sibling subdomains would otherwise overwrite each other's
+# cookie where several Omniports share a parent domain. Django has to write the
+# name the frontend reads or every POST is rejected, so both sides take it from
+# the environment and the default here stays Django's own.
 CSRF_COOKIE_NAME = os.getenv('OMNIPORT_CSRF_COOKIE_NAME', 'csrftoken')
