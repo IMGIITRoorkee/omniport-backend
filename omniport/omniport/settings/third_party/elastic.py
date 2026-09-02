@@ -3,7 +3,7 @@ This setting file exposes settings for Elasticsearch.
 
 Connection parameters are read from the environment so the same image
 runs against:
-  - dev:     a local docker-compose sidecar       (ELASTICSEARCH_HOST=http://elastic:9200)
+  - dev:     a local docker-compose sidecar       (ELASTICSEARCH_HOST=http://elasticsearch:9200)
   - prod:    a separate ES VM with TLS + auth     (ELASTICSEARCH_HOST=https://search.internal.example.com:9200)
 
 The corresponding env file is `noticeboard/elasticsearch.env` in
@@ -22,9 +22,27 @@ _user = os.environ.get('ELASTICSEARCH_USER', '').strip()
 _password = os.environ.get('ELASTICSEARCH_PASSWORD', '').strip()
 _http_auth = (_user, _password) if _user and _password else None
 
+# The fallback names the docker-compose sidecar, so it has to match the
+# service in the compose file rather than read well: an unresolvable default
+# fails as a connection error, which the noticeboard search catches and
+# answers from PostgreSQL instead, leaving a developer with search that looks
+# like it works and never touches the cluster.
+_host = os.environ.get(
+    'ELASTICSEARCH_HOST',
+    'http://elasticsearch:9200',
+).strip()
+
+# Certificate checking follows the scheme unless the environment overrides it.
+# A fixed default of false is the wrong way round for a deployment that talks
+# https and forgets the flag, because that is TLS nobody is checking, which
+# looks identical to the real thing until someone is in the middle of it.
+_verify_certs_default = 'true' if _host.lower().startswith('https://') else 'false'
+
 _default_connection = {
-    'hosts': os.environ.get('ELASTICSEARCH_HOST', 'http://elastic:9200'),
-    'verify_certs': _bool(os.environ.get('ELASTICSEARCH_VERIFY_CERTS', 'false')),
+    'hosts': _host,
+    'verify_certs': _bool(
+        os.environ.get('ELASTICSEARCH_VERIFY_CERTS', _verify_certs_default),
+    ),
     'timeout': int(os.environ.get('ELASTICSEARCH_TIMEOUT', '5')),
 }
 
