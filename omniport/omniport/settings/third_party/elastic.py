@@ -56,3 +56,12 @@ if _ca_cert:
 ELASTICSEARCH_DSL = {
     'default': _default_connection,
 }
+
+# Indexing runs inside the request that saved the model, so the stock processor
+# lets a cluster that is down, full or slow turn an ordinary save into a 500.
+# Search already answers from PostgreSQL when the cluster is unreachable, and
+# writes degrade the same way here: the row is saved, the failure is logged, and
+# search_index --rebuild repairs whatever the index missed.
+ELASTICSEARCH_DSL_SIGNAL_PROCESSOR = (
+    'omniport.utils.elasticsearch.ForgivingSignalProcessor'
+)
