@@ -25,25 +25,45 @@ class OAuthClientThrottle(SimpleRateThrottle):
         # Django caches the form it parses, so the view below still reads it
         return request._request.POST.get('client_id') or self.get_ident(request)
 
+    def get_key(self, request):
+        window = int(self.timer()) // self.duration
+        return f'throttle_{self.scope}_{self.get_client_id(request)}_{window}'
+
+    def count(self, request):
+        # A counter, since the inherited history is read-modify-write and
+        # loses increments when workers run concurrently
+        key = self.get_key(request)
+        try:
+            return self.cache.incr(key)
+        except ValueError:
+            self.cache.add(key, 1, self.duration)
+            return 1
+
     def allow_request(self, request, view):
         if self.rate is None:
             return True
 
-        window = int(self.timer()) // self.duration
-        self.key = f'throttle_{self.scope}_{self.get_client_id(request)}_{window}'
-
-        # A counter, since the inherited history is read-modify-write and
-        # loses increments when workers run concurrently
-        try:
-            count = self.cache.incr(self.key)
-        except ValueError:
-            self.cache.add(self.key, 1, self.duration)
-            count = 1
-
-        return count <= self.num_requests
+        return self.count(request) <= self.num_requests
 
     def wait(self):
         return self.duration - (self.timer() % self.duration)
+
+
+class OAuthFailureThrottle(OAuthClientThrottle):
+    """
+    Throttle that counts only the requests the wrapped view rejected, so that
+    the rate allowed does not have to accommodate how popular a client is
+    """
+
+    scope = 'open_auth_failures'
+
+    def allow_request(self, request, view):
+        if self.rate is None:
+            return True
+
+        # Read only, since the view counts a request once it knows the
+        # outcome, which is after every throttle has run
+        return (self.cache.get(self.get_key(request)) or 0) < self.num_requests
 
 
 class ThrottledOAuthLibView(APIView):
@@ -55,7 +75,7 @@ class ThrottledOAuthLibView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
     oauthlib_view = None
-    throttle_classes = [OAuthClientThrottle]
+    throttle_classes = [OAuthClientThrottle, OAuthFailureThrottle]
 
     def post(self, request, *args, **kwargs):
         """
@@ -68,4 +88,8 @@ class ThrottledOAuthLibView(APIView):
 
         # The toolkit view reads the form body itself, and nothing above has
         # consumed the stream, so hand it the untouched Django request
-        return self.oauthlib_view(request._request, *args, **kwargs)
+        response = self.oauthlib_view(request._request, *args, **kwargs)
+        if response.status_code >= 400:
+            OAuthFailureThrottle().count(request)
+
+        return response

@@ -5,11 +5,15 @@ from django.test import SimpleTestCase, override_settings
 from rest_framework.request import Request
 from rest_framework.test import APIRequestFactory
 
-from open_auth.views.throttling import OAuthClientThrottle
+from open_auth.views.throttling import OAuthClientThrottle, OAuthFailureThrottle
 
 
 class ThreePerHourThrottle(OAuthClientThrottle):
     THROTTLE_RATES = {'open_auth': '3/hour'}
+
+
+class ThreeFailuresThrottle(OAuthFailureThrottle):
+    THROTTLE_RATES = {'open_auth_failures': '3/hour'}
 
 
 @override_settings(CACHES={'default': {
@@ -62,3 +66,28 @@ class OAuthClientThrottleTests(SimpleTestCase):
 
         self.assertFalse(allowed)
         self.assertGreater(throttle.wait(), 0)
+
+    def test_a_client_that_only_succeeds_is_never_failure_throttled(self):
+        for _ in range(10):
+            self.assertTrue(
+                ThreeFailuresThrottle().allow_request(
+                    self.token_request('election'), None
+                )
+            )
+
+    def test_failures_are_counted_until_the_client_is_refused(self):
+        for _ in range(3):
+            request = self.token_request('election')
+            self.assertTrue(ThreeFailuresThrottle().allow_request(request, None))
+            ThreeFailuresThrottle().count(request)
+
+        self.assertFalse(
+            ThreeFailuresThrottle().allow_request(
+                self.token_request('election'), None
+            )
+        )
+        self.assertTrue(
+            ThreeFailuresThrottle().allow_request(
+                self.token_request('noticeboard'), None
+            )
+        )
