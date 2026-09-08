@@ -1,4 +1,5 @@
 import base64
+import json
 
 from rest_framework.authentication import get_authorization_header
 from rest_framework.permissions import AllowAny
@@ -25,9 +26,12 @@ class OAuthClientThrottle(SimpleRateThrottle):
         # Django caches the form it parses, so the view below still reads it
         return request._request.POST.get('client_id') or self.get_ident(request)
 
+    def get_identity(self, request):
+        return self.get_client_id(request)
+
     def get_key(self, request):
         window = int(self.timer()) // self.duration
-        return f'throttle_{self.scope}_{self.get_client_id(request)}_{window}'
+        return f'throttle_{self.scope}_{self.get_identity(request)}_{window}'
 
     def count(self, request):
         # A counter, since the inherited history is read-modify-write and
@@ -56,6 +60,22 @@ class OAuthFailureThrottle(OAuthClientThrottle):
     """
 
     scope = 'open_auth_failures'
+
+    @staticmethod
+    def is_credential_failure(response):
+        # The codes RFC 6749 defines for a client that cannot prove who it is.
+        # Every other rejection is something an ordinary user flow produces
+        try:
+            error = json.loads(response.content).get('error')
+        except (ValueError, TypeError, AttributeError):
+            return response.status_code == 401
+
+        return error in ('invalid_client', 'unauthorized_client')
+
+    def get_identity(self, request):
+        # Also the address, so that a stranger naming a client cannot spend
+        # the allowance that client's own server depends on
+        return f'{self.get_client_id(request)}_{self.get_ident(request)}'
 
     def allow_request(self, request, view):
         if self.rate is None:
@@ -89,7 +109,7 @@ class ThrottledOAuthLibView(APIView):
         # The toolkit view reads the form body itself, and nothing above has
         # consumed the stream, so hand it the untouched Django request
         response = self.oauthlib_view(request._request, *args, **kwargs)
-        if response.status_code >= 400:
+        if OAuthFailureThrottle.is_credential_failure(response):
             OAuthFailureThrottle().count(request)
 
         return response

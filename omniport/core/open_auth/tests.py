@@ -16,6 +16,12 @@ class ThreeFailuresThrottle(OAuthFailureThrottle):
     THROTTLE_RATES = {'open_auth_failures': '3/hour'}
 
 
+class Rejection:
+    def __init__(self, content, status_code=400):
+        self.content = content
+        self.status_code = status_code
+
+
 @override_settings(CACHES={'default': {
     'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
 }})
@@ -91,3 +97,27 @@ class OAuthClientThrottleTests(SimpleTestCase):
                 self.token_request('noticeboard'), None
             )
         )
+
+    def test_a_stranger_cannot_spend_the_allowance_of_a_client(self):
+        for _ in range(3):
+            ThreeFailuresThrottle().count(
+                self.token_request('election', '203.0.113.9')
+            )
+
+        self.assertFalse(
+            ThreeFailuresThrottle().allow_request(
+                self.token_request('election', '203.0.113.9'), None
+            )
+        )
+        self.assertTrue(
+            ThreeFailuresThrottle().allow_request(
+                self.token_request('election', '10.0.0.1'), None
+            )
+        )
+
+    def test_only_a_client_that_cannot_prove_itself_is_counted(self):
+        counted = ThreeFailuresThrottle.is_credential_failure
+        self.assertTrue(counted(Rejection(b'{"error": "invalid_client"}')))
+        self.assertTrue(counted(Rejection(b'', status_code=401)))
+        self.assertFalse(counted(Rejection(b'{"error": "invalid_grant"}')))
+        self.assertFalse(counted(Rejection(b'', status_code=302)))
