@@ -106,6 +106,96 @@ class AppEntryTestCase(unittest.TestCase):
         self.assertEqual(self.logged, [])
 
 
+def discovery_of(apps, services):
+    """
+    A stand-in for settings.DISCOVERY, whose entries are (module, config)
+    pairs the middleware reads the nomenclature name off
+    """
+
+    def entries(names):
+        return [
+            (name, types.SimpleNamespace(
+                nomenclature=types.SimpleNamespace(name=name)))
+            for name in names
+        ]
+
+    return types.SimpleNamespace(
+        DISCOVERY=types.SimpleNamespace(
+            apps=entries(apps), services=entries(services)
+        )
+    )
+
+
+class NamespaceSetsTestCase(unittest.TestCase):
+    """
+    Tests for the two sets AuditLoggingMiddleware builds at startup
+    """
+
+    def setUp(self):
+        with unittest.mock.patch(
+            'omniport.middleware.auth_security.settings',
+            discovery_of(['bhawan_app'], ['notifications']),
+        ):
+            self.middleware = AuditLoggingMiddleware(lambda request: None)
+
+    def test_apps_alone_earn_entry_lines(self):
+        self.assertEqual(self.middleware.app_namespaces, {'bhawan_app'})
+
+    def test_services_are_still_logged_per_request(self):
+        self.assertEqual(
+            self.middleware.namespaces, {'bhawan_app', 'notifications'}
+        )
+
+
+class EntryLineTestCase(unittest.TestCase):
+    """
+    Tests for which namespaces earn an "Opened" line, exercised through
+    __call__ because that is where the distinction is drawn
+    """
+
+    def setUp(self):
+        self.logged = []
+        self.middleware = AuditLoggingMiddleware.__new__(AuditLoggingMiddleware)
+        self.middleware.app_namespaces = frozenset({'bhawan_app'})
+        self.middleware.namespaces = frozenset({'bhawan_app', 'notifications'})
+        self.middleware.get_response = lambda request: types.SimpleNamespace(
+            status_code=200
+        )
+
+    def call(self, app_name):
+        request = types.SimpleNamespace(
+            method='GET',
+            user=types.SimpleNamespace(is_anonymous=False),
+            resolver_match=types.SimpleNamespace(app_name=app_name),
+            session=StubSession(),
+            get_full_path=lambda: f'/api/{app_name}/thing/',
+        )
+        with unittest.mock.patch(
+            'omniport.middleware.auth_security.auth_security_log',
+            lambda message, level, user: self.logged.append(message),
+        ):
+            self.middleware(request)
+
+    def test_an_app_earns_an_entry_line(self):
+        self.call('bhawan_app')
+        self.assertIn('Opened bhawan_app', self.logged)
+
+    def test_a_service_earns_no_entry_line(self):
+        """
+        The shell polls the services on every page load, so an entry line
+        for one says nothing about what a person opened
+        """
+
+        self.call('notifications')
+        self.assertNotIn('Opened notifications', self.logged)
+
+    def test_a_service_is_still_logged_per_request(self):
+        self.call('notifications')
+        self.assertEqual(
+            self.logged, ['GET /api/notifications/thing/ returned status 200']
+        )
+
+
 class DiscoveredNamespaceTestCase(unittest.TestCase):
     """
     Tests for AuditLoggingMiddleware.discovered_namespace
