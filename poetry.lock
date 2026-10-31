@@ -30,6 +30,28 @@ files = [
 vine = ">=5.0.0"
 
 [[package]]
+name = "anyio"
+version = "4.6.2.post1"
+description = "High level compatibility layer for multiple asynchronous event loop implementations"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "anyio-4.6.2.post1-py3-none-any.whl", hash = "sha256:6d170c36fba3bdd840c73d3868c1e777e33676a69c3a72cf0a0d5d6d8009b61d"},
+    {file = "anyio-4.6.2.post1.tar.gz", hash = "sha256:4c8bc31ccdb51c7f7bd251f51c609e038d63e34219b44aa86e47576389880b4c"},
+]
+
+[package.dependencies]
+exceptiongroup = {version = ">=1.0.2", markers = "python_version < \"3.11\""}
+idna = ">=2.8"
+sniffio = ">=1.1"
+typing-extensions = {version = ">=4.1", markers = "python_version < \"3.11\""}
+
+[package.extras]
+doc = ["Sphinx (>=7.4,<8.0)", "packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
+test = ["anyio[trio]", "coverage[toml] (>=7)", "exceptiongroup (>=1.2.0)", "hypothesis (>=4.0)", "psutil (>=5.9)", "pytest (>=7.0)", "pytest-mock (>=3.6.1)", "trustme", "truststore (>=0.9.1)", "uvloop (>=0.21.0b1)"]
+trio = ["trio (>=0.26.1)"]
+
+[[package]]
 name = "appnope"
 version = "0.1.3"
 description = "Disable App Nap on macOS >= 10.9"
@@ -359,20 +381,21 @@ cffi = ">=1.0.0"
 
 [[package]]
 name = "cachecontrol"
-version = "0.12.12"
+version = "0.14.4"
 description = "httplib2 caching for requests"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.10"
 files = [
-    {file = "CacheControl-0.12.12-py2.py3-none-any.whl", hash = "sha256:5986a16897cd296bdb7b86b42e0403c4ca30b9875f0e0c7c8e509b50cff115b7"},
-    {file = "CacheControl-0.12.12.tar.gz", hash = "sha256:9c2e5208ea76ebd9921176569743ddf6d7f3bb4188dbf61806f0f8fc48ecad38"},
+    {file = "cachecontrol-0.14.4-py3-none-any.whl", hash = "sha256:b7ac014ff72ee199b5f8af1de29d60239954f223e948196fa3d84adaffc71d2b"},
+    {file = "cachecontrol-0.14.4.tar.gz", hash = "sha256:e6220afafa4c22a47dd0badb319f84475d79108100d04e26e8542ef7d3ab05a1"},
 ]
 
 [package.dependencies]
-msgpack = ">=0.5.2"
-requests = "*"
+msgpack = ">=0.5.2,<2.0.0"
+requests = ">=2.16.0"
 
 [package.extras]
+dev = ["cachecontrol[filecache,redis]", "cheroot (>=11.1.2)", "cherrypy", "codespell", "furo", "mypy", "pytest", "pytest-cov", "ruff", "sphinx", "sphinx-copybutton", "types-redis", "types-requests"]
 filecache = ["filelock (>=3.8.0)"]
 redis = ["redis (>=2.10.5)"]
 
@@ -1190,6 +1213,20 @@ async = ["elasticsearch[async] (>=8.0.0,<9.0.0)"]
 develop = ["coverage", "elasticsearch[async]", "jinja2", "mypy", "nltk", "pyright", "pytest", "pytest-asyncio", "pytest-cov", "pytest-mock", "pytz", "sentence_transformers", "sphinx (>2)", "sphinx-rtd-theme (>0.5)", "tqdm", "types-python-dateutil", "types-pytz", "types-tqdm", "unasync"]
 
 [[package]]
+name = "exceptiongroup"
+version = "1.2.2"
+description = "Backport of PEP 654 (exception groups)"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
+    {file = "exceptiongroup-1.2.2.tar.gz", hash = "sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc"},
+]
+
+[package.extras]
+test = ["pytest (>=6)"]
+
+[[package]]
 name = "executing"
 version = "1.2.0"
 description = "Get the currently executing AST node of a frame, and other information"
@@ -1205,21 +1242,23 @@ tests = ["asttokens", "littleutils", "pytest", "rich"]
 
 [[package]]
 name = "firebase-admin"
-version = "5.4.0"
+version = "6.9.0"
 description = "Firebase Admin Python SDK"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "firebase_admin-5.4.0-py3-none-any.whl", hash = "sha256:fb8afe0e071e8818e57c8c904f8d5e751fcb843b7e3922d5310ec013992781ea"},
-    {file = "firebase_admin-5.4.0.tar.gz", hash = "sha256:6cb6037ac2c9aedfc78e38b38c0c3e43603351d29f2e35ee8bc253064e49cbb8"},
+    {file = "firebase_admin-6.9.0-py3-none-any.whl", hash = "sha256:75c261c074dcf33a2bcc8366b94ad96255da3fe24079c30220186d489d553ad5"},
+    {file = "firebase_admin-6.9.0.tar.gz", hash = "sha256:06496c3d1380a8f69e3817045b244ce8578d8ad19af3f85c510ac4d8fe0433ca"},
 ]
 
 [package.dependencies]
-cachecontrol = ">=0.12.6"
+cachecontrol = ">=0.12.14"
 google-api-core = {version = ">=1.22.1,<3.0.0dev", extras = ["grpc"], markers = "platform_python_implementation != \"PyPy\""}
 google-api-python-client = ">=1.7.8"
-google-cloud-firestore = {version = ">=2.1.0", markers = "platform_python_implementation != \"PyPy\""}
+google-cloud-firestore = {version = ">=2.19.0", markers = "platform_python_implementation != \"PyPy\""}
 google-cloud-storage = ">=1.37.1"
+httpx = {version = "0.28.1", extras = ["http2"]}
+pyjwt = {version = ">=2.5.0", extras = ["crypto"]}
 
 [[package]]
 name = "fonttools"
@@ -1359,23 +1398,43 @@ grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 
 [[package]]
 name = "google-cloud-firestore"
-version = "2.9.0"
+version = "2.23.0"
 description = "Google Cloud Firestore API client library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-cloud-firestore-2.9.0.tar.gz", hash = "sha256:804813614b1a69cf5d248c4264953f6b18f088daadb544222fa52c921ce3b098"},
-    {file = "google_cloud_firestore-2.9.0-py2.py3-none-any.whl", hash = "sha256:ef5970425e6579ea6f5b87f68db1058c8407d89e4f6d476b634b4bbb73bdd5df"},
+    {file = "google_cloud_firestore-2.23.0-py3-none-any.whl", hash = "sha256:19f2326cb466b0d52aed9fabbd89758be431f6ce18c422966cfdb8326b424314"},
+    {file = "google_cloud_firestore-2.23.0.tar.gz", hash = "sha256:a9cffba7cdc6101111d6d54cde22d521c98f9e7d415e67486b137fa16f06aa03"},
 ]
 
 [package.dependencies]
-google-api-core = {version = ">=1.34.0,<2.0.dev0 || >=2.11.dev0,<3.0.0dev", extras = ["grpc"]}
-google-cloud-core = ">=1.4.1,<3.0.0dev"
-proto-plus = [
-    {version = ">=1.22.2,<2.0.0dev", markers = "python_version >= \"3.11\""},
-    {version = ">=1.22.0,<2.0.0dev", markers = "python_version < \"3.11\""},
+google-api-core = {version = ">=1.34.0,<2.0.dev0 || >=2.11.dev0,<3.0.0", extras = ["grpc"]}
+google-auth = ">=2.14.1,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0"
+google-cloud-core = ">=1.4.1,<3.0.0"
+proto-plus = {version = ">=1.25.0,<2.0.0", markers = "python_version >= \"3.13\""}
+protobuf = ">=3.20.2,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<7.0.0dev"
+
+[[package]]
+name = "google-cloud-firestore"
+version = "2.26.0"
+description = "Google Cloud Firestore API client library"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "google_cloud_firestore-2.26.0-py3-none-any.whl", hash = "sha256:307e6d3aed1a15e7083d9bac1871cb439be17620e035de960225bb00acc771de"},
+    {file = "google_cloud_firestore-2.26.0.tar.gz", hash = "sha256:103fc2bdedcb801a31590fef9a0d50754ee63b803946f9afc904817c85bd935d"},
 ]
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0dev"
+
+[package.dependencies]
+google-api-core = {version = ">=1.34.1,<2.0.dev0 || >=2.11.dev0,<3.0.0", extras = ["grpc"]}
+google-auth = ">=2.14.1,<2.24.0 || >2.24.0,<2.25.0 || >2.25.0,<3.0.0"
+google-cloud-core = ">=1.4.1,<3.0.0"
+grpcio = {version = ">=1.33.2,<2.0.0", markers = "python_version < \"3.14\""}
+proto-plus = [
+    {version = ">=1.25.0,<2.0.0", markers = "python_version >= \"3.13\""},
+    {version = ">=1.22.3,<2.0.0", markers = "python_version < \"3.13\""},
+]
+protobuf = ">=3.20.2,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<7.0.0"
 
 [[package]]
 name = "google-cloud-storage"
@@ -1607,6 +1666,17 @@ setproctitle = ["setproctitle"]
 tornado = ["tornado (>=0.2)"]
 
 [[package]]
+name = "h11"
+version = "0.16.0"
+description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "h11-0.16.0-py3-none-any.whl", hash = "sha256:63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86"},
+    {file = "h11-0.16.0.tar.gz", hash = "sha256:4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1"},
+]
+
+[[package]]
 name = "h2"
 version = "4.1.0"
 description = "HTTP/2 State-Machine based protocol implementation"
@@ -1752,6 +1822,27 @@ genshi = ["genshi"]
 lxml = ["lxml"]
 
 [[package]]
+name = "httpcore"
+version = "1.0.9"
+description = "A minimal low-level HTTP client."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "httpcore-1.0.9-py3-none-any.whl", hash = "sha256:2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55"},
+    {file = "httpcore-1.0.9.tar.gz", hash = "sha256:6e34463af53fd2ab5d807f399a9b45ea31c3dfa2276f15a2c3f00afff6e176e8"},
+]
+
+[package.dependencies]
+certifi = "*"
+h11 = ">=0.16"
+
+[package.extras]
+asyncio = ["anyio (>=4.0,<5.0)"]
+http2 = ["h2 (>=3,<5)"]
+socks = ["socksio (==1.*)"]
+trio = ["trio (>=0.22.0,<1.0)"]
+
+[[package]]
 name = "httplib2"
 version = "0.21.0"
 description = "A comprehensive HTTP client library."
@@ -1764,6 +1855,31 @@ files = [
 
 [package.dependencies]
 pyparsing = {version = ">=2.4.2,<3.0.0 || >3.0.0,<3.0.1 || >3.0.1,<3.0.2 || >3.0.2,<3.0.3 || >3.0.3,<4", markers = "python_version > \"3.0\""}
+
+[[package]]
+name = "httpx"
+version = "0.28.1"
+description = "The next generation HTTP client."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "httpx-0.28.1-py3-none-any.whl", hash = "sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad"},
+    {file = "httpx-0.28.1.tar.gz", hash = "sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc"},
+]
+
+[package.dependencies]
+anyio = "*"
+certifi = "*"
+h2 = {version = ">=3,<5", optional = true, markers = "extra == \"http2\""}
+httpcore = "==1.*"
+idna = "*"
+
+[package.extras]
+brotli = ["brotli", "brotlicffi"]
+cli = ["click (==8.*)", "pygments (==2.*)", "rich (>=10,<14)"]
+http2 = ["h2 (>=3,<5)"]
+socks = ["socksio (==1.*)"]
+zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "hyperframe"
@@ -2334,20 +2450,20 @@ wcwidth = "*"
 
 [[package]]
 name = "proto-plus"
-version = "1.22.2"
-description = "Beautiful, Pythonic protocol buffers."
+version = "1.27.1"
+description = "Beautiful, Pythonic protocol buffers"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 files = [
-    {file = "proto-plus-1.22.2.tar.gz", hash = "sha256:0e8cda3d5a634d9895b75c573c9352c16486cb75deb0e078b5fda34db4243165"},
-    {file = "proto_plus-1.22.2-py3-none-any.whl", hash = "sha256:de34e52d6c9c6fcd704192f09767cb561bb4ee64e70eede20b0834d841f0be4d"},
+    {file = "proto_plus-1.27.1-py3-none-any.whl", hash = "sha256:e4643061f3a4d0de092d62aa4ad09fa4756b2cbb89d4627f3985018216f9fefc"},
+    {file = "proto_plus-1.27.1.tar.gz", hash = "sha256:912a7460446625b792f6448bade9e55cd4e41e6ac10e27009ef71a7f317fa147"},
 ]
 
 [package.dependencies]
-protobuf = ">=3.19.0,<5.0.0dev"
+protobuf = ">=3.19.0,<7.0.0"
 
 [package.extras]
-testing = ["google-api-core[grpc] (>=1.31.5)"]
+testing = ["google-api-core (>=1.31.5)"]
 
 [[package]]
 name = "protobuf"
@@ -2566,6 +2682,9 @@ files = [
     {file = "PyJWT-2.6.0-py3-none-any.whl", hash = "sha256:d83c3d892a77bbb74d3e1a2cfa90afaadb60945205d1095d9221f04466f64c14"},
     {file = "PyJWT-2.6.0.tar.gz", hash = "sha256:69285c7e31fc44f68a1feb309e948e0df53259d579295e6cfe2b1792329f05fd"},
 ]
+
+[package.dependencies]
+cryptography = {version = ">=3.4.0", optional = true, markers = "extra == \"crypto\""}
 
 [package.extras]
 crypto = ["cryptography (>=3.4.0)"]
@@ -2880,6 +2999,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+
+[[package]]
+name = "sniffio"
+version = "1.3.1"
+description = "Sniff out which async library your code is running under"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"},
+    {file = "sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc"},
 ]
 
 [[package]]
@@ -3392,4 +3522,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "954409db8cc6d3ec9bf3b0035231280e5763d58696f509cc8eb119a89f1e317f"
+content-hash = "eafd6ece52f9ac315dc439d361c3af0f5ac3334b3008e01b03ec6b1d1d68ae61"
